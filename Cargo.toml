@@ -1,5 +1,5 @@
 [workspace]
-members = [".", "crates/icons", "crates/tw_merge/tw_merge", "crates/tw_merge/tw_merge_variants"]
+members = [".", "xtask", "crates/icons", "crates/tw_merge/tw_merge", "crates/tw_merge/tw_merge_variants"]
 resolver = "2"
 
 [package]
