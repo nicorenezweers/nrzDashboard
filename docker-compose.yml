@@ -1,6 +1,8 @@
 services:
   nrzdashboard:
-    build: .
+    build:
+      context: .
+      dockerfile: build/Dockerfile
     container_name: nrzdashboard
     restart: unless-stopped
     ports:

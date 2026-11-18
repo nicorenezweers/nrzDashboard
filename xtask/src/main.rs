@@ -19,7 +19,7 @@ use std::process::{Command, ExitCode, Stdio};
 type Result<T> = std::result::Result<T, String>;
 
 const WEB: &str = "target/dx/nrz_dashboard/release/web";
-const CSS: &str = "assets/tailwind.css";
+const CSS: &str = "assets/tailwind.generated.css";
 
 fn main() -> ExitCode {
     let args: Vec<String> = env::args().skip(1).collect();
@@ -206,9 +206,9 @@ fn build(ctx: &Ctx, triple: &str, arch: &str) -> Result<()> {
     }
     // Server und Oberflaeche muessen dieselben Asset-Namen kennen.
     let assets = Path::new(WEB).join("public/assets");
-    let css = find_file(&assets, "tailwind-", ".css").ok_or("Tailwind-CSS fehlt in der Oberflaeche")?;
+    let css = find_file(&assets, "tailwind", ".css").ok_or("Tailwind-CSS fehlt in der Oberflaeche")?;
     let name = css.file_name().and_then(OsStr::to_str).unwrap_or_default();
-    let hash = name.trim_start_matches("tailwind-").trim_end_matches(".css");
+    let hash = name.trim_end_matches(".css").rsplit_once('-').map_or("", |(_, h)| h);
     if !contains(&bin, hash.as_bytes()) {
         return Err(format!("Server-Binary fuer {arch} kennt {name} nicht – Abbruch."));
     }

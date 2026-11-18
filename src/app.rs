@@ -8,7 +8,7 @@ use crate::pages::login::LoginPage;
 use crate::pages::monitors::MonitorsPage;
 use crate::pages::system::SystemPage;
 
-const TAILWIND: Asset = asset!("/assets/tailwind.css");
+const TAILWIND: Asset = asset!("/assets/tailwind.generated.css");
 const FAVICON: Asset = asset!("/assets/favicon.svg");
 
 #[derive(Debug, Clone, Routable, PartialEq)]

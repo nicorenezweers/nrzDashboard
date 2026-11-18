@@ -1,6 +1,2 @@
 # Von dx/Tailwind erzeugt – nicht von Hand bearbeiten, in Diffs einklappen.
-assets/tailwind.css linguist-generated=true -diff
-# nrzUI-Thema, aus nrzUI uebernommen.
-tailwind.css linguist-vendored=true
-# Container-Build
-Dockerfile linguist-detectable=false
+assets/tailwind.generated.css -diff

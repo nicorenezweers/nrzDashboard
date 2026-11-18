@@ -1,5 +1,7 @@
 [application]
 name = "nrzDashboard"
+tailwind_input = "vendor/nrzui/tailwind.css"
+tailwind_output = "assets/tailwind.generated.css"
 
 [web.app]
 title = "nrzDashboard"
