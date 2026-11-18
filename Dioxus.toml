@@ -1,0 +1,9 @@
+[application]
+name = "nrzDashboard"
+
+[web.app]
+title = "nrzDashboard"
+
+[serve]
+port = 8080
+fullstack = true
