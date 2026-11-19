@@ -9,7 +9,6 @@ description = "Icons for Rust fullstack applications — Leptos and Dioxus."
 keywords = ["leptos", "dioxus", "icons", "tailwind", "svg"]
 categories = ["gui", "web-programming", "development-tools", "accessibility", "wasm"]
 license = "MIT"
-readme = "./README.md"
 
 
 [dependencies]

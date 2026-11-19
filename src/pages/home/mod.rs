@@ -1,40 +1,38 @@
 //! Home screen in the style of the umbrelOS desktop: wallpaper, greeting, paged app grid,
-//! live CPU/RAM/storage, Spotlight search (⌘K), dock and windows for App Store, activity,
-//! settings and the umbrelOS MCP console.
+//! live CPU/RAM/storage, search (⌘K), dock and windows for App Store, activity and settings.
 
 mod activity;
-mod console;
-mod prefs;
+mod menu;
 mod settings;
 mod spotlight;
 mod store;
 
 use dioxus::prelude::*;
-use icons::{
-    Activity, ArrowUp, Bot, ChevronLeft, ChevronRight, Cpu, FolderOpen, HardDrive, LayoutDashboard, MemoryStick, RefreshCw,
-    Settings, ShoppingBag, Terminal, X,
-};
+use icons::{Activity, ArrowUp, Bot, ChevronLeft, ChevronRight, Cpu, FolderOpen, HardDrive, LogOut, MemoryStick, RefreshCw, Settings, ShoppingBag, X};
 
-use crate::api::board::{AppTile, app_tiles};
+use crate::api::apps::{AppTile, app_tiles};
 use crate::api::get_overview;
+use crate::api::settings::{SettingsView, settings_get};
 use crate::app::Route;
 use crate::model::Overview;
-use crate::pages::board::appmenu::{AppMenuCtx, AppMenuHost};
-use crate::pages::board::widgets::{AppIcon, browser_url};
 use crate::utils::{fmt_bytes, pct, sleep_ms};
 
-pub use prefs::{Prefs, wallpaper_style};
+use menu::{AppMenu, MenuReq};
 
 pub const WALLPAPER: Asset = asset!("/assets/wallpaper.jpg");
 
-/// Windows that open above the home screen (`/?w=…`, so the back button closes them).
+/// CSS background with the wallpaper.
+pub fn wallpaper_style() -> String {
+    format!("background: #111 url('{WALLPAPER}') center / cover no-repeat;")
+}
+
+/// Windows above the home screen (`/?w=…`, so the back button closes them).
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum Win {
     Store,
     Updates,
     Activity,
     Settings,
-    Console,
 }
 
 impl Win {
@@ -44,7 +42,6 @@ impl Win {
             Self::Updates => "updates",
             Self::Activity => "activity",
             Self::Settings => "settings",
-            Self::Console => "mcp",
         }
     }
 
@@ -54,7 +51,6 @@ impl Win {
             "updates" => Self::Updates,
             "activity" => Self::Activity,
             "settings" => Self::Settings,
-            "mcp" => Self::Console,
             _ => return None,
         })
     }
@@ -73,14 +69,46 @@ pub fn close_win() {
 pub struct HomeCtx {
     pub overview: Resource<Result<Overview, ServerFnError>>,
     pub tiles: Resource<Result<Vec<AppTile>, ServerFnError>>,
-    /// Bump to reload everything at once (refresh button, after actions).
+    pub settings: Resource<Result<SettingsView, ServerFnError>>,
+    /// Bump to reload everything at once.
     pub refresh: Signal<u32>,
-    pub prefs: Signal<Prefs>,
+    pub menu: Signal<Option<MenuReq>>,
 }
 
 impl HomeCtx {
     pub fn reload(mut self) {
         self.refresh += 1;
+    }
+
+    /// `user` or `admin`.
+    pub fn link_mode(&self) -> String {
+        match &*self.settings.read() {
+            Some(Ok(s)) => s.link_mode.clone(),
+            _ => "user".into(),
+        }
+    }
+}
+
+/// App icon from `/appicon/{id}` (fetched by the server), first letter as fallback.
+#[component]
+pub fn AppIcon(id: String, name: String, #[props(default = "size-12".to_string())] class: String) -> Element {
+    let mut failed = use_signal(|| false);
+    let letter: String = name.chars().find(|c| c.is_alphanumeric()).map(|c| c.to_uppercase().collect()).unwrap_or_else(|| "?".into());
+    rsx! {
+        if failed() {
+            div { class: "{class} flex items-center justify-center rounded-[24%] bg-gradient-to-b from-[#2c2c2e] to-[#1c1c1e] text-lg font-semibold text-white/80",
+                "{letter}"
+            }
+        } else {
+            img {
+                class: "{class} rounded-[24%] bg-[#1c1c1e] object-cover",
+                src: "/appicon/{id}",
+                alt: "",
+                loading: "lazy",
+                draggable: "false",
+                onerror: move |_| failed.set(true),
+            }
+        }
     }
 }
 
@@ -111,9 +139,8 @@ fn grid_dims(w: f64, h: f64) -> (usize, usize) {
     } else {
         4
     };
-    let row_h = if w >= 768.0 { 132.0 } else { 104.0 };
-    let reserved = if w >= 768.0 { 470.0 } else { 400.0 };
-    let rows = (((h - reserved) / row_h).floor() as i64).clamp(2, if w >= 768.0 { 4 } else { 6 }) as usize;
+    let (row_h, reserved, max_rows) = if w >= 768.0 { (132.0, 470.0, 4) } else { (104.0, 400.0, 6) };
+    let rows = (((h - reserved) / row_h).floor() as i64).clamp(2, max_rows) as usize;
     (cols, rows)
 }
 
@@ -137,15 +164,19 @@ window.addEventListener('resize', window.__nrzHomeResize);
 window.__nrzHomeResize();
 "#;
 
+/// Current `w` query parameter (read inside the key listener).
+fn current_w() -> String {
+    match router().current::<Route>() {
+        Route::HomePage { w } => w,
+        _ => String::new(),
+    }
+}
+
 #[component]
 pub fn HomePage(w: String) -> Element {
     let win = Win::parse(&w);
-    let menu = use_signal(|| None);
     let refresh = use_signal(|| 0u32);
-    use_context_provider(|| AppMenuCtx { menu, refresh });
-    let prefs = use_signal(Prefs::default);
-    let mut prefs_w = prefs;
-    use_effect(move || prefs_w.set(Prefs::load()));
+    let mut menu = use_signal(|| None::<MenuReq>);
 
     let mut overview = use_resource(move || {
         let _ = refresh();
@@ -155,9 +186,13 @@ pub fn HomePage(w: String) -> Element {
         let _ = refresh();
         app_tiles()
     });
-    let ctx = use_context_provider(|| HomeCtx { overview, tiles, refresh, prefs });
+    let settings = use_resource(move || {
+        let _ = refresh();
+        settings_get()
+    });
+    let ctx = use_context_provider(|| HomeCtx { overview, tiles, settings, refresh, menu });
 
-    // Live values: resources every 5 s, app list every 15 s.
+    // Live values: resources every 5 s, apps every 15 s.
     use_future(move || async move {
         let mut n = 0u32;
         loop {
@@ -183,10 +218,24 @@ pub fn HomePage(w: String) -> Element {
             viewport.set(v);
         }
     });
+    use_future(move || async move {
+        let mut ev = document::eval(KEY_JS);
+        while let Ok(k) = ev.recv::<String>().await {
+            let open = Win::parse(&current_w()).is_some();
+            match k.as_str() {
+                "search" => spotlight.toggle(),
+                "esc" if menu.peek().is_some() => menu.set(None),
+                "esc" if spotlight() => spotlight.set(false),
+                "esc" if open => close_win(),
+                "left" if !spotlight() && !open => page.set(page().saturating_sub(1)),
+                "right" if !spotlight() && !open => page.set(page() + 1),
+                _ => {}
+            }
+        }
+    });
 
     let (cols, rows) = grid_dims(viewport().0, viewport().1);
     let per_page = cols * rows;
-
     let visible: Vec<AppTile> = match &*tiles.read() {
         Some(Ok(list)) => list.iter().filter(|t| !t.hidden && t.id != "nrz-dashboard").cloned().collect(),
         _ => Vec::new(),
@@ -196,30 +245,10 @@ pub fn HomePage(w: String) -> Element {
         page.set(pages - 1);
     }
 
-    use_future(move || async move {
-        let mut ev = document::eval(KEY_JS);
-        while let Ok(k) = ev.recv::<String>().await {
-            match k.as_str() {
-                "search" => spotlight.toggle(),
-                "esc" => {
-                    if spotlight() {
-                        spotlight.set(false);
-                    } else if Win::parse(&current_w()).is_some() {
-                        close_win();
-                    }
-                }
-                "left" if !spotlight() && Win::parse(&current_w()).is_none() => {
-                    page.set(page().saturating_sub(1));
-                }
-                "right" if !spotlight() && Win::parse(&current_w()).is_none() => {
-                    page.set(page() + 1);
-                }
-                _ => {}
-            }
-        }
-    });
-
-    let name = prefs.read().name.clone();
+    let name = match &*settings.read() {
+        Some(Ok(s)) => s.name.clone(),
+        _ => String::new(),
+    };
     let hello = match hour() {
         Some(h) if name.trim().is_empty() => format!("{}.", greeting(h)),
         Some(h) => format!("{}, {}.", greeting(h), name.trim()),
@@ -232,52 +261,38 @@ pub fn HomePage(w: String) -> Element {
     };
     let mut drag_x = use_signal(|| None::<f64>);
 
-    let do_refresh = move |_| {
-        ctx.reload();
-        spinning.set(true);
-        spawn(async move {
-            sleep_ms(900).await;
-            spinning.set(false);
-        });
-    };
-
     rsx! {
-        div {
-            class: "fixed inset-0 overflow-hidden select-none text-white",
-            style: wallpaper_style(&prefs.read()),
-            // soft vignette like umbrelOS
+        div { class: "fixed inset-0 overflow-hidden select-none text-white", style: wallpaper_style(),
             div { class: "pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(0,0,0,0.55)_100%)]" }
 
             // Top-right actions
-            div { class: "absolute right-3 top-3 z-20 flex items-center gap-2 md:right-5 md:top-5",
-                button {
-                    class: "flex size-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.07] text-white/80 backdrop-blur-xl transition hover:bg-white/15 hover:text-white",
-                    title: "Aktualisieren",
-                    "aria-label": "Aktualisieren",
-                    onclick: do_refresh,
+            div { class: "absolute right-3 top-[max(env(safe-area-inset-top,0px),0.75rem)] z-20 flex items-center gap-2 md:right-5 md:top-5",
+                GlassButton {
+                    label: "Aktualisieren",
+                    onclick: move |_| {
+                        ctx.reload();
+                        spinning.set(true);
+                        spawn(async move {
+                            sleep_ms(900).await;
+                            spinning.set(false);
+                        });
+                    },
                     RefreshCw { class: if spinning() { "size-4 animate-spin" } else { "size-4" } }
-                }
-                Link {
-                    to: Route::SystemPage {},
-                    class: "hidden md:flex h-10 items-center rounded-full border border-white/10 bg-white/[0.07] px-4 text-sm text-white/80 backdrop-blur-xl transition hover:bg-white/15 hover:text-white",
-                    "System"
                 }
                 a {
                     href: "/auth/logout",
-                    class: "flex h-10 items-center rounded-full border border-white/10 bg-white/[0.07] px-4 text-sm text-white/80 backdrop-blur-xl transition hover:bg-white/15 hover:text-white",
-                    "Abmelden"
+                    class: "flex size-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.07] text-white/80 backdrop-blur-xl transition hover:bg-white/15 hover:text-white",
+                    title: "Abmelden",
+                    "aria-label": "Abmelden",
+                    LogOut { class: "size-4" }
                 }
             }
 
             div { class: "relative z-10 flex h-full flex-col items-center pt-[calc(env(safe-area-inset-top,0px)+3.75rem)] md:pt-8",
-                // Logo + greeting
                 UmbrellaLogo {}
-                h1 { class: "mt-3 text-center text-3xl font-bold tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)] md:mt-4 md:text-5xl",
-                    "{hello}"
-                }
+                h1 { class: "mt-3 text-center text-3xl font-bold tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)] md:mt-4 md:text-5xl", "{hello}" }
                 LiveBar {}
 
-                // App grid with pages
                 div { class: "relative mt-4 flex w-full max-w-6xl flex-1 min-h-0 items-center md:mt-6",
                     if pages > 1 {
                         PageArrow { left: true, disabled: page() == 0, onclick: move |_| page.set(page().saturating_sub(1)) }
@@ -298,13 +313,13 @@ pub fn HomePage(w: String) -> Element {
                         if let Some(e) = tiles_err {
                             div { class: "flex h-full flex-col items-center justify-center gap-3 px-6 text-center",
                                 p { class: "max-w-md text-sm text-white/80", "{e}" }
-                                Link { to: Route::SystemPage {}, class: "rounded-full bg-white/15 px-4 py-2 text-sm hover:bg-white/25", "Umbrel-Verbindung einrichten" }
+                                button { class: "rounded-full bg-white/15 px-4 py-2 text-sm hover:bg-white/25", onclick: move |_| open_win(Win::Settings), "Einstellungen öffnen" }
                             }
                         } else if loading {
                             div { class: "grid h-full content-center gap-y-6 px-4 md:px-16", style: "grid-template-columns: repeat({cols}, minmax(0, 1fr));",
                                 for i in 0..per_page.min(12) {
                                     div { key: "{i}", class: "flex flex-col items-center gap-2",
-                                        div { class: "size-14 animate-pulse rounded-[22%] bg-white/10 md:size-[4.5rem]" }
+                                        div { class: "size-14 animate-pulse rounded-[24%] bg-white/10 md:size-[4.5rem]" }
                                         div { class: "h-3 w-16 animate-pulse rounded bg-white/10" }
                                     }
                                 }
@@ -331,7 +346,6 @@ pub fn HomePage(w: String) -> Element {
                     }
                 }
 
-                // Page dots
                 div { class: "flex h-6 items-center gap-1.5",
                     if pages > 1 {
                         for i in 0..pages {
@@ -345,7 +359,6 @@ pub fn HomePage(w: String) -> Element {
                     }
                 }
 
-                // Search pill
                 button {
                     class: "mt-3 flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.07] py-2 pl-2.5 pr-4 text-[15px] text-white/90 shadow-lg backdrop-blur-xl transition hover:bg-white/[0.12]",
                     onclick: move |_| spotlight.set(true),
@@ -363,38 +376,34 @@ pub fn HomePage(w: String) -> Element {
                     Win::Updates => rsx! { store::StoreWindow { updates: true } },
                     Win::Activity => rsx! { activity::ActivityWindow {} },
                     Win::Settings => rsx! { settings::SettingsWindow {} },
-                    Win::Console => rsx! { console::ConsoleWindow {} },
                 }
             }
             if spotlight() {
                 spotlight::Spotlight { onclose: move |_| spotlight.set(false) }
             }
-            AppMenuHost {}
+            AppMenu {}
         }
     }
 }
 
-/// Current `w` query parameter (read inside the key listener, outside of render).
-fn current_w() -> String {
-    match router().current::<Route>() {
-        Route::HomePage { w } => w,
-        _ => String::new(),
+#[component]
+fn GlassButton(label: String, onclick: EventHandler<MouseEvent>, children: Element) -> Element {
+    rsx! {
+        button {
+            class: "flex size-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.07] text-white/80 backdrop-blur-xl transition hover:bg-white/15 hover:text-white",
+            title: "{label}",
+            "aria-label": "{label}",
+            onclick: move |e| onclick.call(e),
+            {children}
+        }
     }
 }
 
 #[component]
 fn UmbrellaLogo() -> Element {
     rsx! {
-        svg {
-            class: "h-9 w-auto drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] md:h-12",
-            view_box: "0 0 64 36",
-            fill: "none",
-            path {
-                d: "M4 30C4 15.6 16.5 4 32 4s28 11.6 28 26",
-                stroke: "white",
-                stroke_width: "6",
-                stroke_linecap: "round",
-            }
+        svg { class: "h-9 w-auto drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] md:h-12", view_box: "0 0 64 36", fill: "none",
+            path { d: "M4 30C4 15.6 16.5 4 32 4s28 11.6 28 26", stroke: "white", stroke_width: "6", stroke_linecap: "round" }
             path {
                 d: "M4 30c4.7-4.2 9.3-4.2 14 0 4.7-4.2 9.3-4.2 14 0 4.7-4.2 9.3-4.2 14 0 4.7-4.2 9.3-4.2 14 0",
                 stroke: "white",
@@ -434,62 +443,86 @@ fn busy_label(state: &str) -> Option<&'static str> {
     })
 }
 
+/// Opens a URL in a new tab.
+pub fn open_url(url: &str) {
+    #[cfg(feature = "web")]
+    if let Some(w) = web_sys::window() {
+        let _ = w.open_with_url_and_target(url, "_blank");
+    }
+    #[cfg(not(feature = "web"))]
+    let _ = url;
+}
+
 #[component]
 fn HomeTile(tile: AppTile) -> Element {
-    let menu = use_context::<AppMenuCtx>();
-    let href = tile.url.as_deref().map(browser_url).filter(|_| matches!(tile.state.as_str(), "ready" | "running"));
-    let icon = tile.icon.clone().unwrap_or_default();
-    let menu_tile = tile.clone();
-    let oncontext = move |e: MouseEvent| menu.open(menu_tile.clone(), &e);
+    let ctx = use_context::<HomeCtx>();
+    let mut menu = ctx.menu;
+    let href = if tile.is_running() { tile.url(&ctx.link_mode()) } else { None };
     let busy = busy_label(&tile.state);
     let dim = if busy.is_some() { "opacity-60" } else { "" };
-    let inner = rsx! {
-        div { class: "relative transition-transform duration-200 group-hover:scale-105 group-active:scale-95 {dim}",
-            AppIcon {
-                key: "{tile.id}|{icon}",
-                id: tile.id.clone(),
-                name: tile.name.clone(),
-                url: icon.clone(),
-                class: "size-14 md:size-[4.5rem] shadow-[0_8px_24px_rgba(0,0,0,0.45)]",
-            }
-            if tile.update_available {
-                span { class: "absolute -right-1 -top-1 flex size-5 items-center justify-center rounded-full bg-sky-500 text-white ring-2 ring-black/40", title: "Update verfügbar",
-                    ArrowUp { class: "size-3" }
+    // Long press (touch) opens the menu like a right click.
+    let mut pressed = use_signal(|| false);
+    let mut long_fired = use_signal(|| false);
+    let t_ctx = tile.clone();
+    let t_long = tile.clone();
+    let t_click = tile.clone();
+
+    rsx! {
+        button {
+            class: "group flex min-w-0 flex-col items-center gap-2 rounded-2xl p-1 outline-none focus-visible:bg-white/10 [-webkit-touch-callout:none]",
+            title: "{tile.name}",
+            oncontextmenu: move |e: MouseEvent| {
+                e.prevent_default();
+                let p = e.client_coordinates();
+                menu.set(Some(MenuReq { tile: t_ctx.clone(), x: p.x, y: p.y }));
+            },
+            onpointerdown: move |e: PointerEvent| {
+                if e.pointer_type() != "touch" {
+                    return;
+                }
+                let p = e.client_coordinates();
+                let t = t_long.clone();
+                pressed.set(true);
+                long_fired.set(false);
+                spawn(async move {
+                    sleep_ms(550).await;
+                    if pressed() {
+                        long_fired.set(true);
+                        menu.set(Some(MenuReq { tile: t, x: p.x, y: p.y }));
+                    }
+                });
+            },
+            onpointerup: move |_| pressed.set(false),
+            onpointerleave: move |_| pressed.set(false),
+            onclick: move |e: MouseEvent| {
+                if long_fired() {
+                    long_fired.set(false);
+                    return;
+                }
+                match &href {
+                    Some(h) => open_url(h),
+                    None => {
+                        let p = e.client_coordinates();
+                        menu.set(Some(MenuReq { tile: t_click.clone(), x: p.x, y: p.y }));
+                    }
+                }
+            },
+            div { class: "relative transition-transform duration-200 group-hover:scale-105 group-active:scale-95 {dim}",
+                AppIcon { id: tile.id.clone(), name: tile.name.clone(), class: "size-14 md:size-[4.5rem] shadow-[0_8px_24px_rgba(0,0,0,0.45)]" }
+                if tile.update_available {
+                    span { class: "absolute -right-1 -top-1 flex size-5 items-center justify-center rounded-full bg-sky-500 text-white ring-2 ring-black/40", title: "Update verfügbar",
+                        ArrowUp { class: "size-3" }
+                    }
                 }
             }
-        }
-        span { class: "w-full truncate px-1 text-center text-[13px] text-white/90 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)] md:text-[15px]",
-            if let Some(b) = busy { "{b}" } else { "{tile.name}" }
-        }
-    };
-    rsx! {
-        if let Some(h) = href {
-            a {
-                href: "{h}",
-                target: "_blank",
-                rel: "noopener noreferrer",
-                title: "{tile.name} – Rechtsklick für Optionen",
-                draggable: "false",
-                class: "group flex min-w-0 flex-col items-center gap-2 rounded-2xl p-1 outline-none focus-visible:bg-white/10",
-                oncontextmenu: oncontext,
-                {inner}
-            }
-        } else {
-            button {
-                class: "group flex min-w-0 flex-col items-center gap-2 rounded-2xl p-1",
-                title: "{tile.name} – Rechtsklick für Optionen",
-                onclick: {
-                    let t = tile.clone();
-                    move |e: MouseEvent| menu.open(t.clone(), &e)
-                },
-                oncontextmenu: oncontext,
-                {inner}
+            span { class: "w-full truncate px-1 text-center text-[13px] text-white/90 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)] md:text-[15px]",
+                if let Some(b) = busy { "{b}" } else { "{tile.name}" }
             }
         }
     }
 }
 
-/// Compact CPU / RAM / storage readout under the greeting; opens the activity window.
+/// CPU / RAM / storage under the greeting; opens the activity window.
 #[component]
 fn LiveBar() -> Element {
     let ctx = use_context::<HomeCtx>();
@@ -548,76 +581,86 @@ fn MiniMeter(icon: Element, label: String, value: f64, text: String) -> Element 
     }
 }
 
-#[derive(Clone, PartialEq)]
-enum DockTarget {
-    Route(Route),
-    Win(Win),
+#[derive(Clone, Copy, PartialEq)]
+enum DockItem {
+    Files,
+    Store,
+    Agent,
+    Activity,
+    Settings,
 }
 
-struct DockItem {
-    label: &'static str,
-    gradient: &'static str,
-    target: DockTarget,
-}
+impl DockItem {
+    const ALL: [Self; 5] = [Self::Files, Self::Store, Self::Agent, Self::Activity, Self::Settings];
 
-fn dock_items() -> Vec<DockItem> {
-    vec![
-        DockItem {
-            label: "Dateien",
-            gradient: "bg-gradient-to-b from-[#ff8a65] to-[#c2185b]",
-            target: DockTarget::Route(Route::FilesPage { path: "/Home".into(), msg: String::new() }),
-        },
-        DockItem { label: "Board", gradient: "bg-gradient-to-b from-[#3d8b7a] to-[#1d3f3a]", target: DockTarget::Route(Route::BoardPage {}) },
-        DockItem { label: "App Store", gradient: "bg-gradient-to-b from-[#3b82f6] to-[#1e3a8a]", target: DockTarget::Win(Win::Store) },
-        DockItem { label: "Monitore", gradient: "bg-gradient-to-b from-[#f5e6b8] to-[#c9a96a]", target: DockTarget::Route(Route::MonitorsPage {}) },
-        DockItem { label: "Agent", gradient: "bg-gradient-to-b from-[#a78bfa] to-[#5b21b6]", target: DockTarget::Route(Route::AgentPage {}) },
-        DockItem { label: "MCP-Konsole", gradient: "bg-gradient-to-b from-[#374151] to-[#0b0f17]", target: DockTarget::Win(Win::Console) },
-        DockItem { label: "Einstellungen", gradient: "bg-gradient-to-b from-[#94a3b8] to-[#475569]", target: DockTarget::Win(Win::Settings) },
-        DockItem { label: "Aktivität", gradient: "bg-gradient-to-b from-[#1f4d3f] to-[#0b1f1a]", target: DockTarget::Win(Win::Activity) },
-    ]
-}
+    const fn label(self) -> &'static str {
+        match self {
+            Self::Files => "Dateien",
+            Self::Store => "App Store",
+            Self::Agent => "Agent",
+            Self::Activity => "Aktivität",
+            Self::Settings => "Einstellungen",
+        }
+    }
 
-fn dock_icon(label: &str) -> Element {
-    let class = "size-5 md:size-7 text-white drop-shadow".to_string();
-    match label {
-        "Dateien" => rsx! { FolderOpen { class } },
-        "Board" => rsx! { LayoutDashboard { class } },
-        "App Store" => rsx! { ShoppingBag { class } },
-        "Monitore" => rsx! { Activity { class: "size-5 md:size-7 text-[#5b4a1f]" } },
-        "Agent" => rsx! { Bot { class } },
-        "MCP-Konsole" => rsx! { Terminal { class: "size-5 md:size-7 text-emerald-300" } },
-        "Einstellungen" => rsx! { Settings { class } },
-        _ => rsx! { Activity { class: "size-5 md:size-7 text-emerald-300" } },
+    fn win(self) -> Option<Win> {
+        match self {
+            Self::Store => Some(Win::Store),
+            Self::Activity => Some(Win::Activity),
+            Self::Settings => Some(Win::Settings),
+            _ => None,
+        }
+    }
+
+    fn open(self) {
+        match self {
+            Self::Files => {
+                navigator().push(Route::FilesPage { path: "/Home".into(), msg: String::new() });
+            }
+            Self::Agent => {
+                navigator().push(Route::AgentPage {});
+            }
+            other => {
+                if let Some(w) = other.win() {
+                    open_win(w);
+                }
+            }
+        }
+    }
+
+    fn icon(self) -> Element {
+        let class = "size-6 md:size-7".to_string();
+        match self {
+            Self::Files => rsx! { FolderOpen { class } },
+            Self::Store => rsx! { ShoppingBag { class } },
+            Self::Agent => rsx! { Bot { class } },
+            Self::Activity => rsx! { Activity { class } },
+            Self::Settings => rsx! { Settings { class } },
+        }
     }
 }
 
+/// Dock in the same look as the app icons (dark tiles, white symbols).
 #[component]
 fn Dock(active: Option<Win>) -> Element {
     rsx! {
-        nav { class: "mb-[max(env(safe-area-inset-bottom,0px),0.75rem)] mt-4 max-w-[calc(100vw-1rem)] overflow-x-auto rounded-[1.4rem] border border-white/10 bg-white/[0.08] p-2 shadow-2xl backdrop-blur-2xl md:mb-5 md:p-2.5",
-            div { class: "flex items-end gap-1.5 md:gap-3",
-                for item in dock_items() {
+        nav { class: "mb-[max(env(safe-area-inset-bottom,0px),0.75rem)] mt-4 rounded-[1.6rem] border border-white/10 bg-white/[0.08] p-2 shadow-2xl backdrop-blur-2xl md:mb-5 md:p-2.5",
+            div { class: "flex items-end gap-2 md:gap-3",
+                for item in DockItem::ALL {
                     {
-                        let is_active = matches!(item.target, DockTarget::Win(w) if Some(w) == active)
-                            || (active == Some(Win::Updates) && item.target == DockTarget::Win(Win::Store));
-                        let target = item.target.clone();
+                        let is_active = item.win().is_some() && (item.win() == active || (item == DockItem::Store && active == Some(Win::Updates)));
                         rsx! {
                             button {
-                                key: "{item.label}",
+                                key: "{item.label()}",
                                 class: "group relative flex flex-col items-center",
-                                title: "{item.label}",
-                                "aria-label": "{item.label}",
-                                onclick: move |_| match &target {
-                                    DockTarget::Route(r) => {
-                                        navigator().push(r.clone());
-                                    }
-                                    DockTarget::Win(w) => open_win(*w),
-                                },
+                                title: "{item.label()}",
+                                "aria-label": "{item.label()}",
+                                onclick: move |_| item.open(),
                                 span { class: "pointer-events-none absolute -top-9 whitespace-nowrap rounded-md bg-black/70 px-2 py-1 text-xs text-white opacity-0 backdrop-blur transition group-hover:opacity-100",
-                                    "{item.label}"
+                                    "{item.label()}"
                                 }
-                                span { class: "flex size-10 items-center justify-center rounded-[28%] border border-white/15 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_6px_16px_rgba(0,0,0,0.4)] transition-transform duration-200 group-hover:-translate-y-1 group-hover:scale-110 md:size-14 {item.gradient}",
-                                    {dock_icon(item.label)}
+                                span { class: "flex size-12 items-center justify-center rounded-[24%] bg-gradient-to-b from-[#2c2c2e] to-[#1c1c1e] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_8px_20px_rgba(0,0,0,0.45)] transition-transform duration-200 group-hover:-translate-y-1 group-hover:scale-110 md:size-14",
+                                    {item.icon()}
                                 }
                                 span { class: if is_active { "mt-1 size-1 rounded-full bg-white" } else { "mt-1 size-1 rounded-full bg-transparent" } }
                             }
@@ -629,12 +672,12 @@ fn Dock(active: Option<Win>) -> Element {
     }
 }
 
-/// Glass window used by App Store, activity, settings and console.
+/// Glass window used by App Store, activity and settings.
 #[component]
 pub fn HomeWindow(title: String, #[props(default)] narrow: bool, children: Element) -> Element {
     let w = if narrow { "md:max-w-3xl" } else { "md:max-w-6xl" };
     rsx! {
-        div { class: "fixed inset-0 z-50 flex items-stretch justify-center bg-black/45 backdrop-blur-sm md:items-center md:p-6 animate-in fade-in",
+        div { class: "fixed inset-0 z-50 flex items-stretch justify-center bg-black/45 backdrop-blur-sm md:items-center md:p-6",
             onclick: move |_| close_win(),
             div {
                 class: "relative flex w-full {w} flex-col overflow-hidden border-white/10 bg-[#141414]/85 text-white shadow-2xl backdrop-blur-2xl md:h-[min(88dvh,900px)] md:rounded-[1.75rem] md:border",

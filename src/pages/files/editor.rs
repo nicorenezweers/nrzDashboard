@@ -154,7 +154,7 @@ fn Editor(path: String) -> Element {
     let numbers: String = (1..=lines).map(|n| format!("{n}\n")).collect();
     let html_preview = if preview() && can_preview {
         if matches!(ext.as_str(), "md" | "markdown") {
-            Some((true, crate::pages::board::widgets::markdown(&text)))
+            Some((true, crate::utils::markdown(&text)))
         } else {
             Some((false, text.clone()))
         }

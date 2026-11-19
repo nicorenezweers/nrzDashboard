@@ -3,11 +3,10 @@
 use dioxus::prelude::*;
 use icons::{FileText, Folder, Search, ShoppingBag};
 
-use super::{HomeCtx, Win, open_win};
+use super::{AppIcon, HomeCtx, Win, open_url, open_win};
 use crate::api::files::search_files;
 use crate::api::home::store_search;
 use crate::app::Route;
-use crate::pages::board::widgets::{AppIcon, browser_url};
 use crate::utils::sleep_ms;
 
 #[derive(Clone, PartialEq)]
@@ -32,13 +31,9 @@ fn actions() -> Vec<(&'static str, &'static str, Action)> {
         ("App Store", "Apps entdecken und installieren", Action::Win(Win::Store)),
         ("Updates", "App-Updates installieren", Action::Win(Win::Updates)),
         ("Aktivität", "CPU, RAM und Speicher", Action::Win(Win::Activity)),
-        ("Einstellungen", "Gerät, Updates, Netzwerk", Action::Win(Win::Settings)),
-        ("MCP-Konsole", "Alle umbrelOS-Werkzeuge ausführen", Action::Win(Win::Console)),
-        ("Dateien", "Dateimanager", Action::Route(Route::FilesPage { path: "/Home".into(), msg: String::new() })),
-        ("Board", "Widgets und Dashboards", Action::Route(Route::BoardPage {})),
-        ("Monitore", "Uptime-Überwachung", Action::Route(Route::MonitorsPage {})),
-        ("Agent", "KI-Agent für dein Umbrel", Action::Route(Route::AgentPage {})),
-        ("System", "Verbindung, Logs, Integrationen", Action::Route(Route::SystemPage {})),
+        ("Einstellungen", "Name, App-Adressen, Anmeldung", Action::Win(Win::Settings)),
+        ("Dateien", "Deine Dateien", Action::Route(Route::FilesPage { path: "/Home".into(), msg: String::new() })),
+        ("Agent", "KI-Assistent für dein Umbrel", Action::Route(Route::AgentPage {})),
     ]
 }
 
@@ -52,14 +47,7 @@ fn parent(path: &str) -> String {
 fn run(item: &Item, onclose: EventHandler<()>) {
     onclose.call(());
     match &item.action {
-        Action::Url(u) => {
-            #[cfg(feature = "web")]
-            if let Some(w) = web_sys::window() {
-                let _ = w.open_with_url_and_target(u, "_blank");
-            }
-            #[cfg(not(feature = "web"))]
-            let _ = u;
-        }
+        Action::Url(u) => open_url(u),
         Action::Win(w) => open_win(*w),
         Action::Route(r) => {
             navigator().push(r.clone());
@@ -91,11 +79,12 @@ pub fn Spotlight(onclose: EventHandler<()>) -> Element {
     });
 
     let q = query().trim().to_lowercase();
+    let mode = ctx.link_mode();
     let mut items: Vec<Item> = Vec::new();
     if let Some(Ok(tiles)) = &*ctx.tiles.read() {
         for t in tiles.iter().filter(|t| !t.hidden && (q.is_empty() || t.name.to_lowercase().contains(&q) || t.id.contains(&q))) {
-            let action = match &t.url {
-                Some(u) => Action::Url(browser_url(u)),
+            let action = match t.url(&mode) {
+                Some(u) => Action::Url(u),
                 None => Action::Win(Win::Store),
             };
             items.push(Item { title: t.name.clone(), subtitle: "App öffnen".into(), app: Some(t.id.clone()), kind: "Apps", action });

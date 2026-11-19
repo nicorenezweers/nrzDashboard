@@ -100,44 +100,14 @@ pub fn enc(s: &str) -> String {
     urlencoding::encode(s).into_owned()
 }
 
-/// Jetzt als Unix-Sekunden.
-pub fn now_secs() -> i64 {
-    #[cfg(feature = "web")]
-    {
-        (js_sys::Date::now() / 1000.0) as i64
-    }
-    #[cfg(not(feature = "web"))]
-    {
-        std::time::SystemTime::now()
-            .duration_since(std::time::UNIX_EPOCH)
-            .map(|d| d.as_secs() as i64)
-            .unwrap_or(0)
-    }
-}
-
-/// Wie lange her: "gerade eben", "vor 5 Min.", "vor 3 Std.", "gestern", "vor 4 Tagen".
-pub fn fmt_ago(ts: i64) -> String {
-    let diff = (now_secs() - ts).max(0);
-    match diff {
-        0..60 => "gerade eben".into(),
-        60..3600 => format!("vor {} Min.", diff / 60),
-        3600..86_400 => format!("vor {} Std.", diff / 3600),
-        86_400..172_800 => "gestern".into(),
-        _ => format!("vor {} Tagen", diff / 86_400),
-    }
-}
-
-/// Adresse eines Dienstes auf dem Umbrel, wie sie der Browser erreicht: Namen, die nur im
-/// Container gelten (`host.docker.internal`, `localhost`, `umbrel.local`), werden durch den
-/// Host ersetzt, unter dem das Dashboard geöffnet ist.
-pub fn browser_host_url(url: &str) -> String {
-    #[cfg(feature = "web")]
-    if let Some(host) = web_sys::window().and_then(|w| w.location().hostname().ok()).filter(|h| !h.is_empty()) {
-        for internal in ["host.docker.internal", "localhost", "127.0.0.1", "umbrel.local"] {
-            if url.contains(&format!("//{internal}")) {
-                return url.replacen(internal, &host, 1);
-            }
-        }
-    }
-    url.to_string()
+/// Markdown → HTML; raw HTML is shown as text, links open in a new tab.
+pub fn markdown(text: &str) -> String {
+    use pulldown_cmark::{Event, Options, Parser, html};
+    let parser = Parser::new_ext(text, Options::ENABLE_STRIKETHROUGH | Options::ENABLE_TASKLISTS | Options::ENABLE_TABLES).map(|e| match e {
+        Event::Html(s) | Event::InlineHtml(s) => Event::Text(s),
+        other => other,
+    });
+    let mut out = String::new();
+    html::push_html(&mut out, parser);
+    out.replace("<a href=\"javascript:", "<a data-blocked=\"").replace("<a href=", "<a target=\"_blank\" rel=\"noopener noreferrer\" href=")
 }

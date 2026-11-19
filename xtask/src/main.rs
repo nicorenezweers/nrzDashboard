@@ -21,6 +21,21 @@ type Result<T> = std::result::Result<T, String>;
 const WEB: &str = "target/dx/nrz_dashboard/release/web";
 const CSS: &str = "assets/tailwind.generated.css";
 
+/// README of the `umbrel` branch (finished files only).
+const UMBREL_README: &str = "# nrzDashboard – Umbrel-Paket
+
+Dieser Zweig enthaelt nur fertige Dateien fuer die App `nrz-dashboard` im nrzStore.
+`hooks/pre-start` im Store laedt sie per Tag `umbrel-<version>` von nrzGit.
+
+| Datei | Inhalt |
+|-------|--------|
+| `nrzdashboard-amd64.gz`, `nrzdashboard-arm64.gz` | Server (Linux, glibc) |
+| `public.tar.gz` | Weboberflaeche (WASM, CSS) |
+| `SHA256SUMS` | Pruefsummen |
+
+Quellcode: Zweig `main`.
+";
+
 fn main() -> ExitCode {
     let args: Vec<String> = env::args().skip(1).collect();
     let res = match args.first().map(String::as_str) {
@@ -277,8 +292,7 @@ fn release(args: &[String]) -> Result<()> {
         for e in fs::read_dir(&ctx.out).map_err(|e| e.to_string())?.flatten() {
             fs::copy(e.path(), wt.join(e.file_name())).map_err(|e| e.to_string())?;
         }
-        let readme = output(&mut git(["show", "HEAD:scripts/umbrel-README.md"])).ok_or("scripts/umbrel-README.md fehlt")?;
-        fs::write(wt.join("README.md"), readme + "\n").map_err(|e| e.to_string())?;
+        fs::write(wt.join("README.md"), UMBREL_README).map_err(|e| e.to_string())?;
         run(git(["add", "-A"]).current_dir(&wt))?;
         run(git(["commit", "-qm", &format!("nrzDashboard {version}: Umbrel-Paket")]).current_dir(&wt))?;
         run(git(["tag", "-a", &tag, "-m", &notes]).current_dir(&wt))?;

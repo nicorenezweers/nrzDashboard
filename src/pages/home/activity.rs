@@ -5,9 +5,8 @@ use std::collections::HashMap;
 use dioxus::prelude::*;
 use icons::{Cpu, HardDrive, MemoryStick, RefreshCw, Thermometer};
 
-use super::{HomeCtx, HomeWindow};
+use super::{AppIcon, HomeCtx, HomeWindow};
 use crate::model::AppUse;
-use crate::pages::board::widgets::AppIcon;
 use crate::utils::{err_msg, fmt_bytes, fmt_uptime, pct, sleep_ms};
 
 const HISTORY: usize = 60;

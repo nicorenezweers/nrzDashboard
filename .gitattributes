@@ -1,2 +1,3 @@
-# Von dx/Tailwind erzeugt – nicht von Hand bearbeiten, in Diffs einklappen.
-assets/tailwind.generated.css -diff
+# Von dx/Tailwind erzeugt bzw. eingebundenes Thema – nicht von Hand bearbeiten, nicht in der Sprachstatistik.
+assets/tailwind.generated.css -diff linguist-generated
+vendor/** linguist-vendored

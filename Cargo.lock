@@ -1685,6 +1685,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
 
 [[package]]
+name = "hmac"
+version = "0.12.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6c49c37c09c17a53d937dfbb742eb3a961d65a994e6bcdcf37e7399d0cc8ab5e"
+dependencies = [
+ "digest",
+]
+
+[[package]]
 name = "http"
 version = "1.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2337,7 +2346,7 @@ dependencies = [
 
 [[package]]
 name = "nrz_dashboard"
-version = "1.5.0"
+version = "2.0.0"
 dependencies = [
  "anyhow",
  "argon2",
@@ -2345,14 +2354,16 @@ dependencies = [
  "dioxus",
  "futures",
  "gloo-timers",
+ "hmac",
  "icons",
  "js-sys",
  "pulldown-cmark",
+ "qrcode",
  "rand 0.8.8",
  "reqwest",
  "serde",
  "serde_json",
- "socket2",
+ "sha1",
  "tokio",
  "tw_merge",
  "urlencoding",
@@ -2572,6 +2583,12 @@ name = "pulldown-cmark-escape"
 version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "007d8adb5ddab6f8e3f491ac63566a7d5002cc7ed73901f72057943fa71ae1ae"
+
+[[package]]
+name = "qrcode"
+version = "0.14.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d68782463e408eb1e668cf6152704bd856c78c5b6417adaee3203d8f4c1fc9ec"
 
 [[package]]
 name = "quinn"

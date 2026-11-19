@@ -89,17 +89,6 @@ pub struct Overview {
 }
 
 #[derive(Serialize, Deserialize, Clone, PartialEq, Debug, Default)]
-pub struct AppDetails {
-    pub url: Option<String>,
-    pub username: Option<String>,
-    pub password: Option<String>,
-    pub cpu: f64,
-    pub memory: f64,
-    pub disk: f64,
-    pub tagline: String,
-}
-
-#[derive(Serialize, Deserialize, Clone, PartialEq, Debug, Default)]
 #[serde(rename_all = "camelCase", default)]
 pub struct FileEntry {
     pub name: String,
@@ -141,10 +130,3 @@ pub const DESTRUCTIVE_TOOLS: &[&str] = &[
     "stop_machine",
     "stop_app",
 ];
-
-#[derive(Serialize, Deserialize, Clone, PartialEq, Debug, Default)]
-pub struct UmbrelSettings {
-    pub url: String,
-    /// Masked token (`umbrelmcp_54a6…18e1`), `None` when no token is set.
-    pub token_hint: Option<String>,
-}

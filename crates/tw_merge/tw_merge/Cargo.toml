@@ -9,7 +9,6 @@ license = "MIT"
 repository = "https://git.zweers.ch/nicorenezweers/nrzUI/src/branch/main/crates/tw_merge"
 homepage = "https://ui.zweers.ch"
 categories = ["web-programming", "development-tools", "wasm"]
-readme = "../README.md"
 
 [dependencies]
 nom = {version = "7"}
