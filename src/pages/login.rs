@@ -14,8 +14,8 @@ pub fn LoginPage(error: String) -> Element {
         _ => Some("Benutzername oder Passwort ist falsch."),
     };
     rsx! {
-        div { class: "flex min-h-full items-center justify-center p-4",
-            Card { class: "w-full max-w-sm",
+        div { class: "flex min-h-full items-center justify-center p-4", style: "background: #111 url('{crate::pages::home::WALLPAPER}') center / cover no-repeat;",
+            Card { class: "w-full max-w-sm bg-card/70 backdrop-blur-2xl shadow-2xl",
                 CardHeader {
                     div { class: "mb-2 flex size-10 items-center justify-center rounded-lg bg-primary text-primary-foreground",
                         Lock { class: "size-5" }

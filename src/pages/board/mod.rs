@@ -1,6 +1,6 @@
 //! Modular dashboard like Homarr: several boards, edit mode, drag & drop, resize, widget catalogue.
 
-mod appmenu;
+pub(crate) mod appmenu;
 mod integrations;
 mod layout;
 mod settings;
