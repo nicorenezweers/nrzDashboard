@@ -123,7 +123,7 @@ fn Breadcrumbs() -> Element {
                     }
                     DropTarget { dir: p.clone(), class: "rounded-lg",
                         Link {
-                            to: Route::FilesPage { path: p.clone(), msg: String::new() },
+                            to: Route::files(&p),
                             class: if i + 1 == n { "{item} text-foreground" } else { "{item} text-muted-foreground hover:bg-accent hover:text-foreground" },
                             if i == 0 { {place_icon(&p, "size-4")} }
                             {if i == 0 { root_label(&p) } else { name }}

@@ -161,7 +161,7 @@ fn SideItem(
     let p_rm = path.clone();
     let link = rsx! {
         Link {
-            to: Route::FilesPage { path: path.clone(), msg: String::new() },
+            to: Route::files(&path),
             class: "{row}",
             span { class: "flex w-6 shrink-0 items-center justify-center", {icon} }
             span { class: "min-w-0 flex-1 truncate", "{label}" }

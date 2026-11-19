@@ -113,8 +113,3 @@ pub async fn call_as<T: serde::de::DeserializeOwned>(name: &str, args: Value) ->
     let v = call(name, args).await?;
     serde_json::from_value(v).map_err(|e| format!("Unerwartete Antwort von {name}: {e}"))
 }
-
-pub async fn list_tools() -> Result<Vec<Value>, String> {
-    let result = rpc("tools/list", json!({})).await?;
-    Ok(result.get("tools").and_then(Value::as_array).cloned().unwrap_or_default())
-}

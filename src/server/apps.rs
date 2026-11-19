@@ -119,19 +119,27 @@ fn domains_for(port: u16, hosts: &[ProxyHost]) -> (Option<String>, Option<String
 pub async fn tiles() -> Result<Vec<AppTile>, String> {
     let apps: Vec<AppInfo> = mcp::call_as("list_apps", json!({})).await?;
     let hosts = proxy_hosts().await;
-    let hidden = dash::get().hidden;
+    let d = dash::get();
     let ports = futures::future::join_all(apps.iter().map(|a| app_port(&a.id))).await;
     let mut tiles: Vec<AppTile> = apps
         .into_iter()
         .zip(ports)
         .map(|(a, port)| {
             let (user, admin) = port.map(|p| domains_for(p, &hosts)).unwrap_or_default();
+            let auto_user = user.map(|h| format!("https://{h}"));
+            let auto_admin = admin.map(|h| format!("https://{h}"));
+            let custom = d.links.get(&a.id).cloned().unwrap_or_default();
+            let own = |s: &str| (!s.trim().is_empty()).then(|| s.trim().to_string());
             AppTile {
-                hidden: hidden.contains(&a.id),
-                user_url: user.map(|h| format!("https://{h}")),
-                admin_url: admin.map(|h| format!("https://{h}")),
+                hidden: d.hidden.contains(&a.id),
+                user_url: own(&custom.user).or_else(|| auto_user.clone()),
+                admin_url: own(&custom.admin).or_else(|| auto_admin.clone()),
                 fallback_url: port.map(|p| format!("http://umbrel.local:{p}")),
-                name: a.name,
+                name: own(&custom.name).unwrap_or_else(|| a.name.clone()),
+                auto_name: a.name,
+                auto_user_url: auto_user,
+                auto_admin_url: auto_admin,
+                custom,
                 state: a.state,
                 update_available: a.update_available,
                 id: a.id,

@@ -1,7 +1,7 @@
-//! App menu (right click / long press): open as user or admin, start/stop, update, hide.
+//! App menu (right click / long press): open as user or admin, edit links, start/stop, update, hide.
 
 use dioxus::prelude::*;
-use icons::{ArrowUp, EyeOff, Globe, Play, RotateCw, ShieldCheck, Square};
+use icons::{ArrowUp, EyeOff, Globe, Pencil, Play, RotateCw, ShieldCheck, Square};
 
 use super::{AppIcon, HomeCtx, open_url};
 use crate::api::app_action;
@@ -94,6 +94,18 @@ pub fn AppMenu() -> Element {
                             Item { onclick: { let id = t.id.clone(); move |_| act(id.clone(), "stop") }, Square { class: "size-4" } "Stoppen" }
                         } else if t.state == "stopped" {
                             Item { onclick: { let id = t.id.clone(); move |_| act(id.clone(), "start") }, Play { class: "size-4" } "Starten" }
+                        }
+                        Item {
+                            onclick: {
+                                let t = t.clone();
+                                move |_| {
+                                    menu.set(None);
+                                    let mut editing = ctx.editing;
+                                    editing.set(Some(t.clone()));
+                                }
+                            },
+                            Pencil { class: "size-4" }
+                            "Bearbeiten"
                         }
                         if t.update_available {
                             Item { onclick: { let id = t.id.clone(); move |_| act(id.clone(), "update") }, ArrowUp { class: "size-4" } "Aktualisieren" }

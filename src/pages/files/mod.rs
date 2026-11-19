@@ -127,7 +127,7 @@ pub fn FilesPage(path: String, msg: String) -> Element {
         div {
             id: "fm-root",
             tabindex: "-1",
-            class: "relative -mb-24 flex h-[calc(100dvh-9.25rem-env(safe-area-inset-bottom,0px))] min-h-[28rem] w-full flex-col gap-3 outline-none md:mb-0 md:h-[calc(100dvh-7rem)] md:min-h-[30rem] md:flex-row md:gap-5",
+            class: "relative flex h-full min-h-0 w-full flex-col gap-3 outline-none md:flex-row md:gap-5",
             onkeydown,
             ondragenter: move |e: DragEvent| {
                 if fm.drag.peek().is_none() && web::drag_has_files(&e) {
@@ -411,7 +411,7 @@ fn MobileFab() -> Element {
     let mut open = use_signal(|| false);
     let item = "flex items-center gap-3 rounded-full border bg-popover py-2 pl-3 pr-4 text-sm shadow-lg";
     rsx! {
-        div { class: "fixed bottom-[calc(5rem+env(safe-area-inset-bottom,0px))] right-4 z-30 flex flex-col items-end gap-2 md:hidden",
+        div { class: "absolute bottom-4 right-4 z-30 flex flex-col items-end gap-2 md:hidden",
             if open() {
                 button { class: item, onclick: move |_| { open.set(false); fm.new_folder.set(true); }, FolderPlus { class: "size-4" } "Neuer Ordner" }
                 button { class: item, onclick: move |_| { open.set(false); web::click("fm-pick-folder"); }, FolderUp { class: "size-4" } "Ordner hochladen" }

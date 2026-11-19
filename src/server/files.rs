@@ -167,7 +167,7 @@ pub async fn upload_handler(Query(q): Query<UploadQuery>, mut multipart: Multipa
     } else {
         format!("{ok} hochgeladen, Fehler: {}", errors.join("; "))
     };
-    Redirect::to(&format!("/files?path={}&msg={}", enc(if dir.is_empty() { "/" } else { &dir }), enc(&msg))).into_response()
+    Redirect::to(&format!("/?w=files&path={}&msg={}", enc(if dir.is_empty() { "/" } else { &dir }), enc(&msg))).into_response()
 }
 
 

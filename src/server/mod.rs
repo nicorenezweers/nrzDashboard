@@ -1,6 +1,5 @@
 //! Server-only code: configuration, login (password + 2FA), umbrelOS MCP client, app domains, file proxy.
 
-pub mod agent;
 pub mod apps;
 pub mod auth;
 pub mod dash;
@@ -84,7 +83,6 @@ pub fn router(app: fn() -> dioxus::prelude::Element) -> axum::Router {
             post(files::upload_handler).layer(axum::extract::DefaultBodyLimit::disable()),
         )
         .merge(files::routes())
-        .merge(agent::routes())
         .merge(apps::routes())
         .layer(axum::middleware::from_fn(auth::auth_middleware))
 }

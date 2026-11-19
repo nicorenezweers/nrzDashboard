@@ -1,6 +1,5 @@
 //! Server functions called by the UI. All of them sit behind the auth middleware (`/api/*`).
 
-pub mod agent;
 pub mod apps;
 pub mod files;
 pub mod home;

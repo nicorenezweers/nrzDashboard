@@ -32,8 +32,7 @@ fn actions() -> Vec<(&'static str, &'static str, Action)> {
         ("Updates", "App-Updates installieren", Action::Win(Win::Updates)),
         ("Aktivität", "CPU, RAM und Speicher", Action::Win(Win::Activity)),
         ("Einstellungen", "Name, App-Adressen, Anmeldung", Action::Win(Win::Settings)),
-        ("Dateien", "Deine Dateien", Action::Route(Route::FilesPage { path: "/Home".into(), msg: String::new() })),
-        ("Agent", "KI-Assistent für dein Umbrel", Action::Route(Route::AgentPage {})),
+        ("Dateien", "Deine Dateien", Action::Route(Route::files("/Home"))),
     ]
 }
 
@@ -111,7 +110,7 @@ pub fn Spotlight(onclose: EventHandler<()>) -> Element {
                 subtitle: f.path.clone(),
                 app: None,
                 kind: if f.is_dir() { "Ordner" } else { "Dateien" },
-                action: Action::Route(Route::FilesPage { path: dir, msg: String::new() }),
+                action: Action::Route(Route::files(&dir)),
             });
         }
     }

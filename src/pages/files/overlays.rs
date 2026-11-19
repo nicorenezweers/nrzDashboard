@@ -382,7 +382,7 @@ pub fn SelectionBar() -> Element {
     let btn = "flex min-w-14 flex-col items-center gap-0.5 rounded-lg px-2 py-1.5 text-[11px] hover:bg-accent disabled:opacity-40 md:flex-row md:gap-2 md:px-3 md:text-sm";
     let label = if count == 1 { "1 ausgewählt".to_string() } else { format!("{count} ausgewählt") };
     rsx! {
-        div { class: "pointer-events-none fixed inset-x-0 bottom-[calc(4.25rem+env(safe-area-inset-bottom,0px))] z-30 flex justify-center px-2 md:bottom-6",
+        div { class: "pointer-events-none fixed inset-x-0 bottom-[calc(1.5rem+env(safe-area-inset-bottom,0px))] z-30 flex justify-center px-2 md:bottom-6",
             div { class: "pointer-events-auto flex max-w-full items-center gap-1 overflow-x-auto rounded-2xl border bg-popover p-1.5 shadow-2xl",
                 button {
                     class: "inline-flex size-10 shrink-0 items-center justify-center rounded-lg hover:bg-accent",

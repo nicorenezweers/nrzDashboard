@@ -26,6 +26,8 @@ pub struct Dash {
     pub totp_secret: String,
     pub totp_enabled: bool,
     pub hidden: Vec<String>,
+    /// Own name / public link / admin link per app (empty field = automatic).
+    pub links: std::collections::HashMap<String, crate::api::apps::AppLinks>,
 }
 
 impl Default for Dash {
@@ -39,6 +41,7 @@ impl Default for Dash {
             totp_secret: String::new(),
             totp_enabled: false,
             hidden: Vec::new(),
+            links: Default::default(),
         }
     }
 }

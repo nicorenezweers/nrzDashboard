@@ -482,7 +482,7 @@ impl Fm {
     }
 
     pub fn navigate(self, path: &str) {
-        navigator().push(Route::FilesPage { path: path.to_string(), msg: String::new() });
+        navigator().push(Route::files(path));
     }
 
     /// Display list: search results or the folder, sorted.

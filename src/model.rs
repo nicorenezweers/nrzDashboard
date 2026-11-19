@@ -113,20 +113,3 @@ pub struct DirListing {
     pub total_files: f64,
     pub has_more: bool,
 }
-
-/// Tools that delete data or reboot – the UI asks twice.
-#[cfg_attr(not(feature = "server"), allow(dead_code))]
-pub const DESTRUCTIVE_TOOLS: &[&str] = &[
-    "uninstall_app",
-    "reset_app_data",
-    "move_app_data",
-    "trash",
-    "install_os_update",
-    "restart_device",
-    "set_hostname",
-    "set_release_channel",
-    "delete_machine",
-    "force_stop_machine",
-    "stop_machine",
-    "stop_app",
-];

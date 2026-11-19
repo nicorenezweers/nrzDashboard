@@ -2,13 +2,14 @@
 //! live CPU/RAM/storage, search (⌘K), dock and windows for App Store, activity and settings.
 
 mod activity;
+mod edit;
 mod menu;
 mod settings;
 mod spotlight;
 mod store;
 
 use dioxus::prelude::*;
-use icons::{Activity, ArrowUp, Bot, ChevronLeft, ChevronRight, Cpu, FolderOpen, HardDrive, LogOut, MemoryStick, RefreshCw, Settings, ShoppingBag, X};
+use icons::{Activity, ArrowUp, ChevronLeft, ChevronRight, Cpu, FolderOpen, HardDrive, LogOut, MemoryStick, RefreshCw, Settings, ShoppingBag, X};
 
 use crate::api::apps::{AppTile, app_tiles};
 use crate::api::get_overview;
@@ -33,6 +34,7 @@ pub enum Win {
     Updates,
     Activity,
     Settings,
+    Files,
 }
 
 impl Win {
@@ -42,6 +44,7 @@ impl Win {
             Self::Updates => "updates",
             Self::Activity => "activity",
             Self::Settings => "settings",
+            Self::Files => "files",
         }
     }
 
@@ -51,17 +54,19 @@ impl Win {
             "updates" => Self::Updates,
             "activity" => Self::Activity,
             "settings" => Self::Settings,
+            "files" => Self::Files,
             _ => return None,
         })
     }
 }
 
 pub fn open_win(win: Win) {
-    navigator().push(Route::HomePage { w: win.key().to_string() });
+    let route = if win == Win::Files { Route::files("/Home") } else { Route::HomePage { w: win.key().to_string(), path: String::new(), msg: String::new() } };
+    navigator().push(route);
 }
 
 pub fn close_win() {
-    navigator().replace(Route::HomePage { w: String::new() });
+    navigator().replace(Route::home());
 }
 
 /// Data shared by the home screen and its windows.
@@ -73,6 +78,8 @@ pub struct HomeCtx {
     /// Bump to reload everything at once.
     pub refresh: Signal<u32>,
     pub menu: Signal<Option<MenuReq>>,
+    /// App whose name/links are being edited.
+    pub editing: Signal<Option<AppTile>>,
 }
 
 impl HomeCtx {
@@ -167,16 +174,17 @@ window.__nrzHomeResize();
 /// Current `w` query parameter (read inside the key listener).
 fn current_w() -> String {
     match router().current::<Route>() {
-        Route::HomePage { w } => w,
+        Route::HomePage { w, .. } => w,
         _ => String::new(),
     }
 }
 
 #[component]
-pub fn HomePage(w: String) -> Element {
+pub fn HomePage(w: String, path: String, msg: String) -> Element {
     let win = Win::parse(&w);
     let refresh = use_signal(|| 0u32);
     let mut menu = use_signal(|| None::<MenuReq>);
+    let editing = use_signal(|| None::<AppTile>);
 
     let mut overview = use_resource(move || {
         let _ = refresh();
@@ -190,7 +198,7 @@ pub fn HomePage(w: String) -> Element {
         let _ = refresh();
         settings_get()
     });
-    let ctx = use_context_provider(|| HomeCtx { overview, tiles, settings, refresh, menu });
+    let ctx = use_context_provider(|| HomeCtx { overview, tiles, settings, refresh, menu, editing });
 
     // Live values: resources every 5 s, apps every 15 s.
     use_future(move || async move {
@@ -226,7 +234,7 @@ pub fn HomePage(w: String) -> Element {
                 "search" => spotlight.toggle(),
                 "esc" if menu.peek().is_some() => menu.set(None),
                 "esc" if spotlight() => spotlight.set(false),
-                "esc" if open => close_win(),
+                "esc" if open && current_w() != "files" => close_win(),
                 "left" if !spotlight() && !open => page.set(page().saturating_sub(1)),
                 "right" if !spotlight() && !open => page.set(page() + 1),
                 _ => {}
@@ -376,12 +384,14 @@ pub fn HomePage(w: String) -> Element {
                     Win::Updates => rsx! { store::StoreWindow { updates: true } },
                     Win::Activity => rsx! { activity::ActivityWindow {} },
                     Win::Settings => rsx! { settings::SettingsWindow {} },
+                    Win::Files => rsx! { FilesWindow { path: path.clone(), msg: msg.clone() } },
                 }
             }
             if spotlight() {
                 spotlight::Spotlight { onclose: move |_| spotlight.set(false) }
             }
             AppMenu {}
+            edit::EditDialog {}
         }
     }
 }
@@ -585,46 +595,28 @@ fn MiniMeter(icon: Element, label: String, value: f64, text: String) -> Element 
 enum DockItem {
     Files,
     Store,
-    Agent,
     Activity,
     Settings,
 }
 
 impl DockItem {
-    const ALL: [Self; 5] = [Self::Files, Self::Store, Self::Agent, Self::Activity, Self::Settings];
+    const ALL: [Self; 4] = [Self::Files, Self::Store, Self::Activity, Self::Settings];
 
     const fn label(self) -> &'static str {
         match self {
             Self::Files => "Dateien",
             Self::Store => "App Store",
-            Self::Agent => "Agent",
             Self::Activity => "Aktivität",
             Self::Settings => "Einstellungen",
         }
     }
 
-    fn win(self) -> Option<Win> {
+    const fn win(self) -> Win {
         match self {
-            Self::Store => Some(Win::Store),
-            Self::Activity => Some(Win::Activity),
-            Self::Settings => Some(Win::Settings),
-            _ => None,
-        }
-    }
-
-    fn open(self) {
-        match self {
-            Self::Files => {
-                navigator().push(Route::FilesPage { path: "/Home".into(), msg: String::new() });
-            }
-            Self::Agent => {
-                navigator().push(Route::AgentPage {});
-            }
-            other => {
-                if let Some(w) = other.win() {
-                    open_win(w);
-                }
-            }
+            Self::Files => Win::Files,
+            Self::Store => Win::Store,
+            Self::Activity => Win::Activity,
+            Self::Settings => Win::Settings,
         }
     }
 
@@ -633,7 +625,6 @@ impl DockItem {
         match self {
             Self::Files => rsx! { FolderOpen { class } },
             Self::Store => rsx! { ShoppingBag { class } },
-            Self::Agent => rsx! { Bot { class } },
             Self::Activity => rsx! { Activity { class } },
             Self::Settings => rsx! { Settings { class } },
         }
@@ -648,14 +639,14 @@ fn Dock(active: Option<Win>) -> Element {
             div { class: "flex items-end gap-2 md:gap-3",
                 for item in DockItem::ALL {
                     {
-                        let is_active = item.win().is_some() && (item.win() == active || (item == DockItem::Store && active == Some(Win::Updates)));
+                        let is_active = Some(item.win()) == active || (item == DockItem::Store && active == Some(Win::Updates));
                         rsx! {
                             button {
                                 key: "{item.label()}",
                                 class: "group relative flex flex-col items-center",
                                 title: "{item.label()}",
                                 "aria-label": "{item.label()}",
-                                onclick: move |_| item.open(),
+                                onclick: move |_| open_win(item.win()),
                                 span { class: "pointer-events-none absolute -top-9 whitespace-nowrap rounded-md bg-black/70 px-2 py-1 text-xs text-white opacity-0 backdrop-blur transition group-hover:opacity-100",
                                     "{item.label()}"
                                 }
@@ -692,6 +683,32 @@ pub fn HomeWindow(title: String, #[props(default)] narrow: bool, children: Eleme
                     }
                 }
                 div { class: "min-h-0 flex-1 overflow-y-auto px-5 pb-[max(env(safe-area-inset-bottom,0px),1.25rem)] md:px-7 md:pb-7", {children} }
+            }
+        }
+    }
+}
+
+/// File manager as a window (drag & drop upload, preview, …) – without blur so its menus
+/// are positioned against the whole screen.
+#[component]
+fn FilesWindow(path: String, msg: String) -> Element {
+    rsx! {
+        div { class: "fixed inset-0 z-50 flex items-stretch justify-center bg-black/55 md:items-center md:p-6", onclick: move |_| close_win(),
+            div {
+                class: "relative flex h-full w-full flex-col overflow-hidden border-white/10 bg-[#141414] text-white shadow-2xl md:h-[min(90dvh,960px)] md:max-w-7xl md:rounded-[1.75rem] md:border",
+                onclick: move |e| e.stop_propagation(),
+                div { class: "flex shrink-0 items-center justify-between gap-3 px-5 pb-2 pt-[max(env(safe-area-inset-top,0px),1rem)] md:px-6 md:pt-5",
+                    h2 { class: "text-xl font-semibold", "Dateien" }
+                    button {
+                        class: "flex size-9 items-center justify-center rounded-full bg-white/10 text-white/80 transition hover:bg-white/20 hover:text-white",
+                        "aria-label": "Schließen",
+                        onclick: move |_| close_win(),
+                        X { class: "size-4" }
+                    }
+                }
+                div { class: "min-h-0 flex-1 px-3 pb-[max(env(safe-area-inset-bottom,0px),0.75rem)] md:px-5 md:pb-5",
+                    crate::pages::files::FilesPage { path, msg }
+                }
             }
         }
     }
