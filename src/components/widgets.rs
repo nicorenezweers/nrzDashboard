@@ -8,11 +8,7 @@ use crate::components::ui::card::Card;
 use crate::components::ui::progress::Progress;
 
 #[component]
-pub fn PageHeader(
-    title: String,
-    #[props(into, optional)] subtitle: Option<String>,
-    children: Element,
-) -> Element {
+pub fn PageHeader(title: String, #[props(into, optional)] subtitle: Option<String>, children: Element) -> Element {
     rsx! {
         div { class: "mb-6 flex flex-wrap items-end justify-between gap-3",
             div {
@@ -27,10 +23,7 @@ pub fn PageHeader(
 }
 
 #[component]
-pub fn RefreshButton(
-    onclick: EventHandler<MouseEvent>,
-    #[props(optional)] loading: bool,
-) -> Element {
+pub fn RefreshButton(onclick: EventHandler<MouseEvent>, #[props(optional)] loading: bool) -> Element {
     rsx! {
         Button {
             variant: ButtonVariant::Outline,

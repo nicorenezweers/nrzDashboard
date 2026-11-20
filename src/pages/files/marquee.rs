@@ -46,37 +46,23 @@ mod dom {
     use wasm_bindgen::JsCast;
 
     pub fn container() -> Option<web_sys::Element> {
-        web_sys::window()?
-            .document()?
-            .get_element_by_id(super::SCROLL_ID)
+        web_sys::window()?.document()?.get_element_by_id(super::SCROLL_ID)
     }
 
     /// Client → content coordinates of the scroll container.
     pub fn to_content(c: &web_sys::Element, x: f64, y: f64) -> (f64, f64) {
         let r = c.get_bounding_client_rect();
-        (
-            x - r.left() + f64::from(c.scroll_left()),
-            y - r.top() + f64::from(c.scroll_top()),
-        )
+        (x - r.left() + f64::from(c.scroll_left()), y - r.top() + f64::from(c.scroll_top()))
     }
 
     pub fn item_rects(c: &web_sys::Element) -> Vec<super::ItemRect> {
         let mut out = Vec::new();
-        let Ok(list) = c.query_selector_all("[data-path]") else {
-            return out;
-        };
+        let Ok(list) = c.query_selector_all("[data-path]") else { return out };
         let cr = c.get_bounding_client_rect();
         let (sx, sy) = (f64::from(c.scroll_left()), f64::from(c.scroll_top()));
         for i in 0..list.length() {
-            let Some(el) = list
-                .item(i)
-                .and_then(|n| n.dyn_into::<web_sys::Element>().ok())
-            else {
-                continue;
-            };
-            let Some(path) = el.get_attribute("data-path") else {
-                continue;
-            };
+            let Some(el) = list.item(i).and_then(|n| n.dyn_into::<web_sys::Element>().ok()) else { continue };
+            let Some(path) = el.get_attribute("data-path") else { continue };
             let r = el.get_bounding_client_rect();
             let l = r.left() - cr.left() + sx;
             let t = r.top() - cr.top() + sy;
@@ -87,18 +73,8 @@ mod dom {
 
     /// Pointer went down on empty space (not on an item, button, input …) and not on the scrollbar.
     pub fn on_background(e: &web_sys::PointerEvent, c: &web_sys::Element) -> bool {
-        let Some(target) = e
-            .target()
-            .and_then(|t| t.dyn_into::<web_sys::Element>().ok())
-        else {
-            return false;
-        };
-        if target
-            .closest("[data-path],button,a,input,textarea,select,label,[role=menu]")
-            .ok()
-            .flatten()
-            .is_some()
-        {
+        let Some(target) = e.target().and_then(|t| t.dyn_into::<web_sys::Element>().ok()) else { return false };
+        if target.closest("[data-path],button,a,input,textarea,select,label,[role=menu]").ok().flatten().is_some() {
             return false;
         }
         let r = c.get_bounding_client_rect();
@@ -121,15 +97,10 @@ pub fn begin(e: &PointerEvent, fm: Fm, mut state: Signal<Option<Marquee>>) {
     #[cfg(feature = "web")]
     {
         use dioxus::html::input_data::MouseButton;
-        if e.pointer_type() != "mouse"
-            || *fm.touch.peek()
-            || e.trigger_button() != Some(MouseButton::Primary)
-        {
+        if e.pointer_type() != "mouse" || *fm.touch.peek() || e.trigger_button() != Some(MouseButton::Primary) {
             return;
         }
-        let Some(raw) = e.data().downcast::<web_sys::PointerEvent>().cloned() else {
-            return;
-        };
+        let Some(raw) = e.data().downcast::<web_sys::PointerEvent>().cloned() else { return };
         let Some(c) = dom::container() else { return };
         if !dom::on_background(&raw, &c) {
             return;
@@ -143,11 +114,7 @@ pub fn begin(e: &PointerEvent, fm: Fm, mut state: Signal<Option<Marquee>>) {
             cur: start,
             client: (p.x, p.y),
             rects: dom::item_rects(&c),
-            base: if additive {
-                fm.selected.peek().clone()
-            } else {
-                BTreeSet::new()
-            },
+            base: if additive { fm.selected.peek().clone() } else { BTreeSet::new() },
             additive,
             active: false,
         }));
@@ -161,9 +128,7 @@ pub fn begin(e: &PointerEvent, fm: Fm, mut state: Signal<Option<Marquee>>) {
 fn update(fm: Fm, mut state: Signal<Option<Marquee>>, x: f64, y: f64) {
     #[cfg(feature = "web")]
     {
-        let Some(mut m) = state.peek().clone() else {
-            return;
-        };
+        let Some(mut m) = state.peek().clone() else { return };
         let Some(c) = dom::container() else { return };
         dom::autoscroll(&c, y);
         m.client = (x, y);
@@ -173,11 +138,7 @@ fn update(fm: Fm, mut state: Signal<Option<Marquee>>, x: f64, y: f64) {
         }
         m.active = true;
         let hits = m.hits();
-        let next: BTreeSet<String> = if m.additive {
-            m.base.union(&hits).cloned().collect()
-        } else {
-            hits
-        };
+        let next: BTreeSet<String> = if m.additive { m.base.union(&hits).cloned().collect() } else { hits };
         let mut sel = fm.selected;
         if *sel.peek() != next {
             sel.set(next);
@@ -204,9 +165,7 @@ fn finish(fm: Fm, mut state: Signal<Option<Marquee>>) {
 /// The selection rectangle, rendered inside the scroll container (content coordinates).
 #[component]
 pub fn MarqueeRect(state: Signal<Option<Marquee>>) -> Element {
-    let Some(m) = state.read().clone().filter(|m| m.active) else {
-        return rsx! {};
-    };
+    let Some(m) = state.read().clone().filter(|m| m.active) else { return rsx! {} };
     let (l, t, r, b) = m.bounds();
     rsx! {
         div {
@@ -261,20 +220,10 @@ mod tests {
             ("/c".to_string(), 0.0, 120.0, 100.0, 220.0),
         ];
         // dragged from bottom-right to top-left, touching /b and /c only partially
-        let m = Marquee {
-            start: (150.0, 150.0),
-            cur: (90.0, 50.0),
-            rects,
-            ..Default::default()
-        };
+        let m = Marquee { start: (150.0, 150.0), cur: (90.0, 50.0), rects, ..Default::default() };
         let hits: Vec<String> = m.hits().into_iter().collect();
         assert_eq!(hits, vec!["/a", "/b", "/c"]);
-        let small = Marquee {
-            start: (130.0, 10.0),
-            cur: (140.0, 20.0),
-            rects: m.rects.clone(),
-            ..Default::default()
-        };
+        let small = Marquee { start: (130.0, 10.0), cur: (140.0, 20.0), rects: m.rects.clone(), ..Default::default() };
         assert_eq!(small.hits().into_iter().collect::<Vec<_>>(), vec!["/b"]);
     }
 }

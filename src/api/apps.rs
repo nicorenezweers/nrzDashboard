@@ -47,15 +47,8 @@ pub struct AppTile {
 impl AppTile {
     /// Address for the chosen mode (`user` / `admin`), falling back to the other domain.
     pub fn url(&self, mode: &str) -> Option<String> {
-        let (first, second) = if mode == "admin" {
-            (&self.admin_url, &self.user_url)
-        } else {
-            (&self.user_url, &self.admin_url)
-        };
-        first
-            .clone()
-            .or_else(|| second.clone())
-            .or_else(|| self.fallback_url.as_deref().map(browser_url))
+        let (first, second) = if mode == "admin" { (&self.admin_url, &self.user_url) } else { (&self.user_url, &self.admin_url) };
+        first.clone().or_else(|| second.clone()).or_else(|| self.fallback_url.as_deref().map(browser_url))
     }
 
     pub fn is_running(&self) -> bool {
@@ -66,10 +59,7 @@ impl AppTile {
 /// `umbrel.local` → host of the page (only for apps without a domain).
 pub fn browser_url(url: &str) -> String {
     #[cfg(feature = "web")]
-    if let Some(host) = web_sys::window()
-        .and_then(|w| w.location().hostname().ok())
-        .filter(|h| !h.is_empty())
-    {
+    if let Some(host) = web_sys::window().and_then(|w| w.location().hostname().ok()).filter(|h| !h.is_empty()) {
         return url.replace("umbrel.local", &host);
     }
     url.to_string()
@@ -100,18 +90,8 @@ pub fn normalize_link(s: &str) -> Result<String, String> {
     if s.chars().any(char::is_whitespace) {
         return Err(format!("„{s}“ ist keine gültige Adresse"));
     }
-    let url = if s.starts_with("http://") || s.starts_with("https://") {
-        s.to_string()
-    } else {
-        format!("https://{s}")
-    };
-    let host = url
-        .split_once("://")
-        .map(|(_, r)| r)
-        .unwrap_or_default()
-        .split(['/', '?', '#'])
-        .next()
-        .unwrap_or_default();
+    let url = if s.starts_with("http://") || s.starts_with("https://") { s.to_string() } else { format!("https://{s}") };
+    let host = url.split_once("://").map(|(_, r)| r).unwrap_or_default().split(['/', '?', '#']).next().unwrap_or_default();
     if host.is_empty() || host.starts_with('.') || host.starts_with(':') {
         return Err(format!("„{s}“ ist keine gültige Adresse"));
     }

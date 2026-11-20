@@ -21,13 +21,9 @@ pub fn get_icon_css(icon_type: IconTypeAnimated) -> Option<&'static str> {
         IconTypeAnimated::AnnoyedAnimate => Some(super::icon_registry_css::ANNOYED_CSS),
         IconTypeAnimated::ArchiveAnimate => Some(super::icon_registry_css::ARCHIVE_CSS),
         IconTypeAnimated::ArrowBigDownAnimate => Some(super::icon_registry_css::ARROWBIGDOWN_CSS),
-        IconTypeAnimated::ArrowBigDownDashAnimate => {
-            Some(super::icon_registry_css::ARROWBIGDOWNDASH_CSS)
-        }
+        IconTypeAnimated::ArrowBigDownDashAnimate => Some(super::icon_registry_css::ARROWBIGDOWNDASH_CSS),
         IconTypeAnimated::ArrowBigLeftAnimate => Some(super::icon_registry_css::ARROWBIGLEFT_CSS),
-        IconTypeAnimated::ArrowBigLeftDashAnimate => {
-            Some(super::icon_registry_css::ARROWBIGLEFTDASH_CSS)
-        }
+        IconTypeAnimated::ArrowBigLeftDashAnimate => Some(super::icon_registry_css::ARROWBIGLEFTDASH_CSS),
         IconTypeAnimated::BlocksAnimate => Some(super::icon_registry_css::BLOCKS_CSS),
         IconTypeAnimated::CalendarDaysAnimate => Some(super::icon_registry_css::CALENDARDAYS_CSS),
         IconTypeAnimated::CompassAnimate => Some(super::icon_registry_css::COMPASS_CSS),
@@ -37,83 +33,43 @@ pub fn get_icon_css(icon_type: IconTypeAnimated) -> Option<&'static str> {
         IconTypeAnimated::PanelLeftOpenAnimate => Some(super::icon_registry_css::PANELLEFTOPEN_CSS),
         IconTypeAnimated::PlusAnimate => Some(super::icon_registry_css::PLUS_CSS),
         IconTypeAnimated::SearchAnimate => Some(super::icon_registry_css::SEARCH_CSS),
-        IconTypeAnimated::SquareChevronRightAnimate => {
-            Some(super::icon_registry_css::SQUARECHEVRONRIGHT_CSS)
-        }
+        IconTypeAnimated::SquareChevronRightAnimate => Some(super::icon_registry_css::SQUARECHEVRONRIGHT_CSS),
         IconTypeAnimated::TornadoAnimate => Some(super::icon_registry_css::TORNADO_CSS),
         IconTypeAnimated::WindAnimate => Some(super::icon_registry_css::WIND_CSS),
     }
 }
 
 /// Get static SVG elements for a specific animated icon. Zero-allocation O(1) lookup.
-pub fn get_animated_icon_elements(
-    icon_type: IconTypeAnimated,
-) -> Option<&'static [StaticSvgElement]> {
+pub fn get_animated_icon_elements(icon_type: IconTypeAnimated) -> Option<&'static [StaticSvgElement]> {
     match icon_type {
-        IconTypeAnimated::AArrowDownAnimate => {
-            Some(crate::common::icon_registry_elements::AARROWDOWN_ELEMENTS)
-        }
-        IconTypeAnimated::AirVentAnimate => {
-            Some(crate::common::icon_registry_elements::AIRVENT_ELEMENTS)
-        }
-        IconTypeAnimated::AlarmClockAnimate => {
-            Some(crate::common::icon_registry_elements::ALARMCLOCK_ELEMENTS)
-        }
-        IconTypeAnimated::AlignCenterAnimate => {
-            Some(crate::common::icon_registry_elements::ALIGNCENTER_ELEMENTS)
-        }
-        IconTypeAnimated::AngryAnimate => {
-            Some(crate::common::icon_registry_elements::ANGRY_ELEMENTS)
-        }
-        IconTypeAnimated::AnnoyedAnimate => {
-            Some(crate::common::icon_registry_elements::ANNOYED_ELEMENTS)
-        }
-        IconTypeAnimated::ArchiveAnimate => {
-            Some(crate::common::icon_registry_elements::ARCHIVE_ELEMENTS)
-        }
-        IconTypeAnimated::ArrowBigDownAnimate => {
-            Some(crate::common::icon_registry_elements::ARROWBIGDOWN_ELEMENTS)
-        }
+        IconTypeAnimated::AArrowDownAnimate => Some(crate::common::icon_registry_elements::AARROWDOWN_ELEMENTS),
+        IconTypeAnimated::AirVentAnimate => Some(crate::common::icon_registry_elements::AIRVENT_ELEMENTS),
+        IconTypeAnimated::AlarmClockAnimate => Some(crate::common::icon_registry_elements::ALARMCLOCK_ELEMENTS),
+        IconTypeAnimated::AlignCenterAnimate => Some(crate::common::icon_registry_elements::ALIGNCENTER_ELEMENTS),
+        IconTypeAnimated::AngryAnimate => Some(crate::common::icon_registry_elements::ANGRY_ELEMENTS),
+        IconTypeAnimated::AnnoyedAnimate => Some(crate::common::icon_registry_elements::ANNOYED_ELEMENTS),
+        IconTypeAnimated::ArchiveAnimate => Some(crate::common::icon_registry_elements::ARCHIVE_ELEMENTS),
+        IconTypeAnimated::ArrowBigDownAnimate => Some(crate::common::icon_registry_elements::ARROWBIGDOWN_ELEMENTS),
         IconTypeAnimated::ArrowBigDownDashAnimate => {
             Some(crate::common::icon_registry_elements::ARROWBIGDOWNDASH_ELEMENTS)
         }
-        IconTypeAnimated::ArrowBigLeftAnimate => {
-            Some(crate::common::icon_registry_elements::ARROWBIGLEFT_ELEMENTS)
-        }
+        IconTypeAnimated::ArrowBigLeftAnimate => Some(crate::common::icon_registry_elements::ARROWBIGLEFT_ELEMENTS),
         IconTypeAnimated::ArrowBigLeftDashAnimate => {
             Some(crate::common::icon_registry_elements::ARROWBIGLEFTDASH_ELEMENTS)
         }
-        IconTypeAnimated::BlocksAnimate => {
-            Some(crate::common::icon_registry_elements::BLOCKS_ELEMENTS)
-        }
-        IconTypeAnimated::CalendarDaysAnimate => {
-            Some(crate::common::icon_registry_elements::CALENDARDAYS_ELEMENTS)
-        }
-        IconTypeAnimated::CompassAnimate => {
-            Some(crate::common::icon_registry_elements::COMPASS_ELEMENTS)
-        }
-        IconTypeAnimated::ExpandAnimate => {
-            Some(crate::common::icon_registry_elements::EXPAND_ELEMENTS)
-        }
-        IconTypeAnimated::FrameAnimate => {
-            Some(crate::common::icon_registry_elements::FRAME_ELEMENTS)
-        }
-        IconTypeAnimated::HeartAnimate => {
-            Some(crate::common::icon_registry_elements::HEART_ELEMENTS)
-        }
-        IconTypeAnimated::PanelLeftOpenAnimate => {
-            Some(crate::common::icon_registry_elements::PANELLEFTOPEN_ELEMENTS)
-        }
+        IconTypeAnimated::BlocksAnimate => Some(crate::common::icon_registry_elements::BLOCKS_ELEMENTS),
+        IconTypeAnimated::CalendarDaysAnimate => Some(crate::common::icon_registry_elements::CALENDARDAYS_ELEMENTS),
+        IconTypeAnimated::CompassAnimate => Some(crate::common::icon_registry_elements::COMPASS_ELEMENTS),
+        IconTypeAnimated::ExpandAnimate => Some(crate::common::icon_registry_elements::EXPAND_ELEMENTS),
+        IconTypeAnimated::FrameAnimate => Some(crate::common::icon_registry_elements::FRAME_ELEMENTS),
+        IconTypeAnimated::HeartAnimate => Some(crate::common::icon_registry_elements::HEART_ELEMENTS),
+        IconTypeAnimated::PanelLeftOpenAnimate => Some(crate::common::icon_registry_elements::PANELLEFTOPEN_ELEMENTS),
         IconTypeAnimated::PlusAnimate => Some(crate::common::icon_registry_elements::PLUS_ELEMENTS),
-        IconTypeAnimated::SearchAnimate => {
-            Some(crate::common::icon_registry_elements::SEARCH_ELEMENTS)
-        }
+        IconTypeAnimated::SearchAnimate => Some(crate::common::icon_registry_elements::SEARCH_ELEMENTS),
         IconTypeAnimated::SquareChevronRightAnimate => {
             Some(crate::common::icon_registry_elements::SQUARECHEVRONRIGHT_ELEMENTS)
         }
-        IconTypeAnimated::TornadoAnimate => {
-            Some(crate::common::icon_registry_elements::TORNADO_ELEMENTS)
-        }
+        IconTypeAnimated::TornadoAnimate => Some(crate::common::icon_registry_elements::TORNADO_ELEMENTS),
         IconTypeAnimated::WindAnimate => Some(crate::common::icon_registry_elements::WIND_ELEMENTS),
     }
 }
@@ -128,40 +84,22 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::AArrowDown => Some(crate::common::icon_registry_elements::AARROWDOWN_ELEMENTS),
         IconType::AArrowUp => Some(crate::common::icon_registry_elements::AARROWUP_ELEMENTS),
         IconType::ALargeSmall => Some(crate::common::icon_registry_elements::ALARGESMALL_ELEMENTS),
-        IconType::Accessibility => {
-            Some(crate::common::icon_registry_elements::ACCESSIBILITY_ELEMENTS)
-        }
+        IconType::Accessibility => Some(crate::common::icon_registry_elements::ACCESSIBILITY_ELEMENTS),
         IconType::Activity => Some(crate::common::icon_registry_elements::ACTIVITY_ELEMENTS),
         IconType::AirVent => Some(crate::common::icon_registry_elements::AIRVENT_ELEMENTS),
         IconType::Airplay => Some(crate::common::icon_registry_elements::AIRPLAY_ELEMENTS),
         IconType::AlarmClock => Some(crate::common::icon_registry_elements::ALARMCLOCK_ELEMENTS),
-        IconType::AlarmClockCheck => {
-            Some(crate::common::icon_registry_elements::ALARMCLOCKCHECK_ELEMENTS)
-        }
-        IconType::AlarmClockMinus => {
-            Some(crate::common::icon_registry_elements::ALARMCLOCKMINUS_ELEMENTS)
-        }
-        IconType::AlarmClockOff => {
-            Some(crate::common::icon_registry_elements::ALARMCLOCKOFF_ELEMENTS)
-        }
-        IconType::AlarmClockPlus => {
-            Some(crate::common::icon_registry_elements::ALARMCLOCKPLUS_ELEMENTS)
-        }
+        IconType::AlarmClockCheck => Some(crate::common::icon_registry_elements::ALARMCLOCKCHECK_ELEMENTS),
+        IconType::AlarmClockMinus => Some(crate::common::icon_registry_elements::ALARMCLOCKMINUS_ELEMENTS),
+        IconType::AlarmClockOff => Some(crate::common::icon_registry_elements::ALARMCLOCKOFF_ELEMENTS),
+        IconType::AlarmClockPlus => Some(crate::common::icon_registry_elements::ALARMCLOCKPLUS_ELEMENTS),
         IconType::AlarmSmoke => Some(crate::common::icon_registry_elements::ALARMSMOKE_ELEMENTS),
         IconType::Album => Some(crate::common::icon_registry_elements::ALBUM_ELEMENTS),
         IconType::AlignCenter => Some(crate::common::icon_registry_elements::ALIGNCENTER_ELEMENTS),
-        IconType::AlignCenterHorizontal => {
-            Some(crate::common::icon_registry_elements::ALIGNCENTERHORIZONTAL_ELEMENTS)
-        }
-        IconType::AlignCenterVertical => {
-            Some(crate::common::icon_registry_elements::ALIGNCENTERVERTICAL_ELEMENTS)
-        }
-        IconType::AlignEndHorizontal => {
-            Some(crate::common::icon_registry_elements::ALIGNENDHORIZONTAL_ELEMENTS)
-        }
-        IconType::AlignEndVertical => {
-            Some(crate::common::icon_registry_elements::ALIGNENDVERTICAL_ELEMENTS)
-        }
+        IconType::AlignCenterHorizontal => Some(crate::common::icon_registry_elements::ALIGNCENTERHORIZONTAL_ELEMENTS),
+        IconType::AlignCenterVertical => Some(crate::common::icon_registry_elements::ALIGNCENTERVERTICAL_ELEMENTS),
+        IconType::AlignEndHorizontal => Some(crate::common::icon_registry_elements::ALIGNENDHORIZONTAL_ELEMENTS),
+        IconType::AlignEndVertical => Some(crate::common::icon_registry_elements::ALIGNENDVERTICAL_ELEMENTS),
         IconType::AlignHorizontalDistributeCenter => {
             Some(crate::common::icon_registry_elements::ALIGNHORIZONTALDISTRIBUTECENTER_ELEMENTS)
         }
@@ -186,17 +124,11 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::AlignHorizontalSpaceBetween => {
             Some(crate::common::icon_registry_elements::ALIGNHORIZONTALSPACEBETWEEN_ELEMENTS)
         }
-        IconType::AlignJustify => {
-            Some(crate::common::icon_registry_elements::ALIGNJUSTIFY_ELEMENTS)
-        }
+        IconType::AlignJustify => Some(crate::common::icon_registry_elements::ALIGNJUSTIFY_ELEMENTS),
         IconType::AlignLeft => Some(crate::common::icon_registry_elements::ALIGNLEFT_ELEMENTS),
         IconType::AlignRight => Some(crate::common::icon_registry_elements::ALIGNRIGHT_ELEMENTS),
-        IconType::AlignStartHorizontal => {
-            Some(crate::common::icon_registry_elements::ALIGNSTARTHORIZONTAL_ELEMENTS)
-        }
-        IconType::AlignStartVertical => {
-            Some(crate::common::icon_registry_elements::ALIGNSTARTVERTICAL_ELEMENTS)
-        }
+        IconType::AlignStartHorizontal => Some(crate::common::icon_registry_elements::ALIGNSTARTHORIZONTAL_ELEMENTS),
+        IconType::AlignStartVertical => Some(crate::common::icon_registry_elements::ALIGNSTARTVERTICAL_ELEMENTS),
         IconType::AlignVerticalDistributeCenter => {
             Some(crate::common::icon_registry_elements::ALIGNVERTICALDISTRIBUTECENTER_ELEMENTS)
         }
@@ -232,120 +164,60 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Anvil => Some(crate::common::icon_registry_elements::ANVIL_ELEMENTS),
         IconType::Aperture => Some(crate::common::icon_registry_elements::APERTURE_ELEMENTS),
         IconType::AppWindow => Some(crate::common::icon_registry_elements::APPWINDOW_ELEMENTS),
-        IconType::AppWindowMac => {
-            Some(crate::common::icon_registry_elements::APPWINDOWMAC_ELEMENTS)
-        }
+        IconType::AppWindowMac => Some(crate::common::icon_registry_elements::APPWINDOWMAC_ELEMENTS),
         IconType::Apple => Some(crate::common::icon_registry_elements::APPLE_ELEMENTS),
         IconType::Archive => Some(crate::common::icon_registry_elements::ARCHIVE_ELEMENTS),
-        IconType::ArchiveRestore => {
-            Some(crate::common::icon_registry_elements::ARCHIVERESTORE_ELEMENTS)
-        }
+        IconType::ArchiveRestore => Some(crate::common::icon_registry_elements::ARCHIVERESTORE_ELEMENTS),
         IconType::ArchiveX => Some(crate::common::icon_registry_elements::ARCHIVEX_ELEMENTS),
         IconType::Armchair => Some(crate::common::icon_registry_elements::ARMCHAIR_ELEMENTS),
-        IconType::ArrowBigDown => {
-            Some(crate::common::icon_registry_elements::ARROWBIGDOWN_ELEMENTS)
-        }
-        IconType::ArrowBigDownDash => {
-            Some(crate::common::icon_registry_elements::ARROWBIGDOWNDASH_ELEMENTS)
-        }
-        IconType::ArrowBigLeft => {
-            Some(crate::common::icon_registry_elements::ARROWBIGLEFT_ELEMENTS)
-        }
-        IconType::ArrowBigLeftDash => {
-            Some(crate::common::icon_registry_elements::ARROWBIGLEFTDASH_ELEMENTS)
-        }
-        IconType::ArrowBigRight => {
-            Some(crate::common::icon_registry_elements::ARROWBIGRIGHT_ELEMENTS)
-        }
-        IconType::ArrowBigRightDash => {
-            Some(crate::common::icon_registry_elements::ARROWBIGRIGHTDASH_ELEMENTS)
-        }
+        IconType::ArrowBigDown => Some(crate::common::icon_registry_elements::ARROWBIGDOWN_ELEMENTS),
+        IconType::ArrowBigDownDash => Some(crate::common::icon_registry_elements::ARROWBIGDOWNDASH_ELEMENTS),
+        IconType::ArrowBigLeft => Some(crate::common::icon_registry_elements::ARROWBIGLEFT_ELEMENTS),
+        IconType::ArrowBigLeftDash => Some(crate::common::icon_registry_elements::ARROWBIGLEFTDASH_ELEMENTS),
+        IconType::ArrowBigRight => Some(crate::common::icon_registry_elements::ARROWBIGRIGHT_ELEMENTS),
+        IconType::ArrowBigRightDash => Some(crate::common::icon_registry_elements::ARROWBIGRIGHTDASH_ELEMENTS),
         IconType::ArrowBigUp => Some(crate::common::icon_registry_elements::ARROWBIGUP_ELEMENTS),
-        IconType::ArrowBigUpDash => {
-            Some(crate::common::icon_registry_elements::ARROWBIGUPDASH_ELEMENTS)
-        }
+        IconType::ArrowBigUpDash => Some(crate::common::icon_registry_elements::ARROWBIGUPDASH_ELEMENTS),
         IconType::ArrowDown => Some(crate::common::icon_registry_elements::ARROWDOWN_ELEMENTS),
         IconType::ArrowDown01 => Some(crate::common::icon_registry_elements::ARROWDOWN01_ELEMENTS),
         IconType::ArrowDown10 => Some(crate::common::icon_registry_elements::ARROWDOWN10_ELEMENTS),
         IconType::ArrowDownAZ => Some(crate::common::icon_registry_elements::ARROWDOWNAZ_ELEMENTS),
-        IconType::ArrowDownFromLine => {
-            Some(crate::common::icon_registry_elements::ARROWDOWNFROMLINE_ELEMENTS)
-        }
-        IconType::ArrowDownLeft => {
-            Some(crate::common::icon_registry_elements::ARROWDOWNLEFT_ELEMENTS)
-        }
-        IconType::ArrowDownNarrowWide => {
-            Some(crate::common::icon_registry_elements::ARROWDOWNNARROWWIDE_ELEMENTS)
-        }
-        IconType::ArrowDownRight => {
-            Some(crate::common::icon_registry_elements::ARROWDOWNRIGHT_ELEMENTS)
-        }
-        IconType::ArrowDownToDot => {
-            Some(crate::common::icon_registry_elements::ARROWDOWNTODOT_ELEMENTS)
-        }
-        IconType::ArrowDownToLine => {
-            Some(crate::common::icon_registry_elements::ARROWDOWNTOLINE_ELEMENTS)
-        }
+        IconType::ArrowDownFromLine => Some(crate::common::icon_registry_elements::ARROWDOWNFROMLINE_ELEMENTS),
+        IconType::ArrowDownLeft => Some(crate::common::icon_registry_elements::ARROWDOWNLEFT_ELEMENTS),
+        IconType::ArrowDownNarrowWide => Some(crate::common::icon_registry_elements::ARROWDOWNNARROWWIDE_ELEMENTS),
+        IconType::ArrowDownRight => Some(crate::common::icon_registry_elements::ARROWDOWNRIGHT_ELEMENTS),
+        IconType::ArrowDownToDot => Some(crate::common::icon_registry_elements::ARROWDOWNTODOT_ELEMENTS),
+        IconType::ArrowDownToLine => Some(crate::common::icon_registry_elements::ARROWDOWNTOLINE_ELEMENTS),
         IconType::ArrowDownUp => Some(crate::common::icon_registry_elements::ARROWDOWNUP_ELEMENTS),
-        IconType::ArrowDownWideNarrow => {
-            Some(crate::common::icon_registry_elements::ARROWDOWNWIDENARROW_ELEMENTS)
-        }
+        IconType::ArrowDownWideNarrow => Some(crate::common::icon_registry_elements::ARROWDOWNWIDENARROW_ELEMENTS),
         IconType::ArrowDownZA => Some(crate::common::icon_registry_elements::ARROWDOWNZA_ELEMENTS),
         IconType::ArrowLeft => Some(crate::common::icon_registry_elements::ARROWLEFT_ELEMENTS),
-        IconType::ArrowLeftFromLine => {
-            Some(crate::common::icon_registry_elements::ARROWLEFTFROMLINE_ELEMENTS)
-        }
-        IconType::ArrowLeftRight => {
-            Some(crate::common::icon_registry_elements::ARROWLEFTRIGHT_ELEMENTS)
-        }
-        IconType::ArrowLeftToLine => {
-            Some(crate::common::icon_registry_elements::ARROWLEFTTOLINE_ELEMENTS)
-        }
+        IconType::ArrowLeftFromLine => Some(crate::common::icon_registry_elements::ARROWLEFTFROMLINE_ELEMENTS),
+        IconType::ArrowLeftRight => Some(crate::common::icon_registry_elements::ARROWLEFTRIGHT_ELEMENTS),
+        IconType::ArrowLeftToLine => Some(crate::common::icon_registry_elements::ARROWLEFTTOLINE_ELEMENTS),
         IconType::ArrowRight => Some(crate::common::icon_registry_elements::ARROWRIGHT_ELEMENTS),
-        IconType::ArrowRightFromLine => {
-            Some(crate::common::icon_registry_elements::ARROWRIGHTFROMLINE_ELEMENTS)
-        }
-        IconType::ArrowRightLeft => {
-            Some(crate::common::icon_registry_elements::ARROWRIGHTLEFT_ELEMENTS)
-        }
-        IconType::ArrowRightToLine => {
-            Some(crate::common::icon_registry_elements::ARROWRIGHTTOLINE_ELEMENTS)
-        }
+        IconType::ArrowRightFromLine => Some(crate::common::icon_registry_elements::ARROWRIGHTFROMLINE_ELEMENTS),
+        IconType::ArrowRightLeft => Some(crate::common::icon_registry_elements::ARROWRIGHTLEFT_ELEMENTS),
+        IconType::ArrowRightToLine => Some(crate::common::icon_registry_elements::ARROWRIGHTTOLINE_ELEMENTS),
         IconType::ArrowUp => Some(crate::common::icon_registry_elements::ARROWUP_ELEMENTS),
         IconType::ArrowUp01 => Some(crate::common::icon_registry_elements::ARROWUP01_ELEMENTS),
         IconType::ArrowUp10 => Some(crate::common::icon_registry_elements::ARROWUP10_ELEMENTS),
         IconType::ArrowUpAZ => Some(crate::common::icon_registry_elements::ARROWUPAZ_ELEMENTS),
         IconType::ArrowUpDown => Some(crate::common::icon_registry_elements::ARROWUPDOWN_ELEMENTS),
-        IconType::ArrowUpFromDot => {
-            Some(crate::common::icon_registry_elements::ARROWUPFROMDOT_ELEMENTS)
-        }
-        IconType::ArrowUpFromLine => {
-            Some(crate::common::icon_registry_elements::ARROWUPFROMLINE_ELEMENTS)
-        }
+        IconType::ArrowUpFromDot => Some(crate::common::icon_registry_elements::ARROWUPFROMDOT_ELEMENTS),
+        IconType::ArrowUpFromLine => Some(crate::common::icon_registry_elements::ARROWUPFROMLINE_ELEMENTS),
         IconType::ArrowUpLeft => Some(crate::common::icon_registry_elements::ARROWUPLEFT_ELEMENTS),
-        IconType::ArrowUpNarrowWide => {
-            Some(crate::common::icon_registry_elements::ARROWUPNARROWWIDE_ELEMENTS)
-        }
-        IconType::ArrowUpRight => {
-            Some(crate::common::icon_registry_elements::ARROWUPRIGHT_ELEMENTS)
-        }
-        IconType::ArrowUpToLine => {
-            Some(crate::common::icon_registry_elements::ARROWUPTOLINE_ELEMENTS)
-        }
-        IconType::ArrowUpWideNarrow => {
-            Some(crate::common::icon_registry_elements::ARROWUPWIDENARROW_ELEMENTS)
-        }
+        IconType::ArrowUpNarrowWide => Some(crate::common::icon_registry_elements::ARROWUPNARROWWIDE_ELEMENTS),
+        IconType::ArrowUpRight => Some(crate::common::icon_registry_elements::ARROWUPRIGHT_ELEMENTS),
+        IconType::ArrowUpToLine => Some(crate::common::icon_registry_elements::ARROWUPTOLINE_ELEMENTS),
+        IconType::ArrowUpWideNarrow => Some(crate::common::icon_registry_elements::ARROWUPWIDENARROW_ELEMENTS),
         IconType::ArrowUpZA => Some(crate::common::icon_registry_elements::ARROWUPZA_ELEMENTS),
-        IconType::ArrowsUpFromLine => {
-            Some(crate::common::icon_registry_elements::ARROWSUPFROMLINE_ELEMENTS)
-        }
+        IconType::ArrowsUpFromLine => Some(crate::common::icon_registry_elements::ARROWSUPFROMLINE_ELEMENTS),
         IconType::Asterisk => Some(crate::common::icon_registry_elements::ASTERISK_ELEMENTS),
         IconType::AtSign => Some(crate::common::icon_registry_elements::ATSIGN_ELEMENTS),
         IconType::Atom => Some(crate::common::icon_registry_elements::ATOM_ELEMENTS),
         IconType::AudioLines => Some(crate::common::icon_registry_elements::AUDIOLINES_ELEMENTS),
-        IconType::AudioWaveform => {
-            Some(crate::common::icon_registry_elements::AUDIOWAVEFORM_ELEMENTS)
-        }
+        IconType::AudioWaveform => Some(crate::common::icon_registry_elements::AUDIOWAVEFORM_ELEMENTS),
         IconType::Award => Some(crate::common::icon_registry_elements::AWARD_ELEMENTS),
         IconType::Axe => Some(crate::common::icon_registry_elements::AXE_ELEMENTS),
         IconType::Axis3D => Some(crate::common::icon_registry_elements::AXIS3D_ELEMENTS),
@@ -355,70 +227,40 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::BadgeAlert => Some(crate::common::icon_registry_elements::BADGEALERT_ELEMENTS),
         IconType::BadgeCent => Some(crate::common::icon_registry_elements::BADGECENT_ELEMENTS),
         IconType::BadgeCheck => Some(crate::common::icon_registry_elements::BADGECHECK_ELEMENTS),
-        IconType::BadgeDollarSign => {
-            Some(crate::common::icon_registry_elements::BADGEDOLLARSIGN_ELEMENTS)
-        }
+        IconType::BadgeDollarSign => Some(crate::common::icon_registry_elements::BADGEDOLLARSIGN_ELEMENTS),
         IconType::BadgeEuro => Some(crate::common::icon_registry_elements::BADGEEURO_ELEMENTS),
         IconType::BadgeHelp => Some(crate::common::icon_registry_elements::BADGEHELP_ELEMENTS),
-        IconType::BadgeIndianRupee => {
-            Some(crate::common::icon_registry_elements::BADGEINDIANRUPEE_ELEMENTS)
-        }
+        IconType::BadgeIndianRupee => Some(crate::common::icon_registry_elements::BADGEINDIANRUPEE_ELEMENTS),
         IconType::BadgeInfo => Some(crate::common::icon_registry_elements::BADGEINFO_ELEMENTS),
-        IconType::BadgeJapaneseYen => {
-            Some(crate::common::icon_registry_elements::BADGEJAPANESEYEN_ELEMENTS)
-        }
+        IconType::BadgeJapaneseYen => Some(crate::common::icon_registry_elements::BADGEJAPANESEYEN_ELEMENTS),
         IconType::BadgeMinus => Some(crate::common::icon_registry_elements::BADGEMINUS_ELEMENTS),
-        IconType::BadgePercent => {
-            Some(crate::common::icon_registry_elements::BADGEPERCENT_ELEMENTS)
-        }
+        IconType::BadgePercent => Some(crate::common::icon_registry_elements::BADGEPERCENT_ELEMENTS),
         IconType::BadgePlus => Some(crate::common::icon_registry_elements::BADGEPLUS_ELEMENTS),
-        IconType::BadgePoundSterling => {
-            Some(crate::common::icon_registry_elements::BADGEPOUNDSTERLING_ELEMENTS)
-        }
-        IconType::BadgeQuestionMark => {
-            Some(crate::common::icon_registry_elements::BADGEQUESTIONMARK_ELEMENTS)
-        }
-        IconType::BadgeRussianRuble => {
-            Some(crate::common::icon_registry_elements::BADGERUSSIANRUBLE_ELEMENTS)
-        }
-        IconType::BadgeSwissFranc => {
-            Some(crate::common::icon_registry_elements::BADGESWISSFRANC_ELEMENTS)
-        }
-        IconType::BadgeTurkishLira => {
-            Some(crate::common::icon_registry_elements::BADGETURKISHLIRA_ELEMENTS)
-        }
+        IconType::BadgePoundSterling => Some(crate::common::icon_registry_elements::BADGEPOUNDSTERLING_ELEMENTS),
+        IconType::BadgeQuestionMark => Some(crate::common::icon_registry_elements::BADGEQUESTIONMARK_ELEMENTS),
+        IconType::BadgeRussianRuble => Some(crate::common::icon_registry_elements::BADGERUSSIANRUBLE_ELEMENTS),
+        IconType::BadgeSwissFranc => Some(crate::common::icon_registry_elements::BADGESWISSFRANC_ELEMENTS),
+        IconType::BadgeTurkishLira => Some(crate::common::icon_registry_elements::BADGETURKISHLIRA_ELEMENTS),
         IconType::BadgeX => Some(crate::common::icon_registry_elements::BADGEX_ELEMENTS),
-        IconType::BaggageClaim => {
-            Some(crate::common::icon_registry_elements::BAGGAGECLAIM_ELEMENTS)
-        }
+        IconType::BaggageClaim => Some(crate::common::icon_registry_elements::BAGGAGECLAIM_ELEMENTS),
         IconType::Ban => Some(crate::common::icon_registry_elements::BAN_ELEMENTS),
         IconType::Banana => Some(crate::common::icon_registry_elements::BANANA_ELEMENTS),
         IconType::Bandage => Some(crate::common::icon_registry_elements::BANDAGE_ELEMENTS),
         IconType::Banknote => Some(crate::common::icon_registry_elements::BANKNOTE_ELEMENTS),
-        IconType::BanknoteArrowDown => {
-            Some(crate::common::icon_registry_elements::BANKNOTEARROWDOWN_ELEMENTS)
-        }
-        IconType::BanknoteArrowUp => {
-            Some(crate::common::icon_registry_elements::BANKNOTEARROWUP_ELEMENTS)
-        }
+        IconType::BanknoteArrowDown => Some(crate::common::icon_registry_elements::BANKNOTEARROWDOWN_ELEMENTS),
+        IconType::BanknoteArrowUp => Some(crate::common::icon_registry_elements::BANKNOTEARROWUP_ELEMENTS),
         IconType::BanknoteX => Some(crate::common::icon_registry_elements::BANKNOTEX_ELEMENTS),
         IconType::Barcode => Some(crate::common::icon_registry_elements::BARCODE_ELEMENTS),
         IconType::Barrel => Some(crate::common::icon_registry_elements::BARREL_ELEMENTS),
         IconType::Baseline => Some(crate::common::icon_registry_elements::BASELINE_ELEMENTS),
         IconType::Bath => Some(crate::common::icon_registry_elements::BATH_ELEMENTS),
         IconType::Battery => Some(crate::common::icon_registry_elements::BATTERY_ELEMENTS),
-        IconType::BatteryCharging => {
-            Some(crate::common::icon_registry_elements::BATTERYCHARGING_ELEMENTS)
-        }
+        IconType::BatteryCharging => Some(crate::common::icon_registry_elements::BATTERYCHARGING_ELEMENTS),
         IconType::BatteryFull => Some(crate::common::icon_registry_elements::BATTERYFULL_ELEMENTS),
         IconType::BatteryLow => Some(crate::common::icon_registry_elements::BATTERYLOW_ELEMENTS),
-        IconType::BatteryMedium => {
-            Some(crate::common::icon_registry_elements::BATTERYMEDIUM_ELEMENTS)
-        }
+        IconType::BatteryMedium => Some(crate::common::icon_registry_elements::BATTERYMEDIUM_ELEMENTS),
         IconType::BatteryPlus => Some(crate::common::icon_registry_elements::BATTERYPLUS_ELEMENTS),
-        IconType::BatteryWarning => {
-            Some(crate::common::icon_registry_elements::BATTERYWARNING_ELEMENTS)
-        }
+        IconType::BatteryWarning => Some(crate::common::icon_registry_elements::BATTERYWARNING_ELEMENTS),
         IconType::Beaker => Some(crate::common::icon_registry_elements::BEAKER_ELEMENTS),
         IconType::Bean => Some(crate::common::icon_registry_elements::BEAN_ELEMENTS),
         IconType::BeanOff => Some(crate::common::icon_registry_elements::BEANOFF_ELEMENTS),
@@ -430,28 +272,18 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::BeerOff => Some(crate::common::icon_registry_elements::BEEROFF_ELEMENTS),
         IconType::Bell => Some(crate::common::icon_registry_elements::BELL_ELEMENTS),
         IconType::BellDot => Some(crate::common::icon_registry_elements::BELLDOT_ELEMENTS),
-        IconType::BellElectric => {
-            Some(crate::common::icon_registry_elements::BELLELECTRIC_ELEMENTS)
-        }
+        IconType::BellElectric => Some(crate::common::icon_registry_elements::BELLELECTRIC_ELEMENTS),
         IconType::BellMinus => Some(crate::common::icon_registry_elements::BELLMINUS_ELEMENTS),
         IconType::BellOff => Some(crate::common::icon_registry_elements::BELLOFF_ELEMENTS),
         IconType::BellPlus => Some(crate::common::icon_registry_elements::BELLPLUS_ELEMENTS),
         IconType::BellRing => Some(crate::common::icon_registry_elements::BELLRING_ELEMENTS),
-        IconType::BetweenHorizontalEnd => {
-            Some(crate::common::icon_registry_elements::BETWEENHORIZONTALEND_ELEMENTS)
-        }
+        IconType::BetweenHorizontalEnd => Some(crate::common::icon_registry_elements::BETWEENHORIZONTALEND_ELEMENTS),
         IconType::BetweenHorizontalStart => {
             Some(crate::common::icon_registry_elements::BETWEENHORIZONTALSTART_ELEMENTS)
         }
-        IconType::BetweenVerticalEnd => {
-            Some(crate::common::icon_registry_elements::BETWEENVERTICALEND_ELEMENTS)
-        }
-        IconType::BetweenVerticalStart => {
-            Some(crate::common::icon_registry_elements::BETWEENVERTICALSTART_ELEMENTS)
-        }
-        IconType::BicepsFlexed => {
-            Some(crate::common::icon_registry_elements::BICEPSFLEXED_ELEMENTS)
-        }
+        IconType::BetweenVerticalEnd => Some(crate::common::icon_registry_elements::BETWEENVERTICALEND_ELEMENTS),
+        IconType::BetweenVerticalStart => Some(crate::common::icon_registry_elements::BETWEENVERTICALSTART_ELEMENTS),
+        IconType::BicepsFlexed => Some(crate::common::icon_registry_elements::BICEPSFLEXED_ELEMENTS),
         IconType::Bike => Some(crate::common::icon_registry_elements::BIKE_ELEMENTS),
         IconType::Binary => Some(crate::common::icon_registry_elements::BINARY_ELEMENTS),
         IconType::Binoculars => Some(crate::common::icon_registry_elements::BINOCULARS_ELEMENTS),
@@ -462,15 +294,9 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Blinds => Some(crate::common::icon_registry_elements::BLINDS_ELEMENTS),
         IconType::Blocks => Some(crate::common::icon_registry_elements::BLOCKS_ELEMENTS),
         IconType::Bluetooth => Some(crate::common::icon_registry_elements::BLUETOOTH_ELEMENTS),
-        IconType::BluetoothConnected => {
-            Some(crate::common::icon_registry_elements::BLUETOOTHCONNECTED_ELEMENTS)
-        }
-        IconType::BluetoothOff => {
-            Some(crate::common::icon_registry_elements::BLUETOOTHOFF_ELEMENTS)
-        }
-        IconType::BluetoothSearching => {
-            Some(crate::common::icon_registry_elements::BLUETOOTHSEARCHING_ELEMENTS)
-        }
+        IconType::BluetoothConnected => Some(crate::common::icon_registry_elements::BLUETOOTHCONNECTED_ELEMENTS),
+        IconType::BluetoothOff => Some(crate::common::icon_registry_elements::BLUETOOTHOFF_ELEMENTS),
+        IconType::BluetoothSearching => Some(crate::common::icon_registry_elements::BLUETOOTHSEARCHING_ELEMENTS),
         IconType::Bold => Some(crate::common::icon_registry_elements::BOLD_ELEMENTS),
         IconType::Bolt => Some(crate::common::icon_registry_elements::BOLT_ELEMENTS),
         IconType::Bomb => Some(crate::common::icon_registry_elements::BOMB_ELEMENTS),
@@ -483,9 +309,7 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::BookCopy => Some(crate::common::icon_registry_elements::BOOKCOPY_ELEMENTS),
         IconType::BookDashed => Some(crate::common::icon_registry_elements::BOOKDASHED_ELEMENTS),
         IconType::BookDown => Some(crate::common::icon_registry_elements::BOOKDOWN_ELEMENTS),
-        IconType::BookHeadphones => {
-            Some(crate::common::icon_registry_elements::BOOKHEADPHONES_ELEMENTS)
-        }
+        IconType::BookHeadphones => Some(crate::common::icon_registry_elements::BOOKHEADPHONES_ELEMENTS),
         IconType::BookHeart => Some(crate::common::icon_registry_elements::BOOKHEART_ELEMENTS),
         IconType::BookImage => Some(crate::common::icon_registry_elements::BOOKIMAGE_ELEMENTS),
         IconType::BookKey => Some(crate::common::icon_registry_elements::BOOKKEY_ELEMENTS),
@@ -493,12 +317,8 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::BookMarked => Some(crate::common::icon_registry_elements::BOOKMARKED_ELEMENTS),
         IconType::BookMinus => Some(crate::common::icon_registry_elements::BOOKMINUS_ELEMENTS),
         IconType::BookOpen => Some(crate::common::icon_registry_elements::BOOKOPEN_ELEMENTS),
-        IconType::BookOpenCheck => {
-            Some(crate::common::icon_registry_elements::BOOKOPENCHECK_ELEMENTS)
-        }
-        IconType::BookOpenText => {
-            Some(crate::common::icon_registry_elements::BOOKOPENTEXT_ELEMENTS)
-        }
+        IconType::BookOpenCheck => Some(crate::common::icon_registry_elements::BOOKOPENCHECK_ELEMENTS),
+        IconType::BookOpenText => Some(crate::common::icon_registry_elements::BOOKOPENTEXT_ELEMENTS),
         IconType::BookPlus => Some(crate::common::icon_registry_elements::BOOKPLUS_ELEMENTS),
         IconType::BookText => Some(crate::common::icon_registry_elements::BOOKTEXT_ELEMENTS),
         IconType::BookType => Some(crate::common::icon_registry_elements::BOOKTYPE_ELEMENTS),
@@ -507,21 +327,13 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::BookUser => Some(crate::common::icon_registry_elements::BOOKUSER_ELEMENTS),
         IconType::BookX => Some(crate::common::icon_registry_elements::BOOKX_ELEMENTS),
         IconType::Bookmark => Some(crate::common::icon_registry_elements::BOOKMARK_ELEMENTS),
-        IconType::BookmarkCheck => {
-            Some(crate::common::icon_registry_elements::BOOKMARKCHECK_ELEMENTS)
-        }
-        IconType::BookmarkMinus => {
-            Some(crate::common::icon_registry_elements::BOOKMARKMINUS_ELEMENTS)
-        }
-        IconType::BookmarkPlus => {
-            Some(crate::common::icon_registry_elements::BOOKMARKPLUS_ELEMENTS)
-        }
+        IconType::BookmarkCheck => Some(crate::common::icon_registry_elements::BOOKMARKCHECK_ELEMENTS),
+        IconType::BookmarkMinus => Some(crate::common::icon_registry_elements::BOOKMARKMINUS_ELEMENTS),
+        IconType::BookmarkPlus => Some(crate::common::icon_registry_elements::BOOKMARKPLUS_ELEMENTS),
         IconType::BookmarkX => Some(crate::common::icon_registry_elements::BOOKMARKX_ELEMENTS),
         IconType::BoomBox => Some(crate::common::icon_registry_elements::BOOMBOX_ELEMENTS),
         IconType::Bot => Some(crate::common::icon_registry_elements::BOT_ELEMENTS),
-        IconType::BotMessageSquare => {
-            Some(crate::common::icon_registry_elements::BOTMESSAGESQUARE_ELEMENTS)
-        }
+        IconType::BotMessageSquare => Some(crate::common::icon_registry_elements::BOTMESSAGESQUARE_ELEMENTS),
         IconType::BotOff => Some(crate::common::icon_registry_elements::BOTOFF_ELEMENTS),
         IconType::BottleWine => Some(crate::common::icon_registry_elements::BOTTLEWINE_ELEMENTS),
         IconType::BowArrow => Some(crate::common::icon_registry_elements::BOWARROW_ELEMENTS),
@@ -530,31 +342,17 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Braces => Some(crate::common::icon_registry_elements::BRACES_ELEMENTS),
         IconType::Brackets => Some(crate::common::icon_registry_elements::BRACKETS_ELEMENTS),
         IconType::Brain => Some(crate::common::icon_registry_elements::BRAIN_ELEMENTS),
-        IconType::BrainCircuit => {
-            Some(crate::common::icon_registry_elements::BRAINCIRCUIT_ELEMENTS)
-        }
+        IconType::BrainCircuit => Some(crate::common::icon_registry_elements::BRAINCIRCUIT_ELEMENTS),
         IconType::BrainCog => Some(crate::common::icon_registry_elements::BRAINCOG_ELEMENTS),
         IconType::BrickWall => Some(crate::common::icon_registry_elements::BRICKWALL_ELEMENTS),
-        IconType::BrickWallFire => {
-            Some(crate::common::icon_registry_elements::BRICKWALLFIRE_ELEMENTS)
-        }
+        IconType::BrickWallFire => Some(crate::common::icon_registry_elements::BRICKWALLFIRE_ELEMENTS),
         IconType::Briefcase => Some(crate::common::icon_registry_elements::BRIEFCASE_ELEMENTS),
-        IconType::BriefcaseBusiness => {
-            Some(crate::common::icon_registry_elements::BRIEFCASEBUSINESS_ELEMENTS)
-        }
-        IconType::BriefcaseConveyorBelt => {
-            Some(crate::common::icon_registry_elements::BRIEFCASECONVEYORBELT_ELEMENTS)
-        }
-        IconType::BriefcaseMedical => {
-            Some(crate::common::icon_registry_elements::BRIEFCASEMEDICAL_ELEMENTS)
-        }
-        IconType::BringToFront => {
-            Some(crate::common::icon_registry_elements::BRINGTOFRONT_ELEMENTS)
-        }
+        IconType::BriefcaseBusiness => Some(crate::common::icon_registry_elements::BRIEFCASEBUSINESS_ELEMENTS),
+        IconType::BriefcaseConveyorBelt => Some(crate::common::icon_registry_elements::BRIEFCASECONVEYORBELT_ELEMENTS),
+        IconType::BriefcaseMedical => Some(crate::common::icon_registry_elements::BRIEFCASEMEDICAL_ELEMENTS),
+        IconType::BringToFront => Some(crate::common::icon_registry_elements::BRINGTOFRONT_ELEMENTS),
         IconType::Brush => Some(crate::common::icon_registry_elements::BRUSH_ELEMENTS),
-        IconType::BrushCleaning => {
-            Some(crate::common::icon_registry_elements::BRUSHCLEANING_ELEMENTS)
-        }
+        IconType::BrushCleaning => Some(crate::common::icon_registry_elements::BRUSHCLEANING_ELEMENTS),
         IconType::Bubbles => Some(crate::common::icon_registry_elements::BUBBLES_ELEMENTS),
         IconType::Bug => Some(crate::common::icon_registry_elements::BUG_ELEMENTS),
         IconType::BugOff => Some(crate::common::icon_registry_elements::BUGOFF_ELEMENTS),
@@ -570,53 +368,23 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Calculator => Some(crate::common::icon_registry_elements::CALCULATOR_ELEMENTS),
         IconType::Calendar => Some(crate::common::icon_registry_elements::CALENDAR_ELEMENTS),
         IconType::Calendar1 => Some(crate::common::icon_registry_elements::CALENDAR1_ELEMENTS),
-        IconType::CalendarArrowDown => {
-            Some(crate::common::icon_registry_elements::CALENDARARROWDOWN_ELEMENTS)
-        }
-        IconType::CalendarArrowUp => {
-            Some(crate::common::icon_registry_elements::CALENDARARROWUP_ELEMENTS)
-        }
-        IconType::CalendarCheck => {
-            Some(crate::common::icon_registry_elements::CALENDARCHECK_ELEMENTS)
-        }
-        IconType::CalendarCheck2 => {
-            Some(crate::common::icon_registry_elements::CALENDARCHECK2_ELEMENTS)
-        }
-        IconType::CalendarClock => {
-            Some(crate::common::icon_registry_elements::CALENDARCLOCK_ELEMENTS)
-        }
+        IconType::CalendarArrowDown => Some(crate::common::icon_registry_elements::CALENDARARROWDOWN_ELEMENTS),
+        IconType::CalendarArrowUp => Some(crate::common::icon_registry_elements::CALENDARARROWUP_ELEMENTS),
+        IconType::CalendarCheck => Some(crate::common::icon_registry_elements::CALENDARCHECK_ELEMENTS),
+        IconType::CalendarCheck2 => Some(crate::common::icon_registry_elements::CALENDARCHECK2_ELEMENTS),
+        IconType::CalendarClock => Some(crate::common::icon_registry_elements::CALENDARCLOCK_ELEMENTS),
         IconType::CalendarCog => Some(crate::common::icon_registry_elements::CALENDARCOG_ELEMENTS),
-        IconType::CalendarDays => {
-            Some(crate::common::icon_registry_elements::CALENDARDAYS_ELEMENTS)
-        }
-        IconType::CalendarFold => {
-            Some(crate::common::icon_registry_elements::CALENDARFOLD_ELEMENTS)
-        }
-        IconType::CalendarHeart => {
-            Some(crate::common::icon_registry_elements::CALENDARHEART_ELEMENTS)
-        }
-        IconType::CalendarMinus => {
-            Some(crate::common::icon_registry_elements::CALENDARMINUS_ELEMENTS)
-        }
-        IconType::CalendarMinus2 => {
-            Some(crate::common::icon_registry_elements::CALENDARMINUS2_ELEMENTS)
-        }
+        IconType::CalendarDays => Some(crate::common::icon_registry_elements::CALENDARDAYS_ELEMENTS),
+        IconType::CalendarFold => Some(crate::common::icon_registry_elements::CALENDARFOLD_ELEMENTS),
+        IconType::CalendarHeart => Some(crate::common::icon_registry_elements::CALENDARHEART_ELEMENTS),
+        IconType::CalendarMinus => Some(crate::common::icon_registry_elements::CALENDARMINUS_ELEMENTS),
+        IconType::CalendarMinus2 => Some(crate::common::icon_registry_elements::CALENDARMINUS2_ELEMENTS),
         IconType::CalendarOff => Some(crate::common::icon_registry_elements::CALENDAROFF_ELEMENTS),
-        IconType::CalendarPlus => {
-            Some(crate::common::icon_registry_elements::CALENDARPLUS_ELEMENTS)
-        }
-        IconType::CalendarPlus2 => {
-            Some(crate::common::icon_registry_elements::CALENDARPLUS2_ELEMENTS)
-        }
-        IconType::CalendarRange => {
-            Some(crate::common::icon_registry_elements::CALENDARRANGE_ELEMENTS)
-        }
-        IconType::CalendarSearch => {
-            Some(crate::common::icon_registry_elements::CALENDARSEARCH_ELEMENTS)
-        }
-        IconType::CalendarSync => {
-            Some(crate::common::icon_registry_elements::CALENDARSYNC_ELEMENTS)
-        }
+        IconType::CalendarPlus => Some(crate::common::icon_registry_elements::CALENDARPLUS_ELEMENTS),
+        IconType::CalendarPlus2 => Some(crate::common::icon_registry_elements::CALENDARPLUS2_ELEMENTS),
+        IconType::CalendarRange => Some(crate::common::icon_registry_elements::CALENDARRANGE_ELEMENTS),
+        IconType::CalendarSearch => Some(crate::common::icon_registry_elements::CALENDARSEARCH_ELEMENTS),
+        IconType::CalendarSync => Some(crate::common::icon_registry_elements::CALENDARSYNC_ELEMENTS),
         IconType::CalendarX => Some(crate::common::icon_registry_elements::CALENDARX_ELEMENTS),
         IconType::CalendarX2 => Some(crate::common::icon_registry_elements::CALENDARX2_ELEMENTS),
         IconType::Camera => Some(crate::common::icon_registry_elements::CAMERA_ELEMENTS),
@@ -629,20 +397,14 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::CaptionsOff => Some(crate::common::icon_registry_elements::CAPTIONSOFF_ELEMENTS),
         IconType::Car => Some(crate::common::icon_registry_elements::CAR_ELEMENTS),
         IconType::CarFront => Some(crate::common::icon_registry_elements::CARFRONT_ELEMENTS),
-        IconType::CarTaxiFront => {
-            Some(crate::common::icon_registry_elements::CARTAXIFRONT_ELEMENTS)
-        }
+        IconType::CarTaxiFront => Some(crate::common::icon_registry_elements::CARTAXIFRONT_ELEMENTS),
         IconType::Caravan => Some(crate::common::icon_registry_elements::CARAVAN_ELEMENTS),
         IconType::CardSim => Some(crate::common::icon_registry_elements::CARDSIM_ELEMENTS),
         IconType::Carrot => Some(crate::common::icon_registry_elements::CARROT_ELEMENTS),
         IconType::CaseLower => Some(crate::common::icon_registry_elements::CASELOWER_ELEMENTS),
-        IconType::CaseSensitive => {
-            Some(crate::common::icon_registry_elements::CASESENSITIVE_ELEMENTS)
-        }
+        IconType::CaseSensitive => Some(crate::common::icon_registry_elements::CASESENSITIVE_ELEMENTS),
         IconType::CaseUpper => Some(crate::common::icon_registry_elements::CASEUPPER_ELEMENTS),
-        IconType::CassetteTape => {
-            Some(crate::common::icon_registry_elements::CASSETTETAPE_ELEMENTS)
-        }
+        IconType::CassetteTape => Some(crate::common::icon_registry_elements::CASSETTETAPE_ELEMENTS),
         IconType::Cast => Some(crate::common::icon_registry_elements::CAST_ELEMENTS),
         IconType::Castle => Some(crate::common::icon_registry_elements::CASTLE_ELEMENTS),
         IconType::Cat => Some(crate::common::icon_registry_elements::CAT_ELEMENTS),
@@ -650,55 +412,29 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::ChartArea => Some(crate::common::icon_registry_elements::CHARTAREA_ELEMENTS),
         IconType::ChartBar => Some(crate::common::icon_registry_elements::CHARTBAR_ELEMENTS),
         IconType::ChartBarBig => Some(crate::common::icon_registry_elements::CHARTBARBIG_ELEMENTS),
-        IconType::ChartBarDecreasing => {
-            Some(crate::common::icon_registry_elements::CHARTBARDECREASING_ELEMENTS)
-        }
-        IconType::ChartBarIncreasing => {
-            Some(crate::common::icon_registry_elements::CHARTBARINCREASING_ELEMENTS)
-        }
-        IconType::ChartBarStacked => {
-            Some(crate::common::icon_registry_elements::CHARTBARSTACKED_ELEMENTS)
-        }
-        IconType::ChartCandlestick => {
-            Some(crate::common::icon_registry_elements::CHARTCANDLESTICK_ELEMENTS)
-        }
+        IconType::ChartBarDecreasing => Some(crate::common::icon_registry_elements::CHARTBARDECREASING_ELEMENTS),
+        IconType::ChartBarIncreasing => Some(crate::common::icon_registry_elements::CHARTBARINCREASING_ELEMENTS),
+        IconType::ChartBarStacked => Some(crate::common::icon_registry_elements::CHARTBARSTACKED_ELEMENTS),
+        IconType::ChartCandlestick => Some(crate::common::icon_registry_elements::CHARTCANDLESTICK_ELEMENTS),
         IconType::ChartColumn => Some(crate::common::icon_registry_elements::CHARTCOLUMN_ELEMENTS),
-        IconType::ChartColumnBig => {
-            Some(crate::common::icon_registry_elements::CHARTCOLUMNBIG_ELEMENTS)
-        }
-        IconType::ChartColumnDecreasing => {
-            Some(crate::common::icon_registry_elements::CHARTCOLUMNDECREASING_ELEMENTS)
-        }
-        IconType::ChartColumnIncreasing => {
-            Some(crate::common::icon_registry_elements::CHARTCOLUMNINCREASING_ELEMENTS)
-        }
-        IconType::ChartColumnStacked => {
-            Some(crate::common::icon_registry_elements::CHARTCOLUMNSTACKED_ELEMENTS)
-        }
+        IconType::ChartColumnBig => Some(crate::common::icon_registry_elements::CHARTCOLUMNBIG_ELEMENTS),
+        IconType::ChartColumnDecreasing => Some(crate::common::icon_registry_elements::CHARTCOLUMNDECREASING_ELEMENTS),
+        IconType::ChartColumnIncreasing => Some(crate::common::icon_registry_elements::CHARTCOLUMNINCREASING_ELEMENTS),
+        IconType::ChartColumnStacked => Some(crate::common::icon_registry_elements::CHARTCOLUMNSTACKED_ELEMENTS),
         IconType::ChartGantt => Some(crate::common::icon_registry_elements::CHARTGANTT_ELEMENTS),
         IconType::ChartLine => Some(crate::common::icon_registry_elements::CHARTLINE_ELEMENTS),
-        IconType::ChartNetwork => {
-            Some(crate::common::icon_registry_elements::CHARTNETWORK_ELEMENTS)
-        }
-        IconType::ChartNoAxesColumn => {
-            Some(crate::common::icon_registry_elements::CHARTNOAXESCOLUMN_ELEMENTS)
-        }
+        IconType::ChartNetwork => Some(crate::common::icon_registry_elements::CHARTNETWORK_ELEMENTS),
+        IconType::ChartNoAxesColumn => Some(crate::common::icon_registry_elements::CHARTNOAXESCOLUMN_ELEMENTS),
         IconType::ChartNoAxesColumnDecreasing => {
             Some(crate::common::icon_registry_elements::CHARTNOAXESCOLUMNDECREASING_ELEMENTS)
         }
         IconType::ChartNoAxesColumnIncreasing => {
             Some(crate::common::icon_registry_elements::CHARTNOAXESCOLUMNINCREASING_ELEMENTS)
         }
-        IconType::ChartNoAxesCombined => {
-            Some(crate::common::icon_registry_elements::CHARTNOAXESCOMBINED_ELEMENTS)
-        }
-        IconType::ChartNoAxesGantt => {
-            Some(crate::common::icon_registry_elements::CHARTNOAXESGANTT_ELEMENTS)
-        }
+        IconType::ChartNoAxesCombined => Some(crate::common::icon_registry_elements::CHARTNOAXESCOMBINED_ELEMENTS),
+        IconType::ChartNoAxesGantt => Some(crate::common::icon_registry_elements::CHARTNOAXESGANTT_ELEMENTS),
         IconType::ChartPie => Some(crate::common::icon_registry_elements::CHARTPIE_ELEMENTS),
-        IconType::ChartScatter => {
-            Some(crate::common::icon_registry_elements::CHARTSCATTER_ELEMENTS)
-        }
+        IconType::ChartScatter => Some(crate::common::icon_registry_elements::CHARTSCATTER_ELEMENTS),
         IconType::ChartSpline => Some(crate::common::icon_registry_elements::CHARTSPLINE_ELEMENTS),
         IconType::Check => Some(crate::common::icon_registry_elements::CHECK_ELEMENTS),
         IconType::CheckCheck => Some(crate::common::icon_registry_elements::CHECKCHECK_ELEMENTS),
@@ -706,183 +442,89 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::ChefHat => Some(crate::common::icon_registry_elements::CHEFHAT_ELEMENTS),
         IconType::Cherry => Some(crate::common::icon_registry_elements::CHERRY_ELEMENTS),
         IconType::ChevronDown => Some(crate::common::icon_registry_elements::CHEVRONDOWN_ELEMENTS),
-        IconType::ChevronFirst => {
-            Some(crate::common::icon_registry_elements::CHEVRONFIRST_ELEMENTS)
-        }
+        IconType::ChevronFirst => Some(crate::common::icon_registry_elements::CHEVRONFIRST_ELEMENTS),
         IconType::ChevronLast => Some(crate::common::icon_registry_elements::CHEVRONLAST_ELEMENTS),
         IconType::ChevronLeft => Some(crate::common::icon_registry_elements::CHEVRONLEFT_ELEMENTS),
-        IconType::ChevronRight => {
-            Some(crate::common::icon_registry_elements::CHEVRONRIGHT_ELEMENTS)
-        }
+        IconType::ChevronRight => Some(crate::common::icon_registry_elements::CHEVRONRIGHT_ELEMENTS),
         IconType::ChevronUp => Some(crate::common::icon_registry_elements::CHEVRONUP_ELEMENTS),
-        IconType::ChevronsDown => {
-            Some(crate::common::icon_registry_elements::CHEVRONSDOWN_ELEMENTS)
-        }
-        IconType::ChevronsDownUp => {
-            Some(crate::common::icon_registry_elements::CHEVRONSDOWNUP_ELEMENTS)
-        }
-        IconType::ChevronsLeft => {
-            Some(crate::common::icon_registry_elements::CHEVRONSLEFT_ELEMENTS)
-        }
-        IconType::ChevronsLeftRight => {
-            Some(crate::common::icon_registry_elements::CHEVRONSLEFTRIGHT_ELEMENTS)
-        }
+        IconType::ChevronsDown => Some(crate::common::icon_registry_elements::CHEVRONSDOWN_ELEMENTS),
+        IconType::ChevronsDownUp => Some(crate::common::icon_registry_elements::CHEVRONSDOWNUP_ELEMENTS),
+        IconType::ChevronsLeft => Some(crate::common::icon_registry_elements::CHEVRONSLEFT_ELEMENTS),
+        IconType::ChevronsLeftRight => Some(crate::common::icon_registry_elements::CHEVRONSLEFTRIGHT_ELEMENTS),
         IconType::ChevronsLeftRightEllipsis => {
             Some(crate::common::icon_registry_elements::CHEVRONSLEFTRIGHTELLIPSIS_ELEMENTS)
         }
-        IconType::ChevronsRight => {
-            Some(crate::common::icon_registry_elements::CHEVRONSRIGHT_ELEMENTS)
-        }
-        IconType::ChevronsRightLeft => {
-            Some(crate::common::icon_registry_elements::CHEVRONSRIGHTLEFT_ELEMENTS)
-        }
+        IconType::ChevronsRight => Some(crate::common::icon_registry_elements::CHEVRONSRIGHT_ELEMENTS),
+        IconType::ChevronsRightLeft => Some(crate::common::icon_registry_elements::CHEVRONSRIGHTLEFT_ELEMENTS),
         IconType::ChevronsUp => Some(crate::common::icon_registry_elements::CHEVRONSUP_ELEMENTS),
-        IconType::ChevronsUpDown => {
-            Some(crate::common::icon_registry_elements::CHEVRONSUPDOWN_ELEMENTS)
-        }
+        IconType::ChevronsUpDown => Some(crate::common::icon_registry_elements::CHEVRONSUPDOWN_ELEMENTS),
         IconType::Chrome => Some(crate::common::icon_registry_elements::CHROME_ELEMENTS),
         IconType::Church => Some(crate::common::icon_registry_elements::CHURCH_ELEMENTS),
         IconType::Cigarette => Some(crate::common::icon_registry_elements::CIGARETTE_ELEMENTS),
-        IconType::CigaretteOff => {
-            Some(crate::common::icon_registry_elements::CIGARETTEOFF_ELEMENTS)
-        }
+        IconType::CigaretteOff => Some(crate::common::icon_registry_elements::CIGARETTEOFF_ELEMENTS),
         IconType::Circle => Some(crate::common::icon_registry_elements::CIRCLE_ELEMENTS),
         IconType::CircleAlert => Some(crate::common::icon_registry_elements::CIRCLEALERT_ELEMENTS),
-        IconType::CircleArrowDown => {
-            Some(crate::common::icon_registry_elements::CIRCLEARROWDOWN_ELEMENTS)
-        }
-        IconType::CircleArrowLeft => {
-            Some(crate::common::icon_registry_elements::CIRCLEARROWLEFT_ELEMENTS)
-        }
+        IconType::CircleArrowDown => Some(crate::common::icon_registry_elements::CIRCLEARROWDOWN_ELEMENTS),
+        IconType::CircleArrowLeft => Some(crate::common::icon_registry_elements::CIRCLEARROWLEFT_ELEMENTS),
         IconType::CircleArrowOutDownLeft => {
             Some(crate::common::icon_registry_elements::CIRCLEARROWOUTDOWNLEFT_ELEMENTS)
         }
         IconType::CircleArrowOutDownRight => {
             Some(crate::common::icon_registry_elements::CIRCLEARROWOUTDOWNRIGHT_ELEMENTS)
         }
-        IconType::CircleArrowOutUpLeft => {
-            Some(crate::common::icon_registry_elements::CIRCLEARROWOUTUPLEFT_ELEMENTS)
-        }
-        IconType::CircleArrowOutUpRight => {
-            Some(crate::common::icon_registry_elements::CIRCLEARROWOUTUPRIGHT_ELEMENTS)
-        }
-        IconType::CircleArrowRight => {
-            Some(crate::common::icon_registry_elements::CIRCLEARROWRIGHT_ELEMENTS)
-        }
-        IconType::CircleArrowUp => {
-            Some(crate::common::icon_registry_elements::CIRCLEARROWUP_ELEMENTS)
-        }
+        IconType::CircleArrowOutUpLeft => Some(crate::common::icon_registry_elements::CIRCLEARROWOUTUPLEFT_ELEMENTS),
+        IconType::CircleArrowOutUpRight => Some(crate::common::icon_registry_elements::CIRCLEARROWOUTUPRIGHT_ELEMENTS),
+        IconType::CircleArrowRight => Some(crate::common::icon_registry_elements::CIRCLEARROWRIGHT_ELEMENTS),
+        IconType::CircleArrowUp => Some(crate::common::icon_registry_elements::CIRCLEARROWUP_ELEMENTS),
         IconType::CircleCheck => Some(crate::common::icon_registry_elements::CIRCLECHECK_ELEMENTS),
-        IconType::CircleCheckBig => {
-            Some(crate::common::icon_registry_elements::CIRCLECHECKBIG_ELEMENTS)
-        }
-        IconType::CircleChevronDown => {
-            Some(crate::common::icon_registry_elements::CIRCLECHEVRONDOWN_ELEMENTS)
-        }
-        IconType::CircleChevronLeft => {
-            Some(crate::common::icon_registry_elements::CIRCLECHEVRONLEFT_ELEMENTS)
-        }
-        IconType::CircleChevronRight => {
-            Some(crate::common::icon_registry_elements::CIRCLECHEVRONRIGHT_ELEMENTS)
-        }
-        IconType::CircleChevronUp => {
-            Some(crate::common::icon_registry_elements::CIRCLECHEVRONUP_ELEMENTS)
-        }
-        IconType::CircleDashed => {
-            Some(crate::common::icon_registry_elements::CIRCLEDASHED_ELEMENTS)
-        }
-        IconType::CircleDivide => {
-            Some(crate::common::icon_registry_elements::CIRCLEDIVIDE_ELEMENTS)
-        }
-        IconType::CircleDollarSign => {
-            Some(crate::common::icon_registry_elements::CIRCLEDOLLARSIGN_ELEMENTS)
-        }
+        IconType::CircleCheckBig => Some(crate::common::icon_registry_elements::CIRCLECHECKBIG_ELEMENTS),
+        IconType::CircleChevronDown => Some(crate::common::icon_registry_elements::CIRCLECHEVRONDOWN_ELEMENTS),
+        IconType::CircleChevronLeft => Some(crate::common::icon_registry_elements::CIRCLECHEVRONLEFT_ELEMENTS),
+        IconType::CircleChevronRight => Some(crate::common::icon_registry_elements::CIRCLECHEVRONRIGHT_ELEMENTS),
+        IconType::CircleChevronUp => Some(crate::common::icon_registry_elements::CIRCLECHEVRONUP_ELEMENTS),
+        IconType::CircleDashed => Some(crate::common::icon_registry_elements::CIRCLEDASHED_ELEMENTS),
+        IconType::CircleDivide => Some(crate::common::icon_registry_elements::CIRCLEDIVIDE_ELEMENTS),
+        IconType::CircleDollarSign => Some(crate::common::icon_registry_elements::CIRCLEDOLLARSIGN_ELEMENTS),
         IconType::CircleDot => Some(crate::common::icon_registry_elements::CIRCLEDOT_ELEMENTS),
-        IconType::CircleDotDashed => {
-            Some(crate::common::icon_registry_elements::CIRCLEDOTDASHED_ELEMENTS)
-        }
-        IconType::CircleEllipsis => {
-            Some(crate::common::icon_registry_elements::CIRCLEELLIPSIS_ELEMENTS)
-        }
+        IconType::CircleDotDashed => Some(crate::common::icon_registry_elements::CIRCLEDOTDASHED_ELEMENTS),
+        IconType::CircleEllipsis => Some(crate::common::icon_registry_elements::CIRCLEELLIPSIS_ELEMENTS),
         IconType::CircleEqual => Some(crate::common::icon_registry_elements::CIRCLEEQUAL_ELEMENTS),
-        IconType::CircleFadingArrowUp => {
-            Some(crate::common::icon_registry_elements::CIRCLEFADINGARROWUP_ELEMENTS)
-        }
-        IconType::CircleFadingPlus => {
-            Some(crate::common::icon_registry_elements::CIRCLEFADINGPLUS_ELEMENTS)
-        }
+        IconType::CircleFadingArrowUp => Some(crate::common::icon_registry_elements::CIRCLEFADINGARROWUP_ELEMENTS),
+        IconType::CircleFadingPlus => Some(crate::common::icon_registry_elements::CIRCLEFADINGPLUS_ELEMENTS),
         IconType::CircleGauge => Some(crate::common::icon_registry_elements::CIRCLEGAUGE_ELEMENTS),
         IconType::CircleHelp => Some(crate::common::icon_registry_elements::CIRCLEHELP_ELEMENTS),
         IconType::CircleMinus => Some(crate::common::icon_registry_elements::CIRCLEMINUS_ELEMENTS),
         IconType::CircleOff => Some(crate::common::icon_registry_elements::CIRCLEOFF_ELEMENTS),
-        IconType::CircleParking => {
-            Some(crate::common::icon_registry_elements::CIRCLEPARKING_ELEMENTS)
-        }
-        IconType::CircleParkingOff => {
-            Some(crate::common::icon_registry_elements::CIRCLEPARKINGOFF_ELEMENTS)
-        }
+        IconType::CircleParking => Some(crate::common::icon_registry_elements::CIRCLEPARKING_ELEMENTS),
+        IconType::CircleParkingOff => Some(crate::common::icon_registry_elements::CIRCLEPARKINGOFF_ELEMENTS),
         IconType::CirclePause => Some(crate::common::icon_registry_elements::CIRCLEPAUSE_ELEMENTS),
-        IconType::CirclePercent => {
-            Some(crate::common::icon_registry_elements::CIRCLEPERCENT_ELEMENTS)
-        }
+        IconType::CirclePercent => Some(crate::common::icon_registry_elements::CIRCLEPERCENT_ELEMENTS),
         IconType::CirclePlay => Some(crate::common::icon_registry_elements::CIRCLEPLAY_ELEMENTS),
         IconType::CirclePlus => Some(crate::common::icon_registry_elements::CIRCLEPLUS_ELEMENTS),
-        IconType::CirclePoundSterling => {
-            Some(crate::common::icon_registry_elements::CIRCLEPOUNDSTERLING_ELEMENTS)
-        }
+        IconType::CirclePoundSterling => Some(crate::common::icon_registry_elements::CIRCLEPOUNDSTERLING_ELEMENTS),
         IconType::CirclePower => Some(crate::common::icon_registry_elements::CIRCLEPOWER_ELEMENTS),
-        IconType::CircleQuestionMark => {
-            Some(crate::common::icon_registry_elements::CIRCLEQUESTIONMARK_ELEMENTS)
-        }
+        IconType::CircleQuestionMark => Some(crate::common::icon_registry_elements::CIRCLEQUESTIONMARK_ELEMENTS),
         IconType::CircleSlash => Some(crate::common::icon_registry_elements::CIRCLESLASH_ELEMENTS),
-        IconType::CircleSlash2 => {
-            Some(crate::common::icon_registry_elements::CIRCLESLASH2_ELEMENTS)
-        }
+        IconType::CircleSlash2 => Some(crate::common::icon_registry_elements::CIRCLESLASH2_ELEMENTS),
         IconType::CircleSmall => Some(crate::common::icon_registry_elements::CIRCLESMALL_ELEMENTS),
         IconType::CircleStop => Some(crate::common::icon_registry_elements::CIRCLESTOP_ELEMENTS),
         IconType::CircleUser => Some(crate::common::icon_registry_elements::CIRCLEUSER_ELEMENTS),
-        IconType::CircleUserRound => {
-            Some(crate::common::icon_registry_elements::CIRCLEUSERROUND_ELEMENTS)
-        }
+        IconType::CircleUserRound => Some(crate::common::icon_registry_elements::CIRCLEUSERROUND_ELEMENTS),
         IconType::CircleX => Some(crate::common::icon_registry_elements::CIRCLEX_ELEMENTS),
-        IconType::CircuitBoard => {
-            Some(crate::common::icon_registry_elements::CIRCUITBOARD_ELEMENTS)
-        }
+        IconType::CircuitBoard => Some(crate::common::icon_registry_elements::CIRCUITBOARD_ELEMENTS),
         IconType::Citrus => Some(crate::common::icon_registry_elements::CITRUS_ELEMENTS),
-        IconType::Clapperboard => {
-            Some(crate::common::icon_registry_elements::CLAPPERBOARD_ELEMENTS)
-        }
+        IconType::Clapperboard => Some(crate::common::icon_registry_elements::CLAPPERBOARD_ELEMENTS),
         IconType::Clipboard => Some(crate::common::icon_registry_elements::CLIPBOARD_ELEMENTS),
-        IconType::ClipboardCheck => {
-            Some(crate::common::icon_registry_elements::CLIPBOARDCHECK_ELEMENTS)
-        }
-        IconType::ClipboardClock => {
-            Some(crate::common::icon_registry_elements::CLIPBOARDCLOCK_ELEMENTS)
-        }
-        IconType::ClipboardCopy => {
-            Some(crate::common::icon_registry_elements::CLIPBOARDCOPY_ELEMENTS)
-        }
-        IconType::ClipboardList => {
-            Some(crate::common::icon_registry_elements::CLIPBOARDLIST_ELEMENTS)
-        }
-        IconType::ClipboardMinus => {
-            Some(crate::common::icon_registry_elements::CLIPBOARDMINUS_ELEMENTS)
-        }
-        IconType::ClipboardPaste => {
-            Some(crate::common::icon_registry_elements::CLIPBOARDPASTE_ELEMENTS)
-        }
-        IconType::ClipboardPen => {
-            Some(crate::common::icon_registry_elements::CLIPBOARDPEN_ELEMENTS)
-        }
-        IconType::ClipboardPenLine => {
-            Some(crate::common::icon_registry_elements::CLIPBOARDPENLINE_ELEMENTS)
-        }
-        IconType::ClipboardPlus => {
-            Some(crate::common::icon_registry_elements::CLIPBOARDPLUS_ELEMENTS)
-        }
-        IconType::ClipboardType => {
-            Some(crate::common::icon_registry_elements::CLIPBOARDTYPE_ELEMENTS)
-        }
+        IconType::ClipboardCheck => Some(crate::common::icon_registry_elements::CLIPBOARDCHECK_ELEMENTS),
+        IconType::ClipboardClock => Some(crate::common::icon_registry_elements::CLIPBOARDCLOCK_ELEMENTS),
+        IconType::ClipboardCopy => Some(crate::common::icon_registry_elements::CLIPBOARDCOPY_ELEMENTS),
+        IconType::ClipboardList => Some(crate::common::icon_registry_elements::CLIPBOARDLIST_ELEMENTS),
+        IconType::ClipboardMinus => Some(crate::common::icon_registry_elements::CLIPBOARDMINUS_ELEMENTS),
+        IconType::ClipboardPaste => Some(crate::common::icon_registry_elements::CLIPBOARDPASTE_ELEMENTS),
+        IconType::ClipboardPen => Some(crate::common::icon_registry_elements::CLIPBOARDPEN_ELEMENTS),
+        IconType::ClipboardPenLine => Some(crate::common::icon_registry_elements::CLIPBOARDPENLINE_ELEMENTS),
+        IconType::ClipboardPlus => Some(crate::common::icon_registry_elements::CLIPBOARDPLUS_ELEMENTS),
+        IconType::ClipboardType => Some(crate::common::icon_registry_elements::CLIPBOARDTYPE_ELEMENTS),
         IconType::ClipboardX => Some(crate::common::icon_registry_elements::CLIPBOARDX_ELEMENTS),
         IconType::Clock => Some(crate::common::icon_registry_elements::CLOCK_ELEMENTS),
         IconType::Clock1 => Some(crate::common::icon_registry_elements::CLOCK1_ELEMENTS),
@@ -898,43 +540,27 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Clock8 => Some(crate::common::icon_registry_elements::CLOCK8_ELEMENTS),
         IconType::Clock9 => Some(crate::common::icon_registry_elements::CLOCK9_ELEMENTS),
         IconType::ClockAlert => Some(crate::common::icon_registry_elements::CLOCKALERT_ELEMENTS),
-        IconType::ClockArrowDown => {
-            Some(crate::common::icon_registry_elements::CLOCKARROWDOWN_ELEMENTS)
-        }
-        IconType::ClockArrowUp => {
-            Some(crate::common::icon_registry_elements::CLOCKARROWUP_ELEMENTS)
-        }
+        IconType::ClockArrowDown => Some(crate::common::icon_registry_elements::CLOCKARROWDOWN_ELEMENTS),
+        IconType::ClockArrowUp => Some(crate::common::icon_registry_elements::CLOCKARROWUP_ELEMENTS),
         IconType::ClockFading => Some(crate::common::icon_registry_elements::CLOCKFADING_ELEMENTS),
         IconType::ClockPlus => Some(crate::common::icon_registry_elements::CLOCKPLUS_ELEMENTS),
         IconType::Cloud => Some(crate::common::icon_registry_elements::CLOUD_ELEMENTS),
         IconType::CloudAlert => Some(crate::common::icon_registry_elements::CLOUDALERT_ELEMENTS),
         IconType::CloudCheck => Some(crate::common::icon_registry_elements::CLOUDCHECK_ELEMENTS),
         IconType::CloudCog => Some(crate::common::icon_registry_elements::CLOUDCOG_ELEMENTS),
-        IconType::CloudDownload => {
-            Some(crate::common::icon_registry_elements::CLOUDDOWNLOAD_ELEMENTS)
-        }
-        IconType::CloudDrizzle => {
-            Some(crate::common::icon_registry_elements::CLOUDDRIZZLE_ELEMENTS)
-        }
+        IconType::CloudDownload => Some(crate::common::icon_registry_elements::CLOUDDOWNLOAD_ELEMENTS),
+        IconType::CloudDrizzle => Some(crate::common::icon_registry_elements::CLOUDDRIZZLE_ELEMENTS),
         IconType::CloudFog => Some(crate::common::icon_registry_elements::CLOUDFOG_ELEMENTS),
         IconType::CloudHail => Some(crate::common::icon_registry_elements::CLOUDHAIL_ELEMENTS),
-        IconType::CloudLightning => {
-            Some(crate::common::icon_registry_elements::CLOUDLIGHTNING_ELEMENTS)
-        }
+        IconType::CloudLightning => Some(crate::common::icon_registry_elements::CLOUDLIGHTNING_ELEMENTS),
         IconType::CloudMoon => Some(crate::common::icon_registry_elements::CLOUDMOON_ELEMENTS),
-        IconType::CloudMoonRain => {
-            Some(crate::common::icon_registry_elements::CLOUDMOONRAIN_ELEMENTS)
-        }
+        IconType::CloudMoonRain => Some(crate::common::icon_registry_elements::CLOUDMOONRAIN_ELEMENTS),
         IconType::CloudOff => Some(crate::common::icon_registry_elements::CLOUDOFF_ELEMENTS),
         IconType::CloudRain => Some(crate::common::icon_registry_elements::CLOUDRAIN_ELEMENTS),
-        IconType::CloudRainWind => {
-            Some(crate::common::icon_registry_elements::CLOUDRAINWIND_ELEMENTS)
-        }
+        IconType::CloudRainWind => Some(crate::common::icon_registry_elements::CLOUDRAINWIND_ELEMENTS),
         IconType::CloudSnow => Some(crate::common::icon_registry_elements::CLOUDSNOW_ELEMENTS),
         IconType::CloudSun => Some(crate::common::icon_registry_elements::CLOUDSUN_ELEMENTS),
-        IconType::CloudSunRain => {
-            Some(crate::common::icon_registry_elements::CLOUDSUNRAIN_ELEMENTS)
-        }
+        IconType::CloudSunRain => Some(crate::common::icon_registry_elements::CLOUDSUNRAIN_ELEMENTS),
         IconType::CloudUpload => Some(crate::common::icon_registry_elements::CLOUDUPLOAD_ELEMENTS),
         IconType::Cloudy => Some(crate::common::icon_registry_elements::CLOUDY_ELEMENTS),
         IconType::Clover => Some(crate::common::icon_registry_elements::CLOVER_ELEMENTS),
@@ -955,17 +581,11 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Compass => Some(crate::common::icon_registry_elements::COMPASS_ELEMENTS),
         IconType::Component => Some(crate::common::icon_registry_elements::COMPONENT_ELEMENTS),
         IconType::Computer => Some(crate::common::icon_registry_elements::COMPUTER_ELEMENTS),
-        IconType::ConciergeBell => {
-            Some(crate::common::icon_registry_elements::CONCIERGEBELL_ELEMENTS)
-        }
+        IconType::ConciergeBell => Some(crate::common::icon_registry_elements::CONCIERGEBELL_ELEMENTS),
         IconType::Cone => Some(crate::common::icon_registry_elements::CONE_ELEMENTS),
-        IconType::Construction => {
-            Some(crate::common::icon_registry_elements::CONSTRUCTION_ELEMENTS)
-        }
+        IconType::Construction => Some(crate::common::icon_registry_elements::CONSTRUCTION_ELEMENTS),
         IconType::Contact => Some(crate::common::icon_registry_elements::CONTACT_ELEMENTS),
-        IconType::ContactRound => {
-            Some(crate::common::icon_registry_elements::CONTACTROUND_ELEMENTS)
-        }
+        IconType::ContactRound => Some(crate::common::icon_registry_elements::CONTACTROUND_ELEMENTS),
         IconType::Container => Some(crate::common::icon_registry_elements::CONTAINER_ELEMENTS),
         IconType::Contrast => Some(crate::common::icon_registry_elements::CONTRAST_ELEMENTS),
         IconType::Cookie => Some(crate::common::icon_registry_elements::COOKIE_ELEMENTS),
@@ -978,34 +598,16 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::CopyX => Some(crate::common::icon_registry_elements::COPYX_ELEMENTS),
         IconType::Copyleft => Some(crate::common::icon_registry_elements::COPYLEFT_ELEMENTS),
         IconType::Copyright => Some(crate::common::icon_registry_elements::COPYRIGHT_ELEMENTS),
-        IconType::CornerDownLeft => {
-            Some(crate::common::icon_registry_elements::CORNERDOWNLEFT_ELEMENTS)
-        }
-        IconType::CornerDownRight => {
-            Some(crate::common::icon_registry_elements::CORNERDOWNRIGHT_ELEMENTS)
-        }
-        IconType::CornerLeftDown => {
-            Some(crate::common::icon_registry_elements::CORNERLEFTDOWN_ELEMENTS)
-        }
-        IconType::CornerLeftUp => {
-            Some(crate::common::icon_registry_elements::CORNERLEFTUP_ELEMENTS)
-        }
-        IconType::CornerRightDown => {
-            Some(crate::common::icon_registry_elements::CORNERRIGHTDOWN_ELEMENTS)
-        }
-        IconType::CornerRightUp => {
-            Some(crate::common::icon_registry_elements::CORNERRIGHTUP_ELEMENTS)
-        }
-        IconType::CornerUpLeft => {
-            Some(crate::common::icon_registry_elements::CORNERUPLEFT_ELEMENTS)
-        }
-        IconType::CornerUpRight => {
-            Some(crate::common::icon_registry_elements::CORNERUPRIGHT_ELEMENTS)
-        }
+        IconType::CornerDownLeft => Some(crate::common::icon_registry_elements::CORNERDOWNLEFT_ELEMENTS),
+        IconType::CornerDownRight => Some(crate::common::icon_registry_elements::CORNERDOWNRIGHT_ELEMENTS),
+        IconType::CornerLeftDown => Some(crate::common::icon_registry_elements::CORNERLEFTDOWN_ELEMENTS),
+        IconType::CornerLeftUp => Some(crate::common::icon_registry_elements::CORNERLEFTUP_ELEMENTS),
+        IconType::CornerRightDown => Some(crate::common::icon_registry_elements::CORNERRIGHTDOWN_ELEMENTS),
+        IconType::CornerRightUp => Some(crate::common::icon_registry_elements::CORNERRIGHTUP_ELEMENTS),
+        IconType::CornerUpLeft => Some(crate::common::icon_registry_elements::CORNERUPLEFT_ELEMENTS),
+        IconType::CornerUpRight => Some(crate::common::icon_registry_elements::CORNERUPRIGHT_ELEMENTS),
         IconType::Cpu => Some(crate::common::icon_registry_elements::CPU_ELEMENTS),
-        IconType::CreativeCommons => {
-            Some(crate::common::icon_registry_elements::CREATIVECOMMONS_ELEMENTS)
-        }
+        IconType::CreativeCommons => Some(crate::common::icon_registry_elements::CREATIVECOMMONS_ELEMENTS),
         IconType::CreditCard => Some(crate::common::icon_registry_elements::CREDITCARD_ELEMENTS),
         IconType::Croissant => Some(crate::common::icon_registry_elements::CROISSANT_ELEMENTS),
         IconType::Crop => Some(crate::common::icon_registry_elements::CROP_ELEMENTS),
@@ -1018,26 +620,16 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Cylinder => Some(crate::common::icon_registry_elements::CYLINDER_ELEMENTS),
         IconType::Dam => Some(crate::common::icon_registry_elements::DAM_ELEMENTS),
         IconType::Database => Some(crate::common::icon_registry_elements::DATABASE_ELEMENTS),
-        IconType::DatabaseBackup => {
-            Some(crate::common::icon_registry_elements::DATABASEBACKUP_ELEMENTS)
-        }
+        IconType::DatabaseBackup => Some(crate::common::icon_registry_elements::DATABASEBACKUP_ELEMENTS),
         IconType::DatabaseZap => Some(crate::common::icon_registry_elements::DATABASEZAP_ELEMENTS),
-        IconType::DecimalsArrowLeft => {
-            Some(crate::common::icon_registry_elements::DECIMALSARROWLEFT_ELEMENTS)
-        }
-        IconType::DecimalsArrowRight => {
-            Some(crate::common::icon_registry_elements::DECIMALSARROWRIGHT_ELEMENTS)
-        }
+        IconType::DecimalsArrowLeft => Some(crate::common::icon_registry_elements::DECIMALSARROWLEFT_ELEMENTS),
+        IconType::DecimalsArrowRight => Some(crate::common::icon_registry_elements::DECIMALSARROWRIGHT_ELEMENTS),
         IconType::Delete => Some(crate::common::icon_registry_elements::DELETE_ELEMENTS),
         IconType::Dessert => Some(crate::common::icon_registry_elements::DESSERT_ELEMENTS),
         IconType::Diameter => Some(crate::common::icon_registry_elements::DIAMETER_ELEMENTS),
         IconType::Diamond => Some(crate::common::icon_registry_elements::DIAMOND_ELEMENTS),
-        IconType::DiamondMinus => {
-            Some(crate::common::icon_registry_elements::DIAMONDMINUS_ELEMENTS)
-        }
-        IconType::DiamondPercent => {
-            Some(crate::common::icon_registry_elements::DIAMONDPERCENT_ELEMENTS)
-        }
+        IconType::DiamondMinus => Some(crate::common::icon_registry_elements::DIAMONDMINUS_ELEMENTS),
+        IconType::DiamondPercent => Some(crate::common::icon_registry_elements::DIAMONDPERCENT_ELEMENTS),
         IconType::DiamondPlus => Some(crate::common::icon_registry_elements::DIAMONDPLUS_ELEMENTS),
         IconType::Dice1 => Some(crate::common::icon_registry_elements::DICE1_ELEMENTS),
         IconType::Dice2 => Some(crate::common::icon_registry_elements::DICE2_ELEMENTS),
@@ -1059,15 +651,11 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::DollarSign => Some(crate::common::icon_registry_elements::DOLLARSIGN_ELEMENTS),
         IconType::Donut => Some(crate::common::icon_registry_elements::DONUT_ELEMENTS),
         IconType::DoorClosed => Some(crate::common::icon_registry_elements::DOORCLOSED_ELEMENTS),
-        IconType::DoorClosedLocked => {
-            Some(crate::common::icon_registry_elements::DOORCLOSEDLOCKED_ELEMENTS)
-        }
+        IconType::DoorClosedLocked => Some(crate::common::icon_registry_elements::DOORCLOSEDLOCKED_ELEMENTS),
         IconType::DoorOpen => Some(crate::common::icon_registry_elements::DOOROPEN_ELEMENTS),
         IconType::Dot => Some(crate::common::icon_registry_elements::DOT_ELEMENTS),
         IconType::Download => Some(crate::common::icon_registry_elements::DOWNLOAD_ELEMENTS),
-        IconType::DraftingCompass => {
-            Some(crate::common::icon_registry_elements::DRAFTINGCOMPASS_ELEMENTS)
-        }
+        IconType::DraftingCompass => Some(crate::common::icon_registry_elements::DRAFTINGCOMPASS_ELEMENTS),
         IconType::Drama => Some(crate::common::icon_registry_elements::DRAMA_ELEMENTS),
         IconType::Dribbble => Some(crate::common::icon_registry_elements::DRIBBBLE_ELEMENTS),
         IconType::Drill => Some(crate::common::icon_registry_elements::DRILL_ELEMENTS),
@@ -1087,23 +675,15 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::EggFried => Some(crate::common::icon_registry_elements::EGGFRIED_ELEMENTS),
         IconType::EggOff => Some(crate::common::icon_registry_elements::EGGOFF_ELEMENTS),
         IconType::Ellipsis => Some(crate::common::icon_registry_elements::ELLIPSIS_ELEMENTS),
-        IconType::EllipsisVertical => {
-            Some(crate::common::icon_registry_elements::ELLIPSISVERTICAL_ELEMENTS)
-        }
+        IconType::EllipsisVertical => Some(crate::common::icon_registry_elements::ELLIPSISVERTICAL_ELEMENTS),
         IconType::Equal => Some(crate::common::icon_registry_elements::EQUAL_ELEMENTS),
-        IconType::EqualApproximately => {
-            Some(crate::common::icon_registry_elements::EQUALAPPROXIMATELY_ELEMENTS)
-        }
+        IconType::EqualApproximately => Some(crate::common::icon_registry_elements::EQUALAPPROXIMATELY_ELEMENTS),
         IconType::EqualNot => Some(crate::common::icon_registry_elements::EQUALNOT_ELEMENTS),
         IconType::Eraser => Some(crate::common::icon_registry_elements::ERASER_ELEMENTS),
-        IconType::EthernetPort => {
-            Some(crate::common::icon_registry_elements::ETHERNETPORT_ELEMENTS)
-        }
+        IconType::EthernetPort => Some(crate::common::icon_registry_elements::ETHERNETPORT_ELEMENTS),
         IconType::Euro => Some(crate::common::icon_registry_elements::EURO_ELEMENTS),
         IconType::Expand => Some(crate::common::icon_registry_elements::EXPAND_ELEMENTS),
-        IconType::ExternalLink => {
-            Some(crate::common::icon_registry_elements::EXTERNALLINK_ELEMENTS)
-        }
+        IconType::ExternalLink => Some(crate::common::icon_registry_elements::EXTERNALLINK_ELEMENTS),
         IconType::Eye => Some(crate::common::icon_registry_elements::EYE_ELEMENTS),
         IconType::EyeClosed => Some(crate::common::icon_registry_elements::EYECLOSED_ELEMENTS),
         IconType::EyeOff => Some(crate::common::icon_registry_elements::EYEOFF_ELEMENTS),
@@ -1123,18 +703,12 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::FileBadge => Some(crate::common::icon_registry_elements::FILEBADGE_ELEMENTS),
         IconType::FileBadge2 => Some(crate::common::icon_registry_elements::FILEBADGE2_ELEMENTS),
         IconType::FileBox => Some(crate::common::icon_registry_elements::FILEBOX_ELEMENTS),
-        IconType::FileChartColumn => {
-            Some(crate::common::icon_registry_elements::FILECHARTCOLUMN_ELEMENTS)
-        }
+        IconType::FileChartColumn => Some(crate::common::icon_registry_elements::FILECHARTCOLUMN_ELEMENTS),
         IconType::FileChartColumnIncreasing => {
             Some(crate::common::icon_registry_elements::FILECHARTCOLUMNINCREASING_ELEMENTS)
         }
-        IconType::FileChartLine => {
-            Some(crate::common::icon_registry_elements::FILECHARTLINE_ELEMENTS)
-        }
-        IconType::FileChartPie => {
-            Some(crate::common::icon_registry_elements::FILECHARTPIE_ELEMENTS)
-        }
+        IconType::FileChartLine => Some(crate::common::icon_registry_elements::FILECHARTLINE_ELEMENTS),
+        IconType::FileChartPie => Some(crate::common::icon_registry_elements::FILECHARTPIE_ELEMENTS),
         IconType::FileCheck => Some(crate::common::icon_registry_elements::FILECHECK_ELEMENTS),
         IconType::FileCheck2 => Some(crate::common::icon_registry_elements::FILECHECK2_ELEMENTS),
         IconType::FileClock => Some(crate::common::icon_registry_elements::FILECLOCK_ELEMENTS),
@@ -1162,24 +736,16 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::FilePlay => Some(crate::common::icon_registry_elements::FILEPLAY_ELEMENTS),
         IconType::FilePlus => Some(crate::common::icon_registry_elements::FILEPLUS_ELEMENTS),
         IconType::FilePlus2 => Some(crate::common::icon_registry_elements::FILEPLUS2_ELEMENTS),
-        IconType::FileQuestion => {
-            Some(crate::common::icon_registry_elements::FILEQUESTION_ELEMENTS)
-        }
-        IconType::FileQuestionMark => {
-            Some(crate::common::icon_registry_elements::FILEQUESTIONMARK_ELEMENTS)
-        }
+        IconType::FileQuestion => Some(crate::common::icon_registry_elements::FILEQUESTION_ELEMENTS),
+        IconType::FileQuestionMark => Some(crate::common::icon_registry_elements::FILEQUESTIONMARK_ELEMENTS),
         IconType::FileScan => Some(crate::common::icon_registry_elements::FILESCAN_ELEMENTS),
         IconType::FileSearch => Some(crate::common::icon_registry_elements::FILESEARCH_ELEMENTS),
         IconType::FileSearch2 => Some(crate::common::icon_registry_elements::FILESEARCH2_ELEMENTS),
         IconType::FileSliders => Some(crate::common::icon_registry_elements::FILESLIDERS_ELEMENTS),
-        IconType::FileSpreadsheet => {
-            Some(crate::common::icon_registry_elements::FILESPREADSHEET_ELEMENTS)
-        }
+        IconType::FileSpreadsheet => Some(crate::common::icon_registry_elements::FILESPREADSHEET_ELEMENTS),
         IconType::FileStack => Some(crate::common::icon_registry_elements::FILESTACK_ELEMENTS),
         IconType::FileSymlink => Some(crate::common::icon_registry_elements::FILESYMLINK_ELEMENTS),
-        IconType::FileTerminal => {
-            Some(crate::common::icon_registry_elements::FILETERMINAL_ELEMENTS)
-        }
+        IconType::FileTerminal => Some(crate::common::icon_registry_elements::FILETERMINAL_ELEMENTS),
         IconType::FileText => Some(crate::common::icon_registry_elements::FILETEXT_ELEMENTS),
         IconType::FileType => Some(crate::common::icon_registry_elements::FILETYPE_ELEMENTS),
         IconType::FileType2 => Some(crate::common::icon_registry_elements::FILETYPE2_ELEMENTS),
@@ -1187,9 +753,7 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::FileUser => Some(crate::common::icon_registry_elements::FILEUSER_ELEMENTS),
         IconType::FileVideo => Some(crate::common::icon_registry_elements::FILEVIDEO_ELEMENTS),
         IconType::FileVideo2 => Some(crate::common::icon_registry_elements::FILEVIDEO2_ELEMENTS),
-        IconType::FileVideoCamera => {
-            Some(crate::common::icon_registry_elements::FILEVIDEOCAMERA_ELEMENTS)
-        }
+        IconType::FileVideoCamera => Some(crate::common::icon_registry_elements::FILEVIDEOCAMERA_ELEMENTS),
         IconType::FileVolume => Some(crate::common::icon_registry_elements::FILEVOLUME_ELEMENTS),
         IconType::FileVolume2 => Some(crate::common::icon_registry_elements::FILEVOLUME2_ELEMENTS),
         IconType::FileWarning => Some(crate::common::icon_registry_elements::FILEWARNING_ELEMENTS),
@@ -1200,65 +764,35 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Filter => Some(crate::common::icon_registry_elements::FILTER_ELEMENTS),
         IconType::FilterX => Some(crate::common::icon_registry_elements::FILTERX_ELEMENTS),
         IconType::Fingerprint => Some(crate::common::icon_registry_elements::FINGERPRINT_ELEMENTS),
-        IconType::FireExtinguisher => {
-            Some(crate::common::icon_registry_elements::FIREEXTINGUISHER_ELEMENTS)
-        }
+        IconType::FireExtinguisher => Some(crate::common::icon_registry_elements::FIREEXTINGUISHER_ELEMENTS),
         IconType::Fish => Some(crate::common::icon_registry_elements::FISH_ELEMENTS),
         IconType::FishOff => Some(crate::common::icon_registry_elements::FISHOFF_ELEMENTS),
         IconType::FishSymbol => Some(crate::common::icon_registry_elements::FISHSYMBOL_ELEMENTS),
         IconType::Flag => Some(crate::common::icon_registry_elements::FLAG_ELEMENTS),
         IconType::FlagOff => Some(crate::common::icon_registry_elements::FLAGOFF_ELEMENTS),
-        IconType::FlagTriangleLeft => {
-            Some(crate::common::icon_registry_elements::FLAGTRIANGLELEFT_ELEMENTS)
-        }
-        IconType::FlagTriangleRight => {
-            Some(crate::common::icon_registry_elements::FLAGTRIANGLERIGHT_ELEMENTS)
-        }
+        IconType::FlagTriangleLeft => Some(crate::common::icon_registry_elements::FLAGTRIANGLELEFT_ELEMENTS),
+        IconType::FlagTriangleRight => Some(crate::common::icon_registry_elements::FLAGTRIANGLERIGHT_ELEMENTS),
         IconType::Flame => Some(crate::common::icon_registry_elements::FLAME_ELEMENTS),
-        IconType::FlameKindling => {
-            Some(crate::common::icon_registry_elements::FLAMEKINDLING_ELEMENTS)
-        }
+        IconType::FlameKindling => Some(crate::common::icon_registry_elements::FLAMEKINDLING_ELEMENTS),
         IconType::Flashlight => Some(crate::common::icon_registry_elements::FLASHLIGHT_ELEMENTS),
-        IconType::FlashlightOff => {
-            Some(crate::common::icon_registry_elements::FLASHLIGHTOFF_ELEMENTS)
-        }
-        IconType::FlaskConical => {
-            Some(crate::common::icon_registry_elements::FLASKCONICAL_ELEMENTS)
-        }
-        IconType::FlaskConicalOff => {
-            Some(crate::common::icon_registry_elements::FLASKCONICALOFF_ELEMENTS)
-        }
+        IconType::FlashlightOff => Some(crate::common::icon_registry_elements::FLASHLIGHTOFF_ELEMENTS),
+        IconType::FlaskConical => Some(crate::common::icon_registry_elements::FLASKCONICAL_ELEMENTS),
+        IconType::FlaskConicalOff => Some(crate::common::icon_registry_elements::FLASKCONICALOFF_ELEMENTS),
         IconType::FlaskRound => Some(crate::common::icon_registry_elements::FLASKROUND_ELEMENTS),
-        IconType::FlipHorizontal => {
-            Some(crate::common::icon_registry_elements::FLIPHORIZONTAL_ELEMENTS)
-        }
-        IconType::FlipHorizontal2 => {
-            Some(crate::common::icon_registry_elements::FLIPHORIZONTAL2_ELEMENTS)
-        }
-        IconType::FlipVertical => {
-            Some(crate::common::icon_registry_elements::FLIPVERTICAL_ELEMENTS)
-        }
-        IconType::FlipVertical2 => {
-            Some(crate::common::icon_registry_elements::FLIPVERTICAL2_ELEMENTS)
-        }
+        IconType::FlipHorizontal => Some(crate::common::icon_registry_elements::FLIPHORIZONTAL_ELEMENTS),
+        IconType::FlipHorizontal2 => Some(crate::common::icon_registry_elements::FLIPHORIZONTAL2_ELEMENTS),
+        IconType::FlipVertical => Some(crate::common::icon_registry_elements::FLIPVERTICAL_ELEMENTS),
+        IconType::FlipVertical2 => Some(crate::common::icon_registry_elements::FLIPVERTICAL2_ELEMENTS),
         IconType::Flower => Some(crate::common::icon_registry_elements::FLOWER_ELEMENTS),
         IconType::Flower2 => Some(crate::common::icon_registry_elements::FLOWER2_ELEMENTS),
         IconType::Focus => Some(crate::common::icon_registry_elements::FOCUS_ELEMENTS),
-        IconType::FoldHorizontal => {
-            Some(crate::common::icon_registry_elements::FOLDHORIZONTAL_ELEMENTS)
-        }
-        IconType::FoldVertical => {
-            Some(crate::common::icon_registry_elements::FOLDVERTICAL_ELEMENTS)
-        }
+        IconType::FoldHorizontal => Some(crate::common::icon_registry_elements::FOLDHORIZONTAL_ELEMENTS),
+        IconType::FoldVertical => Some(crate::common::icon_registry_elements::FOLDVERTICAL_ELEMENTS),
         IconType::Folder => Some(crate::common::icon_registry_elements::FOLDER_ELEMENTS),
-        IconType::FolderArchive => {
-            Some(crate::common::icon_registry_elements::FOLDERARCHIVE_ELEMENTS)
-        }
+        IconType::FolderArchive => Some(crate::common::icon_registry_elements::FOLDERARCHIVE_ELEMENTS),
         IconType::FolderCheck => Some(crate::common::icon_registry_elements::FOLDERCHECK_ELEMENTS),
         IconType::FolderClock => Some(crate::common::icon_registry_elements::FOLDERCLOCK_ELEMENTS),
-        IconType::FolderClosed => {
-            Some(crate::common::icon_registry_elements::FOLDERCLOSED_ELEMENTS)
-        }
+        IconType::FolderClosed => Some(crate::common::icon_registry_elements::FOLDERCLOSED_ELEMENTS),
         IconType::FolderCode => Some(crate::common::icon_registry_elements::FOLDERCODE_ELEMENTS),
         IconType::FolderCog => Some(crate::common::icon_registry_elements::FOLDERCOG_ELEMENTS),
         IconType::FolderDot => Some(crate::common::icon_registry_elements::FOLDERDOT_ELEMENTS),
@@ -1267,31 +801,19 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::FolderGit2 => Some(crate::common::icon_registry_elements::FOLDERGIT2_ELEMENTS),
         IconType::FolderHeart => Some(crate::common::icon_registry_elements::FOLDERHEART_ELEMENTS),
         IconType::FolderInput => Some(crate::common::icon_registry_elements::FOLDERINPUT_ELEMENTS),
-        IconType::FolderKanban => {
-            Some(crate::common::icon_registry_elements::FOLDERKANBAN_ELEMENTS)
-        }
+        IconType::FolderKanban => Some(crate::common::icon_registry_elements::FOLDERKANBAN_ELEMENTS),
         IconType::FolderKey => Some(crate::common::icon_registry_elements::FOLDERKEY_ELEMENTS),
         IconType::FolderLock => Some(crate::common::icon_registry_elements::FOLDERLOCK_ELEMENTS),
         IconType::FolderMinus => Some(crate::common::icon_registry_elements::FOLDERMINUS_ELEMENTS),
         IconType::FolderOpen => Some(crate::common::icon_registry_elements::FOLDEROPEN_ELEMENTS),
-        IconType::FolderOpenDot => {
-            Some(crate::common::icon_registry_elements::FOLDEROPENDOT_ELEMENTS)
-        }
-        IconType::FolderOutput => {
-            Some(crate::common::icon_registry_elements::FOLDEROUTPUT_ELEMENTS)
-        }
+        IconType::FolderOpenDot => Some(crate::common::icon_registry_elements::FOLDEROPENDOT_ELEMENTS),
+        IconType::FolderOutput => Some(crate::common::icon_registry_elements::FOLDEROUTPUT_ELEMENTS),
         IconType::FolderPen => Some(crate::common::icon_registry_elements::FOLDERPEN_ELEMENTS),
         IconType::FolderPlus => Some(crate::common::icon_registry_elements::FOLDERPLUS_ELEMENTS),
         IconType::FolderRoot => Some(crate::common::icon_registry_elements::FOLDERROOT_ELEMENTS),
-        IconType::FolderSearch => {
-            Some(crate::common::icon_registry_elements::FOLDERSEARCH_ELEMENTS)
-        }
-        IconType::FolderSearch2 => {
-            Some(crate::common::icon_registry_elements::FOLDERSEARCH2_ELEMENTS)
-        }
-        IconType::FolderSymlink => {
-            Some(crate::common::icon_registry_elements::FOLDERSYMLINK_ELEMENTS)
-        }
+        IconType::FolderSearch => Some(crate::common::icon_registry_elements::FOLDERSEARCH_ELEMENTS),
+        IconType::FolderSearch2 => Some(crate::common::icon_registry_elements::FOLDERSEARCH2_ELEMENTS),
+        IconType::FolderSymlink => Some(crate::common::icon_registry_elements::FOLDERSYMLINK_ELEMENTS),
         IconType::FolderSync => Some(crate::common::icon_registry_elements::FOLDERSYNC_ELEMENTS),
         IconType::FolderTree => Some(crate::common::icon_registry_elements::FOLDERTREE_ELEMENTS),
         IconType::FolderUp => Some(crate::common::icon_registry_elements::FOLDERUP_ELEMENTS),
@@ -1308,66 +830,36 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Funnel => Some(crate::common::icon_registry_elements::FUNNEL_ELEMENTS),
         IconType::FunnelPlus => Some(crate::common::icon_registry_elements::FUNNELPLUS_ELEMENTS),
         IconType::FunnelX => Some(crate::common::icon_registry_elements::FUNNELX_ELEMENTS),
-        IconType::GalleryHorizontal => {
-            Some(crate::common::icon_registry_elements::GALLERYHORIZONTAL_ELEMENTS)
-        }
-        IconType::GalleryHorizontalEnd => {
-            Some(crate::common::icon_registry_elements::GALLERYHORIZONTALEND_ELEMENTS)
-        }
-        IconType::GalleryThumbnails => {
-            Some(crate::common::icon_registry_elements::GALLERYTHUMBNAILS_ELEMENTS)
-        }
-        IconType::GalleryVertical => {
-            Some(crate::common::icon_registry_elements::GALLERYVERTICAL_ELEMENTS)
-        }
-        IconType::GalleryVerticalEnd => {
-            Some(crate::common::icon_registry_elements::GALLERYVERTICALEND_ELEMENTS)
-        }
+        IconType::GalleryHorizontal => Some(crate::common::icon_registry_elements::GALLERYHORIZONTAL_ELEMENTS),
+        IconType::GalleryHorizontalEnd => Some(crate::common::icon_registry_elements::GALLERYHORIZONTALEND_ELEMENTS),
+        IconType::GalleryThumbnails => Some(crate::common::icon_registry_elements::GALLERYTHUMBNAILS_ELEMENTS),
+        IconType::GalleryVertical => Some(crate::common::icon_registry_elements::GALLERYVERTICAL_ELEMENTS),
+        IconType::GalleryVerticalEnd => Some(crate::common::icon_registry_elements::GALLERYVERTICALEND_ELEMENTS),
         IconType::Gamepad => Some(crate::common::icon_registry_elements::GAMEPAD_ELEMENTS),
         IconType::Gamepad2 => Some(crate::common::icon_registry_elements::GAMEPAD2_ELEMENTS),
         IconType::Gauge => Some(crate::common::icon_registry_elements::GAUGE_ELEMENTS),
         IconType::Gavel => Some(crate::common::icon_registry_elements::GAVEL_ELEMENTS),
         IconType::Gem => Some(crate::common::icon_registry_elements::GEM_ELEMENTS),
-        IconType::GeorgianLari => {
-            Some(crate::common::icon_registry_elements::GEORGIANLARI_ELEMENTS)
-        }
+        IconType::GeorgianLari => Some(crate::common::icon_registry_elements::GEORGIANLARI_ELEMENTS),
         IconType::Ghost => Some(crate::common::icon_registry_elements::GHOST_ELEMENTS),
         IconType::Gift => Some(crate::common::icon_registry_elements::GIFT_ELEMENTS),
         IconType::GitBranch => Some(crate::common::icon_registry_elements::GITBRANCH_ELEMENTS),
-        IconType::GitBranchPlus => {
-            Some(crate::common::icon_registry_elements::GITBRANCHPLUS_ELEMENTS)
-        }
-        IconType::GitCommitHorizontal => {
-            Some(crate::common::icon_registry_elements::GITCOMMITHORIZONTAL_ELEMENTS)
-        }
-        IconType::GitCommitVertical => {
-            Some(crate::common::icon_registry_elements::GITCOMMITVERTICAL_ELEMENTS)
-        }
+        IconType::GitBranchPlus => Some(crate::common::icon_registry_elements::GITBRANCHPLUS_ELEMENTS),
+        IconType::GitCommitHorizontal => Some(crate::common::icon_registry_elements::GITCOMMITHORIZONTAL_ELEMENTS),
+        IconType::GitCommitVertical => Some(crate::common::icon_registry_elements::GITCOMMITVERTICAL_ELEMENTS),
         IconType::GitCompare => Some(crate::common::icon_registry_elements::GITCOMPARE_ELEMENTS),
-        IconType::GitCompareArrows => {
-            Some(crate::common::icon_registry_elements::GITCOMPAREARROWS_ELEMENTS)
-        }
+        IconType::GitCompareArrows => Some(crate::common::icon_registry_elements::GITCOMPAREARROWS_ELEMENTS),
         IconType::GitFork => Some(crate::common::icon_registry_elements::GITFORK_ELEMENTS),
         IconType::GitGraph => Some(crate::common::icon_registry_elements::GITGRAPH_ELEMENTS),
         IconType::GitMerge => Some(crate::common::icon_registry_elements::GITMERGE_ELEMENTS),
-        IconType::GitPullRequest => {
-            Some(crate::common::icon_registry_elements::GITPULLREQUEST_ELEMENTS)
-        }
-        IconType::GitPullRequestArrow => {
-            Some(crate::common::icon_registry_elements::GITPULLREQUESTARROW_ELEMENTS)
-        }
-        IconType::GitPullRequestClosed => {
-            Some(crate::common::icon_registry_elements::GITPULLREQUESTCLOSED_ELEMENTS)
-        }
-        IconType::GitPullRequestCreate => {
-            Some(crate::common::icon_registry_elements::GITPULLREQUESTCREATE_ELEMENTS)
-        }
+        IconType::GitPullRequest => Some(crate::common::icon_registry_elements::GITPULLREQUEST_ELEMENTS),
+        IconType::GitPullRequestArrow => Some(crate::common::icon_registry_elements::GITPULLREQUESTARROW_ELEMENTS),
+        IconType::GitPullRequestClosed => Some(crate::common::icon_registry_elements::GITPULLREQUESTCLOSED_ELEMENTS),
+        IconType::GitPullRequestCreate => Some(crate::common::icon_registry_elements::GITPULLREQUESTCREATE_ELEMENTS),
         IconType::GitPullRequestCreateArrow => {
             Some(crate::common::icon_registry_elements::GITPULLREQUESTCREATEARROW_ELEMENTS)
         }
-        IconType::GitPullRequestDraft => {
-            Some(crate::common::icon_registry_elements::GITPULLREQUESTDRAFT_ELEMENTS)
-        }
+        IconType::GitPullRequestDraft => Some(crate::common::icon_registry_elements::GITPULLREQUESTDRAFT_ELEMENTS),
         IconType::Github => Some(crate::common::icon_registry_elements::GITHUB_ELEMENTS),
         IconType::Gitlab => Some(crate::common::icon_registry_elements::GITLAB_ELEMENTS),
         IconType::GlassWater => Some(crate::common::icon_registry_elements::GLASSWATER_ELEMENTS),
@@ -1377,25 +869,17 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Goal => Some(crate::common::icon_registry_elements::GOAL_ELEMENTS),
         IconType::Gpu => Some(crate::common::icon_registry_elements::GPU_ELEMENTS),
         IconType::Grab => Some(crate::common::icon_registry_elements::GRAB_ELEMENTS),
-        IconType::GraduationCap => {
-            Some(crate::common::icon_registry_elements::GRADUATIONCAP_ELEMENTS)
-        }
+        IconType::GraduationCap => Some(crate::common::icon_registry_elements::GRADUATIONCAP_ELEMENTS),
         IconType::Grape => Some(crate::common::icon_registry_elements::GRAPE_ELEMENTS),
         IconType::Grid2X2 => Some(crate::common::icon_registry_elements::GRID2X2_ELEMENTS),
-        IconType::Grid2X2Check => {
-            Some(crate::common::icon_registry_elements::GRID2X2CHECK_ELEMENTS)
-        }
+        IconType::Grid2X2Check => Some(crate::common::icon_registry_elements::GRID2X2CHECK_ELEMENTS),
         IconType::Grid2X2Plus => Some(crate::common::icon_registry_elements::GRID2X2PLUS_ELEMENTS),
         IconType::Grid2X2X => Some(crate::common::icon_registry_elements::GRID2X2X_ELEMENTS),
         IconType::Grid3X2 => Some(crate::common::icon_registry_elements::GRID3X2_ELEMENTS),
         IconType::Grid3X3 => Some(crate::common::icon_registry_elements::GRID3X3_ELEMENTS),
         IconType::Grip => Some(crate::common::icon_registry_elements::GRIP_ELEMENTS),
-        IconType::GripHorizontal => {
-            Some(crate::common::icon_registry_elements::GRIPHORIZONTAL_ELEMENTS)
-        }
-        IconType::GripVertical => {
-            Some(crate::common::icon_registry_elements::GRIPVERTICAL_ELEMENTS)
-        }
+        IconType::GripHorizontal => Some(crate::common::icon_registry_elements::GRIPHORIZONTAL_ELEMENTS),
+        IconType::GripVertical => Some(crate::common::icon_registry_elements::GRIPVERTICAL_ELEMENTS),
         IconType::Group => Some(crate::common::icon_registry_elements::GROUP_ELEMENTS),
         IconType::Guitar => Some(crate::common::icon_registry_elements::GUITAR_ELEMENTS),
         IconType::Ham => Some(crate::common::icon_registry_elements::HAM_ELEMENTS),
@@ -1410,12 +894,8 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Handbag => Some(crate::common::icon_registry_elements::HANDBAG_ELEMENTS),
         IconType::Handshake => Some(crate::common::icon_registry_elements::HANDSHAKE_ELEMENTS),
         IconType::HardDrive => Some(crate::common::icon_registry_elements::HARDDRIVE_ELEMENTS),
-        IconType::HardDriveDownload => {
-            Some(crate::common::icon_registry_elements::HARDDRIVEDOWNLOAD_ELEMENTS)
-        }
-        IconType::HardDriveUpload => {
-            Some(crate::common::icon_registry_elements::HARDDRIVEUPLOAD_ELEMENTS)
-        }
+        IconType::HardDriveDownload => Some(crate::common::icon_registry_elements::HARDDRIVEDOWNLOAD_ELEMENTS),
+        IconType::HardDriveUpload => Some(crate::common::icon_registry_elements::HARDDRIVEUPLOAD_ELEMENTS),
         IconType::HardHat => Some(crate::common::icon_registry_elements::HARDHAT_ELEMENTS),
         IconType::Hash => Some(crate::common::icon_registry_elements::HASH_ELEMENTS),
         IconType::HatGlasses => Some(crate::common::icon_registry_elements::HATGLASSES_ELEMENTS),
@@ -1428,16 +908,12 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Heading4 => Some(crate::common::icon_registry_elements::HEADING4_ELEMENTS),
         IconType::Heading5 => Some(crate::common::icon_registry_elements::HEADING5_ELEMENTS),
         IconType::Heading6 => Some(crate::common::icon_registry_elements::HEADING6_ELEMENTS),
-        IconType::HeadphoneOff => {
-            Some(crate::common::icon_registry_elements::HEADPHONEOFF_ELEMENTS)
-        }
+        IconType::HeadphoneOff => Some(crate::common::icon_registry_elements::HEADPHONEOFF_ELEMENTS),
         IconType::Headphones => Some(crate::common::icon_registry_elements::HEADPHONES_ELEMENTS),
         IconType::Headset => Some(crate::common::icon_registry_elements::HEADSET_ELEMENTS),
         IconType::Heart => Some(crate::common::icon_registry_elements::HEART_ELEMENTS),
         IconType::HeartCrack => Some(crate::common::icon_registry_elements::HEARTCRACK_ELEMENTS),
-        IconType::HeartHandshake => {
-            Some(crate::common::icon_registry_elements::HEARTHANDSHAKE_ELEMENTS)
-        }
+        IconType::HeartHandshake => Some(crate::common::icon_registry_elements::HEARTHANDSHAKE_ELEMENTS),
         IconType::HeartMinus => Some(crate::common::icon_registry_elements::HEARTMINUS_ELEMENTS),
         IconType::HeartOff => Some(crate::common::icon_registry_elements::HEARTOFF_ELEMENTS),
         IconType::HeartPlus => Some(crate::common::icon_registry_elements::HEARTPLUS_ELEMENTS),
@@ -1455,16 +931,10 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::HousePlug => Some(crate::common::icon_registry_elements::HOUSEPLUG_ELEMENTS),
         IconType::HousePlus => Some(crate::common::icon_registry_elements::HOUSEPLUS_ELEMENTS),
         IconType::HouseWifi => Some(crate::common::icon_registry_elements::HOUSEWIFI_ELEMENTS),
-        IconType::IceCreamBowl => {
-            Some(crate::common::icon_registry_elements::ICECREAMBOWL_ELEMENTS)
-        }
-        IconType::IceCreamCone => {
-            Some(crate::common::icon_registry_elements::ICECREAMCONE_ELEMENTS)
-        }
+        IconType::IceCreamBowl => Some(crate::common::icon_registry_elements::ICECREAMBOWL_ELEMENTS),
+        IconType::IceCreamCone => Some(crate::common::icon_registry_elements::ICECREAMCONE_ELEMENTS),
         IconType::IdCard => Some(crate::common::icon_registry_elements::IDCARD_ELEMENTS),
-        IconType::IdCardLanyard => {
-            Some(crate::common::icon_registry_elements::IDCARDLANYARD_ELEMENTS)
-        }
+        IconType::IdCardLanyard => Some(crate::common::icon_registry_elements::IDCARDLANYARD_ELEMENTS),
         IconType::Image => Some(crate::common::icon_registry_elements::IMAGE_ELEMENTS),
         IconType::ImageDown => Some(crate::common::icon_registry_elements::IMAGEDOWN_ELEMENTS),
         IconType::ImageMinus => Some(crate::common::icon_registry_elements::IMAGEMINUS_ELEMENTS),
@@ -1472,29 +942,19 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::ImagePlay => Some(crate::common::icon_registry_elements::IMAGEPLAY_ELEMENTS),
         IconType::ImagePlus => Some(crate::common::icon_registry_elements::IMAGEPLUS_ELEMENTS),
         IconType::ImageUp => Some(crate::common::icon_registry_elements::IMAGEUP_ELEMENTS),
-        IconType::ImageUpscale => {
-            Some(crate::common::icon_registry_elements::IMAGEUPSCALE_ELEMENTS)
-        }
+        IconType::ImageUpscale => Some(crate::common::icon_registry_elements::IMAGEUPSCALE_ELEMENTS),
         IconType::Images => Some(crate::common::icon_registry_elements::IMAGES_ELEMENTS),
         IconType::Import => Some(crate::common::icon_registry_elements::IMPORT_ELEMENTS),
         IconType::Inbox => Some(crate::common::icon_registry_elements::INBOX_ELEMENTS),
-        IconType::IndentDecrease => {
-            Some(crate::common::icon_registry_elements::INDENTDECREASE_ELEMENTS)
-        }
-        IconType::IndentIncrease => {
-            Some(crate::common::icon_registry_elements::INDENTINCREASE_ELEMENTS)
-        }
+        IconType::IndentDecrease => Some(crate::common::icon_registry_elements::INDENTDECREASE_ELEMENTS),
+        IconType::IndentIncrease => Some(crate::common::icon_registry_elements::INDENTINCREASE_ELEMENTS),
         IconType::IndianRupee => Some(crate::common::icon_registry_elements::INDIANRUPEE_ELEMENTS),
         IconType::Infinity => Some(crate::common::icon_registry_elements::INFINITY_ELEMENTS),
         IconType::Info => Some(crate::common::icon_registry_elements::INFO_ELEMENTS),
-        IconType::InspectionPanel => {
-            Some(crate::common::icon_registry_elements::INSPECTIONPANEL_ELEMENTS)
-        }
+        IconType::InspectionPanel => Some(crate::common::icon_registry_elements::INSPECTIONPANEL_ELEMENTS),
         IconType::Instagram => Some(crate::common::icon_registry_elements::INSTAGRAM_ELEMENTS),
         IconType::Italic => Some(crate::common::icon_registry_elements::ITALIC_ELEMENTS),
-        IconType::IterationCcw => {
-            Some(crate::common::icon_registry_elements::ITERATIONCCW_ELEMENTS)
-        }
+        IconType::IterationCcw => Some(crate::common::icon_registry_elements::ITERATIONCCW_ELEMENTS),
         IconType::IterationCw => Some(crate::common::icon_registry_elements::ITERATIONCW_ELEMENTS),
         IconType::JapaneseYen => Some(crate::common::icon_registry_elements::JAPANESEYEN_ELEMENTS),
         IconType::Joystick => Some(crate::common::icon_registry_elements::JOYSTICK_ELEMENTS),
@@ -1503,48 +963,32 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::KeyRound => Some(crate::common::icon_registry_elements::KEYROUND_ELEMENTS),
         IconType::KeySquare => Some(crate::common::icon_registry_elements::KEYSQUARE_ELEMENTS),
         IconType::Keyboard => Some(crate::common::icon_registry_elements::KEYBOARD_ELEMENTS),
-        IconType::KeyboardMusic => {
-            Some(crate::common::icon_registry_elements::KEYBOARDMUSIC_ELEMENTS)
-        }
+        IconType::KeyboardMusic => Some(crate::common::icon_registry_elements::KEYBOARDMUSIC_ELEMENTS),
         IconType::KeyboardOff => Some(crate::common::icon_registry_elements::KEYBOARDOFF_ELEMENTS),
         IconType::Lamp => Some(crate::common::icon_registry_elements::LAMP_ELEMENTS),
         IconType::LampCeiling => Some(crate::common::icon_registry_elements::LAMPCEILING_ELEMENTS),
         IconType::LampDesk => Some(crate::common::icon_registry_elements::LAMPDESK_ELEMENTS),
         IconType::LampFloor => Some(crate::common::icon_registry_elements::LAMPFLOOR_ELEMENTS),
-        IconType::LampWallDown => {
-            Some(crate::common::icon_registry_elements::LAMPWALLDOWN_ELEMENTS)
-        }
+        IconType::LampWallDown => Some(crate::common::icon_registry_elements::LAMPWALLDOWN_ELEMENTS),
         IconType::LampWallUp => Some(crate::common::icon_registry_elements::LAMPWALLUP_ELEMENTS),
         IconType::LandPlot => Some(crate::common::icon_registry_elements::LANDPLOT_ELEMENTS),
         IconType::Landmark => Some(crate::common::icon_registry_elements::LANDMARK_ELEMENTS),
         IconType::Languages => Some(crate::common::icon_registry_elements::LANGUAGES_ELEMENTS),
         IconType::Laptop => Some(crate::common::icon_registry_elements::LAPTOP_ELEMENTS),
-        IconType::LaptopMinimal => {
-            Some(crate::common::icon_registry_elements::LAPTOPMINIMAL_ELEMENTS)
-        }
-        IconType::LaptopMinimalCheck => {
-            Some(crate::common::icon_registry_elements::LAPTOPMINIMALCHECK_ELEMENTS)
-        }
+        IconType::LaptopMinimal => Some(crate::common::icon_registry_elements::LAPTOPMINIMAL_ELEMENTS),
+        IconType::LaptopMinimalCheck => Some(crate::common::icon_registry_elements::LAPTOPMINIMALCHECK_ELEMENTS),
         IconType::Lasso => Some(crate::common::icon_registry_elements::LASSO_ELEMENTS),
         IconType::LassoSelect => Some(crate::common::icon_registry_elements::LASSOSELECT_ELEMENTS),
         IconType::Laugh => Some(crate::common::icon_registry_elements::LAUGH_ELEMENTS),
         IconType::Layers => Some(crate::common::icon_registry_elements::LAYERS_ELEMENTS),
         IconType::Layers2 => Some(crate::common::icon_registry_elements::LAYERS2_ELEMENTS),
         IconType::Layers3 => Some(crate::common::icon_registry_elements::LAYERS3_ELEMENTS),
-        IconType::LayoutDashboard => {
-            Some(crate::common::icon_registry_elements::LAYOUTDASHBOARD_ELEMENTS)
-        }
+        IconType::LayoutDashboard => Some(crate::common::icon_registry_elements::LAYOUTDASHBOARD_ELEMENTS),
         IconType::LayoutGrid => Some(crate::common::icon_registry_elements::LAYOUTGRID_ELEMENTS),
         IconType::LayoutList => Some(crate::common::icon_registry_elements::LAYOUTLIST_ELEMENTS),
-        IconType::LayoutPanelLeft => {
-            Some(crate::common::icon_registry_elements::LAYOUTPANELLEFT_ELEMENTS)
-        }
-        IconType::LayoutPanelTop => {
-            Some(crate::common::icon_registry_elements::LAYOUTPANELTOP_ELEMENTS)
-        }
-        IconType::LayoutTemplate => {
-            Some(crate::common::icon_registry_elements::LAYOUTTEMPLATE_ELEMENTS)
-        }
+        IconType::LayoutPanelLeft => Some(crate::common::icon_registry_elements::LAYOUTPANELLEFT_ELEMENTS),
+        IconType::LayoutPanelTop => Some(crate::common::icon_registry_elements::LAYOUTPANELTOP_ELEMENTS),
+        IconType::LayoutTemplate => Some(crate::common::icon_registry_elements::LAYOUTTEMPLATE_ELEMENTS),
         IconType::Leaf => Some(crate::common::icon_registry_elements::LEAF_ELEMENTS),
         IconType::LeafyGreen => Some(crate::common::icon_registry_elements::LEAFYGREEN_ELEMENTS),
         IconType::Lectern => Some(crate::common::icon_registry_elements::LECTERN_ELEMENTS),
@@ -1554,12 +998,8 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::LifeBuoy => Some(crate::common::icon_registry_elements::LIFEBUOY_ELEMENTS),
         IconType::Ligature => Some(crate::common::icon_registry_elements::LIGATURE_ELEMENTS),
         IconType::Lightbulb => Some(crate::common::icon_registry_elements::LIGHTBULB_ELEMENTS),
-        IconType::LightbulbOff => {
-            Some(crate::common::icon_registry_elements::LIGHTBULBOFF_ELEMENTS)
-        }
-        IconType::LineSquiggle => {
-            Some(crate::common::icon_registry_elements::LINESQUIGGLE_ELEMENTS)
-        }
+        IconType::LightbulbOff => Some(crate::common::icon_registry_elements::LIGHTBULBOFF_ELEMENTS),
+        IconType::LineSquiggle => Some(crate::common::icon_registry_elements::LINESQUIGGLE_ELEMENTS),
         IconType::Link => Some(crate::common::icon_registry_elements::LINK_ELEMENTS),
         IconType::Link2 => Some(crate::common::icon_registry_elements::LINK2_ELEMENTS),
         IconType::Link2Off => Some(crate::common::icon_registry_elements::LINK2OFF_ELEMENTS),
@@ -1567,14 +1007,10 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::List => Some(crate::common::icon_registry_elements::LIST_ELEMENTS),
         IconType::ListCheck => Some(crate::common::icon_registry_elements::LISTCHECK_ELEMENTS),
         IconType::ListChecks => Some(crate::common::icon_registry_elements::LISTCHECKS_ELEMENTS),
-        IconType::ListCollapse => {
-            Some(crate::common::icon_registry_elements::LISTCOLLAPSE_ELEMENTS)
-        }
+        IconType::ListCollapse => Some(crate::common::icon_registry_elements::LISTCOLLAPSE_ELEMENTS),
         IconType::ListEnd => Some(crate::common::icon_registry_elements::LISTEND_ELEMENTS),
         IconType::ListFilter => Some(crate::common::icon_registry_elements::LISTFILTER_ELEMENTS),
-        IconType::ListFilterPlus => {
-            Some(crate::common::icon_registry_elements::LISTFILTERPLUS_ELEMENTS)
-        }
+        IconType::ListFilterPlus => Some(crate::common::icon_registry_elements::LISTFILTERPLUS_ELEMENTS),
         IconType::ListMinus => Some(crate::common::icon_registry_elements::LISTMINUS_ELEMENTS),
         IconType::ListMusic => Some(crate::common::icon_registry_elements::LISTMUSIC_ELEMENTS),
         IconType::ListOrdered => Some(crate::common::icon_registry_elements::LISTORDERED_ELEMENTS),
@@ -1586,23 +1022,15 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::ListVideo => Some(crate::common::icon_registry_elements::LISTVIDEO_ELEMENTS),
         IconType::ListX => Some(crate::common::icon_registry_elements::LISTX_ELEMENTS),
         IconType::Loader => Some(crate::common::icon_registry_elements::LOADER_ELEMENTS),
-        IconType::LoaderCircle => {
-            Some(crate::common::icon_registry_elements::LOADERCIRCLE_ELEMENTS)
-        }
-        IconType::LoaderPinwheel => {
-            Some(crate::common::icon_registry_elements::LOADERPINWHEEL_ELEMENTS)
-        }
+        IconType::LoaderCircle => Some(crate::common::icon_registry_elements::LOADERCIRCLE_ELEMENTS),
+        IconType::LoaderPinwheel => Some(crate::common::icon_registry_elements::LOADERPINWHEEL_ELEMENTS),
         IconType::Locate => Some(crate::common::icon_registry_elements::LOCATE_ELEMENTS),
         IconType::LocateFixed => Some(crate::common::icon_registry_elements::LOCATEFIXED_ELEMENTS),
         IconType::LocateOff => Some(crate::common::icon_registry_elements::LOCATEOFF_ELEMENTS),
-        IconType::LocationEdit => {
-            Some(crate::common::icon_registry_elements::LOCATIONEDIT_ELEMENTS)
-        }
+        IconType::LocationEdit => Some(crate::common::icon_registry_elements::LOCATIONEDIT_ELEMENTS),
         IconType::Lock => Some(crate::common::icon_registry_elements::LOCK_ELEMENTS),
         IconType::LockKeyhole => Some(crate::common::icon_registry_elements::LOCKKEYHOLE_ELEMENTS),
-        IconType::LockKeyholeOpen => {
-            Some(crate::common::icon_registry_elements::LOCKKEYHOLEOPEN_ELEMENTS)
-        }
+        IconType::LockKeyholeOpen => Some(crate::common::icon_registry_elements::LOCKKEYHOLEOPEN_ELEMENTS),
         IconType::LockOpen => Some(crate::common::icon_registry_elements::LOCKOPEN_ELEMENTS),
         IconType::LogIn => Some(crate::common::icon_registry_elements::LOGIN_ELEMENTS),
         IconType::LogOut => Some(crate::common::icon_registry_elements::LOGOUT_ELEMENTS),
@@ -1615,12 +1043,8 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::MailMinus => Some(crate::common::icon_registry_elements::MAILMINUS_ELEMENTS),
         IconType::MailOpen => Some(crate::common::icon_registry_elements::MAILOPEN_ELEMENTS),
         IconType::MailPlus => Some(crate::common::icon_registry_elements::MAILPLUS_ELEMENTS),
-        IconType::MailQuestion => {
-            Some(crate::common::icon_registry_elements::MAILQUESTION_ELEMENTS)
-        }
-        IconType::MailQuestionMark => {
-            Some(crate::common::icon_registry_elements::MAILQUESTIONMARK_ELEMENTS)
-        }
+        IconType::MailQuestion => Some(crate::common::icon_registry_elements::MAILQUESTION_ELEMENTS),
+        IconType::MailQuestionMark => Some(crate::common::icon_registry_elements::MAILQUESTIONMARK_ELEMENTS),
         IconType::MailSearch => Some(crate::common::icon_registry_elements::MAILSEARCH_ELEMENTS),
         IconType::MailWarning => Some(crate::common::icon_registry_elements::MAILWARNING_ELEMENTS),
         IconType::MailX => Some(crate::common::icon_registry_elements::MAILX_ELEMENTS),
@@ -1630,24 +1054,16 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::MapMinus => Some(crate::common::icon_registry_elements::MAPMINUS_ELEMENTS),
         IconType::MapPin => Some(crate::common::icon_registry_elements::MAPPIN_ELEMENTS),
         IconType::MapPinCheck => Some(crate::common::icon_registry_elements::MAPPINCHECK_ELEMENTS),
-        IconType::MapPinCheckInside => {
-            Some(crate::common::icon_registry_elements::MAPPINCHECKINSIDE_ELEMENTS)
-        }
+        IconType::MapPinCheckInside => Some(crate::common::icon_registry_elements::MAPPINCHECKINSIDE_ELEMENTS),
         IconType::MapPinHouse => Some(crate::common::icon_registry_elements::MAPPINHOUSE_ELEMENTS),
         IconType::MapPinMinus => Some(crate::common::icon_registry_elements::MAPPINMINUS_ELEMENTS),
-        IconType::MapPinMinusInside => {
-            Some(crate::common::icon_registry_elements::MAPPINMINUSINSIDE_ELEMENTS)
-        }
+        IconType::MapPinMinusInside => Some(crate::common::icon_registry_elements::MAPPINMINUSINSIDE_ELEMENTS),
         IconType::MapPinOff => Some(crate::common::icon_registry_elements::MAPPINOFF_ELEMENTS),
         IconType::MapPinPen => Some(crate::common::icon_registry_elements::MAPPINPEN_ELEMENTS),
         IconType::MapPinPlus => Some(crate::common::icon_registry_elements::MAPPINPLUS_ELEMENTS),
-        IconType::MapPinPlusInside => {
-            Some(crate::common::icon_registry_elements::MAPPINPLUSINSIDE_ELEMENTS)
-        }
+        IconType::MapPinPlusInside => Some(crate::common::icon_registry_elements::MAPPINPLUSINSIDE_ELEMENTS),
         IconType::MapPinX => Some(crate::common::icon_registry_elements::MAPPINX_ELEMENTS),
-        IconType::MapPinXInside => {
-            Some(crate::common::icon_registry_elements::MAPPINXINSIDE_ELEMENTS)
-        }
+        IconType::MapPinXInside => Some(crate::common::icon_registry_elements::MAPPINXINSIDE_ELEMENTS),
         IconType::MapPinned => Some(crate::common::icon_registry_elements::MAPPINNED_ELEMENTS),
         IconType::MapPlus => Some(crate::common::icon_registry_elements::MAPPLUS_ELEMENTS),
         IconType::Mars => Some(crate::common::icon_registry_elements::MARS_ELEMENTS),
@@ -1657,100 +1073,42 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Maximize2 => Some(crate::common::icon_registry_elements::MAXIMIZE2_ELEMENTS),
         IconType::Medal => Some(crate::common::icon_registry_elements::MEDAL_ELEMENTS),
         IconType::Megaphone => Some(crate::common::icon_registry_elements::MEGAPHONE_ELEMENTS),
-        IconType::MegaphoneOff => {
-            Some(crate::common::icon_registry_elements::MEGAPHONEOFF_ELEMENTS)
-        }
+        IconType::MegaphoneOff => Some(crate::common::icon_registry_elements::MEGAPHONEOFF_ELEMENTS),
         IconType::Meh => Some(crate::common::icon_registry_elements::MEH_ELEMENTS),
         IconType::MemoryStick => Some(crate::common::icon_registry_elements::MEMORYSTICK_ELEMENTS),
         IconType::Menu => Some(crate::common::icon_registry_elements::MENU_ELEMENTS),
         IconType::Merge => Some(crate::common::icon_registry_elements::MERGE_ELEMENTS),
-        IconType::MessageCircle => {
-            Some(crate::common::icon_registry_elements::MESSAGECIRCLE_ELEMENTS)
-        }
-        IconType::MessageCircleCode => {
-            Some(crate::common::icon_registry_elements::MESSAGECIRCLECODE_ELEMENTS)
-        }
-        IconType::MessageCircleDashed => {
-            Some(crate::common::icon_registry_elements::MESSAGECIRCLEDASHED_ELEMENTS)
-        }
-        IconType::MessageCircleHeart => {
-            Some(crate::common::icon_registry_elements::MESSAGECIRCLEHEART_ELEMENTS)
-        }
-        IconType::MessageCircleMore => {
-            Some(crate::common::icon_registry_elements::MESSAGECIRCLEMORE_ELEMENTS)
-        }
-        IconType::MessageCircleOff => {
-            Some(crate::common::icon_registry_elements::MESSAGECIRCLEOFF_ELEMENTS)
-        }
-        IconType::MessageCirclePlus => {
-            Some(crate::common::icon_registry_elements::MESSAGECIRCLEPLUS_ELEMENTS)
-        }
-        IconType::MessageCircleQuestion => {
-            Some(crate::common::icon_registry_elements::MESSAGECIRCLEQUESTION_ELEMENTS)
-        }
+        IconType::MessageCircle => Some(crate::common::icon_registry_elements::MESSAGECIRCLE_ELEMENTS),
+        IconType::MessageCircleCode => Some(crate::common::icon_registry_elements::MESSAGECIRCLECODE_ELEMENTS),
+        IconType::MessageCircleDashed => Some(crate::common::icon_registry_elements::MESSAGECIRCLEDASHED_ELEMENTS),
+        IconType::MessageCircleHeart => Some(crate::common::icon_registry_elements::MESSAGECIRCLEHEART_ELEMENTS),
+        IconType::MessageCircleMore => Some(crate::common::icon_registry_elements::MESSAGECIRCLEMORE_ELEMENTS),
+        IconType::MessageCircleOff => Some(crate::common::icon_registry_elements::MESSAGECIRCLEOFF_ELEMENTS),
+        IconType::MessageCirclePlus => Some(crate::common::icon_registry_elements::MESSAGECIRCLEPLUS_ELEMENTS),
+        IconType::MessageCircleQuestion => Some(crate::common::icon_registry_elements::MESSAGECIRCLEQUESTION_ELEMENTS),
         IconType::MessageCircleQuestionMark => {
             Some(crate::common::icon_registry_elements::MESSAGECIRCLEQUESTIONMARK_ELEMENTS)
         }
-        IconType::MessageCircleReply => {
-            Some(crate::common::icon_registry_elements::MESSAGECIRCLEREPLY_ELEMENTS)
-        }
-        IconType::MessageCircleWarning => {
-            Some(crate::common::icon_registry_elements::MESSAGECIRCLEWARNING_ELEMENTS)
-        }
-        IconType::MessageCircleX => {
-            Some(crate::common::icon_registry_elements::MESSAGECIRCLEX_ELEMENTS)
-        }
-        IconType::MessageSquare => {
-            Some(crate::common::icon_registry_elements::MESSAGESQUARE_ELEMENTS)
-        }
-        IconType::MessageSquareCode => {
-            Some(crate::common::icon_registry_elements::MESSAGESQUARECODE_ELEMENTS)
-        }
-        IconType::MessageSquareDashed => {
-            Some(crate::common::icon_registry_elements::MESSAGESQUAREDASHED_ELEMENTS)
-        }
-        IconType::MessageSquareDiff => {
-            Some(crate::common::icon_registry_elements::MESSAGESQUAREDIFF_ELEMENTS)
-        }
-        IconType::MessageSquareDot => {
-            Some(crate::common::icon_registry_elements::MESSAGESQUAREDOT_ELEMENTS)
-        }
-        IconType::MessageSquareHeart => {
-            Some(crate::common::icon_registry_elements::MESSAGESQUAREHEART_ELEMENTS)
-        }
-        IconType::MessageSquareLock => {
-            Some(crate::common::icon_registry_elements::MESSAGESQUARELOCK_ELEMENTS)
-        }
-        IconType::MessageSquareMore => {
-            Some(crate::common::icon_registry_elements::MESSAGESQUAREMORE_ELEMENTS)
-        }
-        IconType::MessageSquareOff => {
-            Some(crate::common::icon_registry_elements::MESSAGESQUAREOFF_ELEMENTS)
-        }
-        IconType::MessageSquarePlus => {
-            Some(crate::common::icon_registry_elements::MESSAGESQUAREPLUS_ELEMENTS)
-        }
-        IconType::MessageSquareQuote => {
-            Some(crate::common::icon_registry_elements::MESSAGESQUAREQUOTE_ELEMENTS)
-        }
-        IconType::MessageSquareReply => {
-            Some(crate::common::icon_registry_elements::MESSAGESQUAREREPLY_ELEMENTS)
-        }
-        IconType::MessageSquareShare => {
-            Some(crate::common::icon_registry_elements::MESSAGESQUARESHARE_ELEMENTS)
-        }
-        IconType::MessageSquareText => {
-            Some(crate::common::icon_registry_elements::MESSAGESQUARETEXT_ELEMENTS)
-        }
-        IconType::MessageSquareWarning => {
-            Some(crate::common::icon_registry_elements::MESSAGESQUAREWARNING_ELEMENTS)
-        }
-        IconType::MessageSquareX => {
-            Some(crate::common::icon_registry_elements::MESSAGESQUAREX_ELEMENTS)
-        }
-        IconType::MessagesSquare => {
-            Some(crate::common::icon_registry_elements::MESSAGESSQUARE_ELEMENTS)
-        }
+        IconType::MessageCircleReply => Some(crate::common::icon_registry_elements::MESSAGECIRCLEREPLY_ELEMENTS),
+        IconType::MessageCircleWarning => Some(crate::common::icon_registry_elements::MESSAGECIRCLEWARNING_ELEMENTS),
+        IconType::MessageCircleX => Some(crate::common::icon_registry_elements::MESSAGECIRCLEX_ELEMENTS),
+        IconType::MessageSquare => Some(crate::common::icon_registry_elements::MESSAGESQUARE_ELEMENTS),
+        IconType::MessageSquareCode => Some(crate::common::icon_registry_elements::MESSAGESQUARECODE_ELEMENTS),
+        IconType::MessageSquareDashed => Some(crate::common::icon_registry_elements::MESSAGESQUAREDASHED_ELEMENTS),
+        IconType::MessageSquareDiff => Some(crate::common::icon_registry_elements::MESSAGESQUAREDIFF_ELEMENTS),
+        IconType::MessageSquareDot => Some(crate::common::icon_registry_elements::MESSAGESQUAREDOT_ELEMENTS),
+        IconType::MessageSquareHeart => Some(crate::common::icon_registry_elements::MESSAGESQUAREHEART_ELEMENTS),
+        IconType::MessageSquareLock => Some(crate::common::icon_registry_elements::MESSAGESQUARELOCK_ELEMENTS),
+        IconType::MessageSquareMore => Some(crate::common::icon_registry_elements::MESSAGESQUAREMORE_ELEMENTS),
+        IconType::MessageSquareOff => Some(crate::common::icon_registry_elements::MESSAGESQUAREOFF_ELEMENTS),
+        IconType::MessageSquarePlus => Some(crate::common::icon_registry_elements::MESSAGESQUAREPLUS_ELEMENTS),
+        IconType::MessageSquareQuote => Some(crate::common::icon_registry_elements::MESSAGESQUAREQUOTE_ELEMENTS),
+        IconType::MessageSquareReply => Some(crate::common::icon_registry_elements::MESSAGESQUAREREPLY_ELEMENTS),
+        IconType::MessageSquareShare => Some(crate::common::icon_registry_elements::MESSAGESQUARESHARE_ELEMENTS),
+        IconType::MessageSquareText => Some(crate::common::icon_registry_elements::MESSAGESQUARETEXT_ELEMENTS),
+        IconType::MessageSquareWarning => Some(crate::common::icon_registry_elements::MESSAGESQUAREWARNING_ELEMENTS),
+        IconType::MessageSquareX => Some(crate::common::icon_registry_elements::MESSAGESQUAREX_ELEMENTS),
+        IconType::MessagesSquare => Some(crate::common::icon_registry_elements::MESSAGESSQUARE_ELEMENTS),
         IconType::Mic => Some(crate::common::icon_registry_elements::MIC_ELEMENTS),
         IconType::MicOff => Some(crate::common::icon_registry_elements::MICOFF_ELEMENTS),
         IconType::MicVocal => Some(crate::common::icon_registry_elements::MICVOCAL_ELEMENTS),
@@ -1764,112 +1122,66 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Minimize2 => Some(crate::common::icon_registry_elements::MINIMIZE2_ELEMENTS),
         IconType::Minus => Some(crate::common::icon_registry_elements::MINUS_ELEMENTS),
         IconType::Monitor => Some(crate::common::icon_registry_elements::MONITOR_ELEMENTS),
-        IconType::MonitorCheck => {
-            Some(crate::common::icon_registry_elements::MONITORCHECK_ELEMENTS)
-        }
+        IconType::MonitorCheck => Some(crate::common::icon_registry_elements::MONITORCHECK_ELEMENTS),
         IconType::MonitorCog => Some(crate::common::icon_registry_elements::MONITORCOG_ELEMENTS),
         IconType::MonitorDot => Some(crate::common::icon_registry_elements::MONITORDOT_ELEMENTS),
         IconType::MonitorDown => Some(crate::common::icon_registry_elements::MONITORDOWN_ELEMENTS),
         IconType::MonitorOff => Some(crate::common::icon_registry_elements::MONITOROFF_ELEMENTS),
-        IconType::MonitorPause => {
-            Some(crate::common::icon_registry_elements::MONITORPAUSE_ELEMENTS)
-        }
+        IconType::MonitorPause => Some(crate::common::icon_registry_elements::MONITORPAUSE_ELEMENTS),
         IconType::MonitorPlay => Some(crate::common::icon_registry_elements::MONITORPLAY_ELEMENTS),
-        IconType::MonitorSmartphone => {
-            Some(crate::common::icon_registry_elements::MONITORSMARTPHONE_ELEMENTS)
-        }
-        IconType::MonitorSpeaker => {
-            Some(crate::common::icon_registry_elements::MONITORSPEAKER_ELEMENTS)
-        }
+        IconType::MonitorSmartphone => Some(crate::common::icon_registry_elements::MONITORSMARTPHONE_ELEMENTS),
+        IconType::MonitorSpeaker => Some(crate::common::icon_registry_elements::MONITORSPEAKER_ELEMENTS),
         IconType::MonitorStop => Some(crate::common::icon_registry_elements::MONITORSTOP_ELEMENTS),
         IconType::MonitorUp => Some(crate::common::icon_registry_elements::MONITORUP_ELEMENTS),
         IconType::MonitorX => Some(crate::common::icon_registry_elements::MONITORX_ELEMENTS),
         IconType::Moon => Some(crate::common::icon_registry_elements::MOON_ELEMENTS),
         IconType::MoonStar => Some(crate::common::icon_registry_elements::MOONSTAR_ELEMENTS),
         IconType::Mountain => Some(crate::common::icon_registry_elements::MOUNTAIN_ELEMENTS),
-        IconType::MountainSnow => {
-            Some(crate::common::icon_registry_elements::MOUNTAINSNOW_ELEMENTS)
-        }
+        IconType::MountainSnow => Some(crate::common::icon_registry_elements::MOUNTAINSNOW_ELEMENTS),
         IconType::Mouse => Some(crate::common::icon_registry_elements::MOUSE_ELEMENTS),
         IconType::MouseOff => Some(crate::common::icon_registry_elements::MOUSEOFF_ELEMENTS),
-        IconType::MousePointer => {
-            Some(crate::common::icon_registry_elements::MOUSEPOINTER_ELEMENTS)
-        }
-        IconType::MousePointer2 => {
-            Some(crate::common::icon_registry_elements::MOUSEPOINTER2_ELEMENTS)
-        }
-        IconType::MousePointerBan => {
-            Some(crate::common::icon_registry_elements::MOUSEPOINTERBAN_ELEMENTS)
-        }
-        IconType::MousePointerClick => {
-            Some(crate::common::icon_registry_elements::MOUSEPOINTERCLICK_ELEMENTS)
-        }
+        IconType::MousePointer => Some(crate::common::icon_registry_elements::MOUSEPOINTER_ELEMENTS),
+        IconType::MousePointer2 => Some(crate::common::icon_registry_elements::MOUSEPOINTER2_ELEMENTS),
+        IconType::MousePointerBan => Some(crate::common::icon_registry_elements::MOUSEPOINTERBAN_ELEMENTS),
+        IconType::MousePointerClick => Some(crate::common::icon_registry_elements::MOUSEPOINTERCLICK_ELEMENTS),
         IconType::Move => Some(crate::common::icon_registry_elements::MOVE_ELEMENTS),
         IconType::Move3D => Some(crate::common::icon_registry_elements::MOVE3D_ELEMENTS),
-        IconType::MoveDiagonal => {
-            Some(crate::common::icon_registry_elements::MOVEDIAGONAL_ELEMENTS)
-        }
-        IconType::MoveDiagonal2 => {
-            Some(crate::common::icon_registry_elements::MOVEDIAGONAL2_ELEMENTS)
-        }
+        IconType::MoveDiagonal => Some(crate::common::icon_registry_elements::MOVEDIAGONAL_ELEMENTS),
+        IconType::MoveDiagonal2 => Some(crate::common::icon_registry_elements::MOVEDIAGONAL2_ELEMENTS),
         IconType::MoveDown => Some(crate::common::icon_registry_elements::MOVEDOWN_ELEMENTS),
-        IconType::MoveDownLeft => {
-            Some(crate::common::icon_registry_elements::MOVEDOWNLEFT_ELEMENTS)
-        }
-        IconType::MoveDownRight => {
-            Some(crate::common::icon_registry_elements::MOVEDOWNRIGHT_ELEMENTS)
-        }
-        IconType::MoveHorizontal => {
-            Some(crate::common::icon_registry_elements::MOVEHORIZONTAL_ELEMENTS)
-        }
+        IconType::MoveDownLeft => Some(crate::common::icon_registry_elements::MOVEDOWNLEFT_ELEMENTS),
+        IconType::MoveDownRight => Some(crate::common::icon_registry_elements::MOVEDOWNRIGHT_ELEMENTS),
+        IconType::MoveHorizontal => Some(crate::common::icon_registry_elements::MOVEHORIZONTAL_ELEMENTS),
         IconType::MoveLeft => Some(crate::common::icon_registry_elements::MOVELEFT_ELEMENTS),
         IconType::MoveRight => Some(crate::common::icon_registry_elements::MOVERIGHT_ELEMENTS),
         IconType::MoveUp => Some(crate::common::icon_registry_elements::MOVEUP_ELEMENTS),
         IconType::MoveUpLeft => Some(crate::common::icon_registry_elements::MOVEUPLEFT_ELEMENTS),
         IconType::MoveUpRight => Some(crate::common::icon_registry_elements::MOVEUPRIGHT_ELEMENTS),
-        IconType::MoveVertical => {
-            Some(crate::common::icon_registry_elements::MOVEVERTICAL_ELEMENTS)
-        }
+        IconType::MoveVertical => Some(crate::common::icon_registry_elements::MOVEVERTICAL_ELEMENTS),
         IconType::Music => Some(crate::common::icon_registry_elements::MUSIC_ELEMENTS),
         IconType::Music2 => Some(crate::common::icon_registry_elements::MUSIC2_ELEMENTS),
         IconType::Music3 => Some(crate::common::icon_registry_elements::MUSIC3_ELEMENTS),
         IconType::Music4 => Some(crate::common::icon_registry_elements::MUSIC4_ELEMENTS),
         IconType::Navigation => Some(crate::common::icon_registry_elements::NAVIGATION_ELEMENTS),
         IconType::Navigation2 => Some(crate::common::icon_registry_elements::NAVIGATION2_ELEMENTS),
-        IconType::Navigation2Off => {
-            Some(crate::common::icon_registry_elements::NAVIGATION2OFF_ELEMENTS)
-        }
-        IconType::NavigationOff => {
-            Some(crate::common::icon_registry_elements::NAVIGATIONOFF_ELEMENTS)
-        }
+        IconType::Navigation2Off => Some(crate::common::icon_registry_elements::NAVIGATION2OFF_ELEMENTS),
+        IconType::NavigationOff => Some(crate::common::icon_registry_elements::NAVIGATIONOFF_ELEMENTS),
         IconType::Network => Some(crate::common::icon_registry_elements::NETWORK_ELEMENTS),
         IconType::Newspaper => Some(crate::common::icon_registry_elements::NEWSPAPER_ELEMENTS),
         IconType::Nfc => Some(crate::common::icon_registry_elements::NFC_ELEMENTS),
         IconType::NonBinary => Some(crate::common::icon_registry_elements::NONBINARY_ELEMENTS),
         IconType::Notebook => Some(crate::common::icon_registry_elements::NOTEBOOK_ELEMENTS),
         IconType::NotebookPen => Some(crate::common::icon_registry_elements::NOTEBOOKPEN_ELEMENTS),
-        IconType::NotebookTabs => {
-            Some(crate::common::icon_registry_elements::NOTEBOOKTABS_ELEMENTS)
-        }
-        IconType::NotebookText => {
-            Some(crate::common::icon_registry_elements::NOTEBOOKTEXT_ELEMENTS)
-        }
+        IconType::NotebookTabs => Some(crate::common::icon_registry_elements::NOTEBOOKTABS_ELEMENTS),
+        IconType::NotebookText => Some(crate::common::icon_registry_elements::NOTEBOOKTEXT_ELEMENTS),
         IconType::NotepadText => Some(crate::common::icon_registry_elements::NOTEPADTEXT_ELEMENTS),
-        IconType::NotepadTextDashed => {
-            Some(crate::common::icon_registry_elements::NOTEPADTEXTDASHED_ELEMENTS)
-        }
+        IconType::NotepadTextDashed => Some(crate::common::icon_registry_elements::NOTEPADTEXTDASHED_ELEMENTS),
         IconType::Nut => Some(crate::common::icon_registry_elements::NUT_ELEMENTS),
         IconType::NutOff => Some(crate::common::icon_registry_elements::NUTOFF_ELEMENTS),
         IconType::Octagon => Some(crate::common::icon_registry_elements::OCTAGON_ELEMENTS),
-        IconType::OctagonAlert => {
-            Some(crate::common::icon_registry_elements::OCTAGONALERT_ELEMENTS)
-        }
-        IconType::OctagonMinus => {
-            Some(crate::common::icon_registry_elements::OCTAGONMINUS_ELEMENTS)
-        }
-        IconType::OctagonPause => {
-            Some(crate::common::icon_registry_elements::OCTAGONPAUSE_ELEMENTS)
-        }
+        IconType::OctagonAlert => Some(crate::common::icon_registry_elements::OCTAGONALERT_ELEMENTS),
+        IconType::OctagonMinus => Some(crate::common::icon_registry_elements::OCTAGONMINUS_ELEMENTS),
+        IconType::OctagonPause => Some(crate::common::icon_registry_elements::OCTAGONPAUSE_ELEMENTS),
         IconType::OctagonX => Some(crate::common::icon_registry_elements::OCTAGONX_ELEMENTS),
         IconType::Omega => Some(crate::common::icon_registry_elements::OMEGA_ELEMENTS),
         IconType::OptionIcon => Some(crate::common::icon_registry_elements::OPTIONICON_ELEMENTS),
@@ -1877,80 +1189,40 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Origami => Some(crate::common::icon_registry_elements::ORIGAMI_ELEMENTS),
         IconType::Package => Some(crate::common::icon_registry_elements::PACKAGE_ELEMENTS),
         IconType::Package2 => Some(crate::common::icon_registry_elements::PACKAGE2_ELEMENTS),
-        IconType::PackageCheck => {
-            Some(crate::common::icon_registry_elements::PACKAGECHECK_ELEMENTS)
-        }
-        IconType::PackageMinus => {
-            Some(crate::common::icon_registry_elements::PACKAGEMINUS_ELEMENTS)
-        }
+        IconType::PackageCheck => Some(crate::common::icon_registry_elements::PACKAGECHECK_ELEMENTS),
+        IconType::PackageMinus => Some(crate::common::icon_registry_elements::PACKAGEMINUS_ELEMENTS),
         IconType::PackageOpen => Some(crate::common::icon_registry_elements::PACKAGEOPEN_ELEMENTS),
         IconType::PackagePlus => Some(crate::common::icon_registry_elements::PACKAGEPLUS_ELEMENTS),
-        IconType::PackageSearch => {
-            Some(crate::common::icon_registry_elements::PACKAGESEARCH_ELEMENTS)
-        }
+        IconType::PackageSearch => Some(crate::common::icon_registry_elements::PACKAGESEARCH_ELEMENTS),
         IconType::PackageX => Some(crate::common::icon_registry_elements::PACKAGEX_ELEMENTS),
         IconType::PaintBucket => Some(crate::common::icon_registry_elements::PAINTBUCKET_ELEMENTS),
         IconType::PaintRoller => Some(crate::common::icon_registry_elements::PAINTROLLER_ELEMENTS),
         IconType::Paintbrush => Some(crate::common::icon_registry_elements::PAINTBRUSH_ELEMENTS),
-        IconType::PaintbrushVertical => {
-            Some(crate::common::icon_registry_elements::PAINTBRUSHVERTICAL_ELEMENTS)
-        }
+        IconType::PaintbrushVertical => Some(crate::common::icon_registry_elements::PAINTBRUSHVERTICAL_ELEMENTS),
         IconType::Palette => Some(crate::common::icon_registry_elements::PALETTE_ELEMENTS),
         IconType::Panda => Some(crate::common::icon_registry_elements::PANDA_ELEMENTS),
         IconType::PanelBottom => Some(crate::common::icon_registry_elements::PANELBOTTOM_ELEMENTS),
-        IconType::PanelBottomClose => {
-            Some(crate::common::icon_registry_elements::PANELBOTTOMCLOSE_ELEMENTS)
-        }
-        IconType::PanelBottomDashed => {
-            Some(crate::common::icon_registry_elements::PANELBOTTOMDASHED_ELEMENTS)
-        }
-        IconType::PanelBottomOpen => {
-            Some(crate::common::icon_registry_elements::PANELBOTTOMOPEN_ELEMENTS)
-        }
+        IconType::PanelBottomClose => Some(crate::common::icon_registry_elements::PANELBOTTOMCLOSE_ELEMENTS),
+        IconType::PanelBottomDashed => Some(crate::common::icon_registry_elements::PANELBOTTOMDASHED_ELEMENTS),
+        IconType::PanelBottomOpen => Some(crate::common::icon_registry_elements::PANELBOTTOMOPEN_ELEMENTS),
         IconType::PanelLeft => Some(crate::common::icon_registry_elements::PANELLEFT_ELEMENTS),
-        IconType::PanelLeftClose => {
-            Some(crate::common::icon_registry_elements::PANELLEFTCLOSE_ELEMENTS)
-        }
-        IconType::PanelLeftDashed => {
-            Some(crate::common::icon_registry_elements::PANELLEFTDASHED_ELEMENTS)
-        }
-        IconType::PanelLeftOpen => {
-            Some(crate::common::icon_registry_elements::PANELLEFTOPEN_ELEMENTS)
-        }
+        IconType::PanelLeftClose => Some(crate::common::icon_registry_elements::PANELLEFTCLOSE_ELEMENTS),
+        IconType::PanelLeftDashed => Some(crate::common::icon_registry_elements::PANELLEFTDASHED_ELEMENTS),
+        IconType::PanelLeftOpen => Some(crate::common::icon_registry_elements::PANELLEFTOPEN_ELEMENTS),
         IconType::PanelRight => Some(crate::common::icon_registry_elements::PANELRIGHT_ELEMENTS),
-        IconType::PanelRightClose => {
-            Some(crate::common::icon_registry_elements::PANELRIGHTCLOSE_ELEMENTS)
-        }
-        IconType::PanelRightDashed => {
-            Some(crate::common::icon_registry_elements::PANELRIGHTDASHED_ELEMENTS)
-        }
-        IconType::PanelRightOpen => {
-            Some(crate::common::icon_registry_elements::PANELRIGHTOPEN_ELEMENTS)
-        }
+        IconType::PanelRightClose => Some(crate::common::icon_registry_elements::PANELRIGHTCLOSE_ELEMENTS),
+        IconType::PanelRightDashed => Some(crate::common::icon_registry_elements::PANELRIGHTDASHED_ELEMENTS),
+        IconType::PanelRightOpen => Some(crate::common::icon_registry_elements::PANELRIGHTOPEN_ELEMENTS),
         IconType::PanelTop => Some(crate::common::icon_registry_elements::PANELTOP_ELEMENTS),
-        IconType::PanelTopClose => {
-            Some(crate::common::icon_registry_elements::PANELTOPCLOSE_ELEMENTS)
-        }
-        IconType::PanelTopDashed => {
-            Some(crate::common::icon_registry_elements::PANELTOPDASHED_ELEMENTS)
-        }
-        IconType::PanelTopOpen => {
-            Some(crate::common::icon_registry_elements::PANELTOPOPEN_ELEMENTS)
-        }
-        IconType::PanelsLeftBottom => {
-            Some(crate::common::icon_registry_elements::PANELSLEFTBOTTOM_ELEMENTS)
-        }
-        IconType::PanelsRightBottom => {
-            Some(crate::common::icon_registry_elements::PANELSRIGHTBOTTOM_ELEMENTS)
-        }
-        IconType::PanelsTopLeft => {
-            Some(crate::common::icon_registry_elements::PANELSTOPLEFT_ELEMENTS)
-        }
+        IconType::PanelTopClose => Some(crate::common::icon_registry_elements::PANELTOPCLOSE_ELEMENTS),
+        IconType::PanelTopDashed => Some(crate::common::icon_registry_elements::PANELTOPDASHED_ELEMENTS),
+        IconType::PanelTopOpen => Some(crate::common::icon_registry_elements::PANELTOPOPEN_ELEMENTS),
+        IconType::PanelsLeftBottom => Some(crate::common::icon_registry_elements::PANELSLEFTBOTTOM_ELEMENTS),
+        IconType::PanelsRightBottom => Some(crate::common::icon_registry_elements::PANELSRIGHTBOTTOM_ELEMENTS),
+        IconType::PanelsTopLeft => Some(crate::common::icon_registry_elements::PANELSTOPLEFT_ELEMENTS),
         IconType::Paperclip => Some(crate::common::icon_registry_elements::PAPERCLIP_ELEMENTS),
         IconType::Parentheses => Some(crate::common::icon_registry_elements::PARENTHESES_ELEMENTS),
-        IconType::ParkingMeter => {
-            Some(crate::common::icon_registry_elements::PARKINGMETER_ELEMENTS)
-        }
+        IconType::ParkingMeter => Some(crate::common::icon_registry_elements::PARKINGMETER_ELEMENTS),
         IconType::PartyPopper => Some(crate::common::icon_registry_elements::PARTYPOPPER_ELEMENTS),
         IconType::Pause => Some(crate::common::icon_registry_elements::PAUSE_ELEMENTS),
         IconType::PawPrint => Some(crate::common::icon_registry_elements::PAWPRINT_ELEMENTS),
@@ -1965,40 +1237,24 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::PencilRuler => Some(crate::common::icon_registry_elements::PENCILRULER_ELEMENTS),
         IconType::Pentagon => Some(crate::common::icon_registry_elements::PENTAGON_ELEMENTS),
         IconType::Percent => Some(crate::common::icon_registry_elements::PERCENT_ELEMENTS),
-        IconType::PersonStanding => {
-            Some(crate::common::icon_registry_elements::PERSONSTANDING_ELEMENTS)
-        }
-        IconType::PhilippinePeso => {
-            Some(crate::common::icon_registry_elements::PHILIPPINEPESO_ELEMENTS)
-        }
+        IconType::PersonStanding => Some(crate::common::icon_registry_elements::PERSONSTANDING_ELEMENTS),
+        IconType::PhilippinePeso => Some(crate::common::icon_registry_elements::PHILIPPINEPESO_ELEMENTS),
         IconType::Phone => Some(crate::common::icon_registry_elements::PHONE_ELEMENTS),
         IconType::PhoneCall => Some(crate::common::icon_registry_elements::PHONECALL_ELEMENTS),
-        IconType::PhoneForwarded => {
-            Some(crate::common::icon_registry_elements::PHONEFORWARDED_ELEMENTS)
-        }
-        IconType::PhoneIncoming => {
-            Some(crate::common::icon_registry_elements::PHONEINCOMING_ELEMENTS)
-        }
+        IconType::PhoneForwarded => Some(crate::common::icon_registry_elements::PHONEFORWARDED_ELEMENTS),
+        IconType::PhoneIncoming => Some(crate::common::icon_registry_elements::PHONEINCOMING_ELEMENTS),
         IconType::PhoneMissed => Some(crate::common::icon_registry_elements::PHONEMISSED_ELEMENTS),
         IconType::PhoneOff => Some(crate::common::icon_registry_elements::PHONEOFF_ELEMENTS),
-        IconType::PhoneOutgoing => {
-            Some(crate::common::icon_registry_elements::PHONEOUTGOING_ELEMENTS)
-        }
+        IconType::PhoneOutgoing => Some(crate::common::icon_registry_elements::PHONEOUTGOING_ELEMENTS),
         IconType::Pi => Some(crate::common::icon_registry_elements::PI_ELEMENTS),
         IconType::Piano => Some(crate::common::icon_registry_elements::PIANO_ELEMENTS),
         IconType::Pickaxe => Some(crate::common::icon_registry_elements::PICKAXE_ELEMENTS),
-        IconType::PictureInPicture => {
-            Some(crate::common::icon_registry_elements::PICTUREINPICTURE_ELEMENTS)
-        }
-        IconType::PictureInPicture2 => {
-            Some(crate::common::icon_registry_elements::PICTUREINPICTURE2_ELEMENTS)
-        }
+        IconType::PictureInPicture => Some(crate::common::icon_registry_elements::PICTUREINPICTURE_ELEMENTS),
+        IconType::PictureInPicture2 => Some(crate::common::icon_registry_elements::PICTUREINPICTURE2_ELEMENTS),
         IconType::PiggyBank => Some(crate::common::icon_registry_elements::PIGGYBANK_ELEMENTS),
         IconType::Pilcrow => Some(crate::common::icon_registry_elements::PILCROW_ELEMENTS),
         IconType::PilcrowLeft => Some(crate::common::icon_registry_elements::PILCROWLEFT_ELEMENTS),
-        IconType::PilcrowRight => {
-            Some(crate::common::icon_registry_elements::PILCROWRIGHT_ELEMENTS)
-        }
+        IconType::PilcrowRight => Some(crate::common::icon_registry_elements::PILCROWRIGHT_ELEMENTS),
         IconType::Pill => Some(crate::common::icon_registry_elements::PILL_ELEMENTS),
         IconType::PillBottle => Some(crate::common::icon_registry_elements::PILLBOTTLE_ELEMENTS),
         IconType::Pin => Some(crate::common::icon_registry_elements::PIN_ELEMENTS),
@@ -2006,12 +1262,8 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Pipette => Some(crate::common::icon_registry_elements::PIPETTE_ELEMENTS),
         IconType::Pizza => Some(crate::common::icon_registry_elements::PIZZA_ELEMENTS),
         IconType::Plane => Some(crate::common::icon_registry_elements::PLANE_ELEMENTS),
-        IconType::PlaneLanding => {
-            Some(crate::common::icon_registry_elements::PLANELANDING_ELEMENTS)
-        }
-        IconType::PlaneTakeoff => {
-            Some(crate::common::icon_registry_elements::PLANETAKEOFF_ELEMENTS)
-        }
+        IconType::PlaneLanding => Some(crate::common::icon_registry_elements::PLANELANDING_ELEMENTS),
+        IconType::PlaneTakeoff => Some(crate::common::icon_registry_elements::PLANETAKEOFF_ELEMENTS),
         IconType::Play => Some(crate::common::icon_registry_elements::PLAY_ELEMENTS),
         IconType::Plug => Some(crate::common::icon_registry_elements::PLUG_ELEMENTS),
         IconType::Plug2 => Some(crate::common::icon_registry_elements::PLUG2_ELEMENTS),
@@ -2024,18 +1276,12 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::PointerOff => Some(crate::common::icon_registry_elements::POINTEROFF_ELEMENTS),
         IconType::Popcorn => Some(crate::common::icon_registry_elements::POPCORN_ELEMENTS),
         IconType::Popsicle => Some(crate::common::icon_registry_elements::POPSICLE_ELEMENTS),
-        IconType::PoundSterling => {
-            Some(crate::common::icon_registry_elements::POUNDSTERLING_ELEMENTS)
-        }
+        IconType::PoundSterling => Some(crate::common::icon_registry_elements::POUNDSTERLING_ELEMENTS),
         IconType::Power => Some(crate::common::icon_registry_elements::POWER_ELEMENTS),
         IconType::PowerOff => Some(crate::common::icon_registry_elements::POWEROFF_ELEMENTS),
-        IconType::Presentation => {
-            Some(crate::common::icon_registry_elements::PRESENTATION_ELEMENTS)
-        }
+        IconType::Presentation => Some(crate::common::icon_registry_elements::PRESENTATION_ELEMENTS),
         IconType::Printer => Some(crate::common::icon_registry_elements::PRINTER_ELEMENTS),
-        IconType::PrinterCheck => {
-            Some(crate::common::icon_registry_elements::PRINTERCHECK_ELEMENTS)
-        }
+        IconType::PrinterCheck => Some(crate::common::icon_registry_elements::PRINTERCHECK_ELEMENTS),
         IconType::Projector => Some(crate::common::icon_registry_elements::PROJECTOR_ELEMENTS),
         IconType::Proportions => Some(crate::common::icon_registry_elements::PROPORTIONS_ELEMENTS),
         IconType::Puzzle => Some(crate::common::icon_registry_elements::PUZZLE_ELEMENTS),
@@ -2047,9 +1293,7 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Radiation => Some(crate::common::icon_registry_elements::RADIATION_ELEMENTS),
         IconType::Radical => Some(crate::common::icon_registry_elements::RADICAL_ELEMENTS),
         IconType::Radio => Some(crate::common::icon_registry_elements::RADIO_ELEMENTS),
-        IconType::RadioReceiver => {
-            Some(crate::common::icon_registry_elements::RADIORECEIVER_ELEMENTS)
-        }
+        IconType::RadioReceiver => Some(crate::common::icon_registry_elements::RADIORECEIVER_ELEMENTS),
         IconType::RadioTower => Some(crate::common::icon_registry_elements::RADIOTOWER_ELEMENTS),
         IconType::Radius => Some(crate::common::icon_registry_elements::RADIUS_ELEMENTS),
         IconType::RailSymbol => Some(crate::common::icon_registry_elements::RAILSYMBOL_ELEMENTS),
@@ -2059,59 +1303,29 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Receipt => Some(crate::common::icon_registry_elements::RECEIPT_ELEMENTS),
         IconType::ReceiptCent => Some(crate::common::icon_registry_elements::RECEIPTCENT_ELEMENTS),
         IconType::ReceiptEuro => Some(crate::common::icon_registry_elements::RECEIPTEURO_ELEMENTS),
-        IconType::ReceiptIndianRupee => {
-            Some(crate::common::icon_registry_elements::RECEIPTINDIANRUPEE_ELEMENTS)
-        }
-        IconType::ReceiptJapaneseYen => {
-            Some(crate::common::icon_registry_elements::RECEIPTJAPANESEYEN_ELEMENTS)
-        }
-        IconType::ReceiptPoundSterling => {
-            Some(crate::common::icon_registry_elements::RECEIPTPOUNDSTERLING_ELEMENTS)
-        }
-        IconType::ReceiptRussianRuble => {
-            Some(crate::common::icon_registry_elements::RECEIPTRUSSIANRUBLE_ELEMENTS)
-        }
-        IconType::ReceiptSwissFranc => {
-            Some(crate::common::icon_registry_elements::RECEIPTSWISSFRANC_ELEMENTS)
-        }
+        IconType::ReceiptIndianRupee => Some(crate::common::icon_registry_elements::RECEIPTINDIANRUPEE_ELEMENTS),
+        IconType::ReceiptJapaneseYen => Some(crate::common::icon_registry_elements::RECEIPTJAPANESEYEN_ELEMENTS),
+        IconType::ReceiptPoundSterling => Some(crate::common::icon_registry_elements::RECEIPTPOUNDSTERLING_ELEMENTS),
+        IconType::ReceiptRussianRuble => Some(crate::common::icon_registry_elements::RECEIPTRUSSIANRUBLE_ELEMENTS),
+        IconType::ReceiptSwissFranc => Some(crate::common::icon_registry_elements::RECEIPTSWISSFRANC_ELEMENTS),
         IconType::ReceiptText => Some(crate::common::icon_registry_elements::RECEIPTTEXT_ELEMENTS),
-        IconType::ReceiptTurkishLira => {
-            Some(crate::common::icon_registry_elements::RECEIPTTURKISHLIRA_ELEMENTS)
-        }
-        IconType::RectangleCircle => {
-            Some(crate::common::icon_registry_elements::RECTANGLECIRCLE_ELEMENTS)
-        }
-        IconType::RectangleEllipsis => {
-            Some(crate::common::icon_registry_elements::RECTANGLEELLIPSIS_ELEMENTS)
-        }
-        IconType::RectangleGoggles => {
-            Some(crate::common::icon_registry_elements::RECTANGLEGOGGLES_ELEMENTS)
-        }
-        IconType::RectangleHorizontal => {
-            Some(crate::common::icon_registry_elements::RECTANGLEHORIZONTAL_ELEMENTS)
-        }
-        IconType::RectangleVertical => {
-            Some(crate::common::icon_registry_elements::RECTANGLEVERTICAL_ELEMENTS)
-        }
+        IconType::ReceiptTurkishLira => Some(crate::common::icon_registry_elements::RECEIPTTURKISHLIRA_ELEMENTS),
+        IconType::RectangleCircle => Some(crate::common::icon_registry_elements::RECTANGLECIRCLE_ELEMENTS),
+        IconType::RectangleEllipsis => Some(crate::common::icon_registry_elements::RECTANGLEELLIPSIS_ELEMENTS),
+        IconType::RectangleGoggles => Some(crate::common::icon_registry_elements::RECTANGLEGOGGLES_ELEMENTS),
+        IconType::RectangleHorizontal => Some(crate::common::icon_registry_elements::RECTANGLEHORIZONTAL_ELEMENTS),
+        IconType::RectangleVertical => Some(crate::common::icon_registry_elements::RECTANGLEVERTICAL_ELEMENTS),
         IconType::Recycle => Some(crate::common::icon_registry_elements::RECYCLE_ELEMENTS),
         IconType::Redo => Some(crate::common::icon_registry_elements::REDO_ELEMENTS),
         IconType::Redo2 => Some(crate::common::icon_registry_elements::REDO2_ELEMENTS),
         IconType::RedoDot => Some(crate::common::icon_registry_elements::REDODOT_ELEMENTS),
         IconType::RefreshCcw => Some(crate::common::icon_registry_elements::REFRESHCCW_ELEMENTS),
-        IconType::RefreshCcwDot => {
-            Some(crate::common::icon_registry_elements::REFRESHCCWDOT_ELEMENTS)
-        }
+        IconType::RefreshCcwDot => Some(crate::common::icon_registry_elements::REFRESHCCWDOT_ELEMENTS),
         IconType::RefreshCw => Some(crate::common::icon_registry_elements::REFRESHCW_ELEMENTS),
-        IconType::RefreshCwOff => {
-            Some(crate::common::icon_registry_elements::REFRESHCWOFF_ELEMENTS)
-        }
-        IconType::Refrigerator => {
-            Some(crate::common::icon_registry_elements::REFRIGERATOR_ELEMENTS)
-        }
+        IconType::RefreshCwOff => Some(crate::common::icon_registry_elements::REFRESHCWOFF_ELEMENTS),
+        IconType::Refrigerator => Some(crate::common::icon_registry_elements::REFRIGERATOR_ELEMENTS),
         IconType::Regex => Some(crate::common::icon_registry_elements::REGEX_ELEMENTS),
-        IconType::RemoveFormatting => {
-            Some(crate::common::icon_registry_elements::REMOVEFORMATTING_ELEMENTS)
-        }
+        IconType::RemoveFormatting => Some(crate::common::icon_registry_elements::REMOVEFORMATTING_ELEMENTS),
         IconType::Repeat => Some(crate::common::icon_registry_elements::REPEAT_ELEMENTS),
         IconType::Repeat1 => Some(crate::common::icon_registry_elements::REPEAT1_ELEMENTS),
         IconType::Repeat2 => Some(crate::common::icon_registry_elements::REPEAT2_ELEMENTS),
@@ -2122,24 +1336,14 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Rewind => Some(crate::common::icon_registry_elements::REWIND_ELEMENTS),
         IconType::Ribbon => Some(crate::common::icon_registry_elements::RIBBON_ELEMENTS),
         IconType::Rocket => Some(crate::common::icon_registry_elements::ROCKET_ELEMENTS),
-        IconType::RockingChair => {
-            Some(crate::common::icon_registry_elements::ROCKINGCHAIR_ELEMENTS)
-        }
-        IconType::RollerCoaster => {
-            Some(crate::common::icon_registry_elements::ROLLERCOASTER_ELEMENTS)
-        }
+        IconType::RockingChair => Some(crate::common::icon_registry_elements::ROCKINGCHAIR_ELEMENTS),
+        IconType::RollerCoaster => Some(crate::common::icon_registry_elements::ROLLERCOASTER_ELEMENTS),
         IconType::Rotate3D => Some(crate::common::icon_registry_elements::ROTATE3D_ELEMENTS),
         IconType::RotateCcw => Some(crate::common::icon_registry_elements::ROTATECCW_ELEMENTS),
-        IconType::RotateCcwKey => {
-            Some(crate::common::icon_registry_elements::ROTATECCWKEY_ELEMENTS)
-        }
-        IconType::RotateCcwSquare => {
-            Some(crate::common::icon_registry_elements::ROTATECCWSQUARE_ELEMENTS)
-        }
+        IconType::RotateCcwKey => Some(crate::common::icon_registry_elements::ROTATECCWKEY_ELEMENTS),
+        IconType::RotateCcwSquare => Some(crate::common::icon_registry_elements::ROTATECCWSQUARE_ELEMENTS),
         IconType::RotateCw => Some(crate::common::icon_registry_elements::ROTATECW_ELEMENTS),
-        IconType::RotateCwSquare => {
-            Some(crate::common::icon_registry_elements::ROTATECWSQUARE_ELEMENTS)
-        }
+        IconType::RotateCwSquare => Some(crate::common::icon_registry_elements::ROTATECWSQUARE_ELEMENTS),
         IconType::Route => Some(crate::common::icon_registry_elements::ROUTE_ELEMENTS),
         IconType::RouteOff => Some(crate::common::icon_registry_elements::ROUTEOFF_ELEMENTS),
         IconType::Router => Some(crate::common::icon_registry_elements::ROUTER_ELEMENTS),
@@ -2148,19 +1352,13 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Rows4 => Some(crate::common::icon_registry_elements::ROWS4_ELEMENTS),
         IconType::Rss => Some(crate::common::icon_registry_elements::RSS_ELEMENTS),
         IconType::Ruler => Some(crate::common::icon_registry_elements::RULER_ELEMENTS),
-        IconType::RulerDimensionLine => {
-            Some(crate::common::icon_registry_elements::RULERDIMENSIONLINE_ELEMENTS)
-        }
-        IconType::RussianRuble => {
-            Some(crate::common::icon_registry_elements::RUSSIANRUBLE_ELEMENTS)
-        }
+        IconType::RulerDimensionLine => Some(crate::common::icon_registry_elements::RULERDIMENSIONLINE_ELEMENTS),
+        IconType::RussianRuble => Some(crate::common::icon_registry_elements::RUSSIANRUBLE_ELEMENTS),
         IconType::Sailboat => Some(crate::common::icon_registry_elements::SAILBOAT_ELEMENTS),
         IconType::Salad => Some(crate::common::icon_registry_elements::SALAD_ELEMENTS),
         IconType::Sandwich => Some(crate::common::icon_registry_elements::SANDWICH_ELEMENTS),
         IconType::Satellite => Some(crate::common::icon_registry_elements::SATELLITE_ELEMENTS),
-        IconType::SatelliteDish => {
-            Some(crate::common::icon_registry_elements::SATELLITEDISH_ELEMENTS)
-        }
+        IconType::SatelliteDish => Some(crate::common::icon_registry_elements::SATELLITEDISH_ELEMENTS),
         IconType::SaudiRiyal => Some(crate::common::icon_registry_elements::SAUDIRIYAL_ELEMENTS),
         IconType::Save => Some(crate::common::icon_registry_elements::SAVE_ELEMENTS),
         IconType::SaveAll => Some(crate::common::icon_registry_elements::SAVEALL_ELEMENTS),
@@ -2179,13 +1377,9 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::ScanText => Some(crate::common::icon_registry_elements::SCANTEXT_ELEMENTS),
         IconType::School => Some(crate::common::icon_registry_elements::SCHOOL_ELEMENTS),
         IconType::Scissors => Some(crate::common::icon_registry_elements::SCISSORS_ELEMENTS),
-        IconType::ScissorsLineDashed => {
-            Some(crate::common::icon_registry_elements::SCISSORSLINEDASHED_ELEMENTS)
-        }
+        IconType::ScissorsLineDashed => Some(crate::common::icon_registry_elements::SCISSORSLINEDASHED_ELEMENTS),
         IconType::ScreenShare => Some(crate::common::icon_registry_elements::SCREENSHARE_ELEMENTS),
-        IconType::ScreenShareOff => {
-            Some(crate::common::icon_registry_elements::SCREENSHAREOFF_ELEMENTS)
-        }
+        IconType::ScreenShareOff => Some(crate::common::icon_registry_elements::SCREENSHAREOFF_ELEMENTS),
         IconType::Scroll => Some(crate::common::icon_registry_elements::SCROLL_ELEMENTS),
         IconType::ScrollText => Some(crate::common::icon_registry_elements::SCROLLTEXT_ELEMENTS),
         IconType::Search => Some(crate::common::icon_registry_elements::SEARCH_ELEMENTS),
@@ -2195,16 +1389,10 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::SearchX => Some(crate::common::icon_registry_elements::SEARCHX_ELEMENTS),
         IconType::Section => Some(crate::common::icon_registry_elements::SECTION_ELEMENTS),
         IconType::Send => Some(crate::common::icon_registry_elements::SEND_ELEMENTS),
-        IconType::SendHorizontal => {
-            Some(crate::common::icon_registry_elements::SENDHORIZONTAL_ELEMENTS)
-        }
+        IconType::SendHorizontal => Some(crate::common::icon_registry_elements::SENDHORIZONTAL_ELEMENTS),
         IconType::SendToBack => Some(crate::common::icon_registry_elements::SENDTOBACK_ELEMENTS),
-        IconType::SeparatorHorizontal => {
-            Some(crate::common::icon_registry_elements::SEPARATORHORIZONTAL_ELEMENTS)
-        }
-        IconType::SeparatorVertical => {
-            Some(crate::common::icon_registry_elements::SEPARATORVERTICAL_ELEMENTS)
-        }
+        IconType::SeparatorHorizontal => Some(crate::common::icon_registry_elements::SEPARATORHORIZONTAL_ELEMENTS),
+        IconType::SeparatorVertical => Some(crate::common::icon_registry_elements::SEPARATORVERTICAL_ELEMENTS),
         IconType::Server => Some(crate::common::icon_registry_elements::SERVER_ELEMENTS),
         IconType::ServerCog => Some(crate::common::icon_registry_elements::SERVERCOG_ELEMENTS),
         IconType::ServerCrash => Some(crate::common::icon_registry_elements::SERVERCRASH_ELEMENTS),
@@ -2220,31 +1408,21 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::ShieldAlert => Some(crate::common::icon_registry_elements::SHIELDALERT_ELEMENTS),
         IconType::ShieldBan => Some(crate::common::icon_registry_elements::SHIELDBAN_ELEMENTS),
         IconType::ShieldCheck => Some(crate::common::icon_registry_elements::SHIELDCHECK_ELEMENTS),
-        IconType::ShieldEllipsis => {
-            Some(crate::common::icon_registry_elements::SHIELDELLIPSIS_ELEMENTS)
-        }
+        IconType::ShieldEllipsis => Some(crate::common::icon_registry_elements::SHIELDELLIPSIS_ELEMENTS),
         IconType::ShieldHalf => Some(crate::common::icon_registry_elements::SHIELDHALF_ELEMENTS),
         IconType::ShieldMinus => Some(crate::common::icon_registry_elements::SHIELDMINUS_ELEMENTS),
         IconType::ShieldOff => Some(crate::common::icon_registry_elements::SHIELDOFF_ELEMENTS),
         IconType::ShieldPlus => Some(crate::common::icon_registry_elements::SHIELDPLUS_ELEMENTS),
-        IconType::ShieldQuestion => {
-            Some(crate::common::icon_registry_elements::SHIELDQUESTION_ELEMENTS)
-        }
-        IconType::ShieldQuestionMark => {
-            Some(crate::common::icon_registry_elements::SHIELDQUESTIONMARK_ELEMENTS)
-        }
+        IconType::ShieldQuestion => Some(crate::common::icon_registry_elements::SHIELDQUESTION_ELEMENTS),
+        IconType::ShieldQuestionMark => Some(crate::common::icon_registry_elements::SHIELDQUESTIONMARK_ELEMENTS),
         IconType::ShieldUser => Some(crate::common::icon_registry_elements::SHIELDUSER_ELEMENTS),
         IconType::ShieldX => Some(crate::common::icon_registry_elements::SHIELDX_ELEMENTS),
         IconType::Ship => Some(crate::common::icon_registry_elements::SHIP_ELEMENTS),
         IconType::ShipWheel => Some(crate::common::icon_registry_elements::SHIPWHEEL_ELEMENTS),
         IconType::Shirt => Some(crate::common::icon_registry_elements::SHIRT_ELEMENTS),
         IconType::ShoppingBag => Some(crate::common::icon_registry_elements::SHOPPINGBAG_ELEMENTS),
-        IconType::ShoppingBasket => {
-            Some(crate::common::icon_registry_elements::SHOPPINGBASKET_ELEMENTS)
-        }
-        IconType::ShoppingCart => {
-            Some(crate::common::icon_registry_elements::SHOPPINGCART_ELEMENTS)
-        }
+        IconType::ShoppingBasket => Some(crate::common::icon_registry_elements::SHOPPINGBASKET_ELEMENTS),
+        IconType::ShoppingCart => Some(crate::common::icon_registry_elements::SHOPPINGCART_ELEMENTS),
         IconType::Shovel => Some(crate::common::icon_registry_elements::SHOVEL_ELEMENTS),
         IconType::ShowerHead => Some(crate::common::icon_registry_elements::SHOWERHEAD_ELEMENTS),
         IconType::Shredder => Some(crate::common::icon_registry_elements::SHREDDER_ELEMENTS),
@@ -2256,9 +1434,7 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Signal => Some(crate::common::icon_registry_elements::SIGNAL_ELEMENTS),
         IconType::SignalHigh => Some(crate::common::icon_registry_elements::SIGNALHIGH_ELEMENTS),
         IconType::SignalLow => Some(crate::common::icon_registry_elements::SIGNALLOW_ELEMENTS),
-        IconType::SignalMedium => {
-            Some(crate::common::icon_registry_elements::SIGNALMEDIUM_ELEMENTS)
-        }
+        IconType::SignalMedium => Some(crate::common::icon_registry_elements::SIGNALMEDIUM_ELEMENTS),
         IconType::SignalZero => Some(crate::common::icon_registry_elements::SIGNALZERO_ELEMENTS),
         IconType::Signature => Some(crate::common::icon_registry_elements::SIGNATURE_ELEMENTS),
         IconType::Signpost => Some(crate::common::icon_registry_elements::SIGNPOST_ELEMENTS),
@@ -2270,26 +1446,16 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Slack => Some(crate::common::icon_registry_elements::SLACK_ELEMENTS),
         IconType::Slash => Some(crate::common::icon_registry_elements::SLASH_ELEMENTS),
         IconType::Slice => Some(crate::common::icon_registry_elements::SLICE_ELEMENTS),
-        IconType::SlidersHorizontal => {
-            Some(crate::common::icon_registry_elements::SLIDERSHORIZONTAL_ELEMENTS)
-        }
-        IconType::SlidersVertical => {
-            Some(crate::common::icon_registry_elements::SLIDERSVERTICAL_ELEMENTS)
-        }
+        IconType::SlidersHorizontal => Some(crate::common::icon_registry_elements::SLIDERSHORIZONTAL_ELEMENTS),
+        IconType::SlidersVertical => Some(crate::common::icon_registry_elements::SLIDERSVERTICAL_ELEMENTS),
         IconType::Smartphone => Some(crate::common::icon_registry_elements::SMARTPHONE_ELEMENTS),
-        IconType::SmartphoneCharging => {
-            Some(crate::common::icon_registry_elements::SMARTPHONECHARGING_ELEMENTS)
-        }
-        IconType::SmartphoneNfc => {
-            Some(crate::common::icon_registry_elements::SMARTPHONENFC_ELEMENTS)
-        }
+        IconType::SmartphoneCharging => Some(crate::common::icon_registry_elements::SMARTPHONECHARGING_ELEMENTS),
+        IconType::SmartphoneNfc => Some(crate::common::icon_registry_elements::SMARTPHONENFC_ELEMENTS),
         IconType::Smile => Some(crate::common::icon_registry_elements::SMILE_ELEMENTS),
         IconType::SmilePlus => Some(crate::common::icon_registry_elements::SMILEPLUS_ELEMENTS),
         IconType::Snail => Some(crate::common::icon_registry_elements::SNAIL_ELEMENTS),
         IconType::Snowflake => Some(crate::common::icon_registry_elements::SNOWFLAKE_ELEMENTS),
-        IconType::SoapDispenserDroplet => {
-            Some(crate::common::icon_registry_elements::SOAPDISPENSERDROPLET_ELEMENTS)
-        }
+        IconType::SoapDispenserDroplet => Some(crate::common::icon_registry_elements::SOAPDISPENSERDROPLET_ELEMENTS),
         IconType::Sofa => Some(crate::common::icon_registry_elements::SOFA_ELEMENTS),
         IconType::Soup => Some(crate::common::icon_registry_elements::SOUP_ELEMENTS),
         IconType::Space => Some(crate::common::icon_registry_elements::SPACE_ELEMENTS),
@@ -2301,182 +1467,92 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::SpellCheck => Some(crate::common::icon_registry_elements::SPELLCHECK_ELEMENTS),
         IconType::SpellCheck2 => Some(crate::common::icon_registry_elements::SPELLCHECK2_ELEMENTS),
         IconType::Spline => Some(crate::common::icon_registry_elements::SPLINE_ELEMENTS),
-        IconType::SplinePointer => {
-            Some(crate::common::icon_registry_elements::SPLINEPOINTER_ELEMENTS)
-        }
+        IconType::SplinePointer => Some(crate::common::icon_registry_elements::SPLINEPOINTER_ELEMENTS),
         IconType::Split => Some(crate::common::icon_registry_elements::SPLIT_ELEMENTS),
         IconType::Spool => Some(crate::common::icon_registry_elements::SPOOL_ELEMENTS),
         IconType::Spotlight => Some(crate::common::icon_registry_elements::SPOTLIGHT_ELEMENTS),
         IconType::SprayCan => Some(crate::common::icon_registry_elements::SPRAYCAN_ELEMENTS),
         IconType::Sprout => Some(crate::common::icon_registry_elements::SPROUT_ELEMENTS),
         IconType::Square => Some(crate::common::icon_registry_elements::SQUARE_ELEMENTS),
-        IconType::SquareActivity => {
-            Some(crate::common::icon_registry_elements::SQUAREACTIVITY_ELEMENTS)
-        }
-        IconType::SquareArrowDown => {
-            Some(crate::common::icon_registry_elements::SQUAREARROWDOWN_ELEMENTS)
-        }
-        IconType::SquareArrowDownLeft => {
-            Some(crate::common::icon_registry_elements::SQUAREARROWDOWNLEFT_ELEMENTS)
-        }
-        IconType::SquareArrowDownRight => {
-            Some(crate::common::icon_registry_elements::SQUAREARROWDOWNRIGHT_ELEMENTS)
-        }
-        IconType::SquareArrowLeft => {
-            Some(crate::common::icon_registry_elements::SQUAREARROWLEFT_ELEMENTS)
-        }
+        IconType::SquareActivity => Some(crate::common::icon_registry_elements::SQUAREACTIVITY_ELEMENTS),
+        IconType::SquareArrowDown => Some(crate::common::icon_registry_elements::SQUAREARROWDOWN_ELEMENTS),
+        IconType::SquareArrowDownLeft => Some(crate::common::icon_registry_elements::SQUAREARROWDOWNLEFT_ELEMENTS),
+        IconType::SquareArrowDownRight => Some(crate::common::icon_registry_elements::SQUAREARROWDOWNRIGHT_ELEMENTS),
+        IconType::SquareArrowLeft => Some(crate::common::icon_registry_elements::SQUAREARROWLEFT_ELEMENTS),
         IconType::SquareArrowOutDownLeft => {
             Some(crate::common::icon_registry_elements::SQUAREARROWOUTDOWNLEFT_ELEMENTS)
         }
         IconType::SquareArrowOutDownRight => {
             Some(crate::common::icon_registry_elements::SQUAREARROWOUTDOWNRIGHT_ELEMENTS)
         }
-        IconType::SquareArrowOutUpLeft => {
-            Some(crate::common::icon_registry_elements::SQUAREARROWOUTUPLEFT_ELEMENTS)
-        }
-        IconType::SquareArrowOutUpRight => {
-            Some(crate::common::icon_registry_elements::SQUAREARROWOUTUPRIGHT_ELEMENTS)
-        }
-        IconType::SquareArrowRight => {
-            Some(crate::common::icon_registry_elements::SQUAREARROWRIGHT_ELEMENTS)
-        }
-        IconType::SquareArrowUp => {
-            Some(crate::common::icon_registry_elements::SQUAREARROWUP_ELEMENTS)
-        }
-        IconType::SquareArrowUpLeft => {
-            Some(crate::common::icon_registry_elements::SQUAREARROWUPLEFT_ELEMENTS)
-        }
-        IconType::SquareArrowUpRight => {
-            Some(crate::common::icon_registry_elements::SQUAREARROWUPRIGHT_ELEMENTS)
-        }
-        IconType::SquareAsterisk => {
-            Some(crate::common::icon_registry_elements::SQUAREASTERISK_ELEMENTS)
-        }
+        IconType::SquareArrowOutUpLeft => Some(crate::common::icon_registry_elements::SQUAREARROWOUTUPLEFT_ELEMENTS),
+        IconType::SquareArrowOutUpRight => Some(crate::common::icon_registry_elements::SQUAREARROWOUTUPRIGHT_ELEMENTS),
+        IconType::SquareArrowRight => Some(crate::common::icon_registry_elements::SQUAREARROWRIGHT_ELEMENTS),
+        IconType::SquareArrowUp => Some(crate::common::icon_registry_elements::SQUAREARROWUP_ELEMENTS),
+        IconType::SquareArrowUpLeft => Some(crate::common::icon_registry_elements::SQUAREARROWUPLEFT_ELEMENTS),
+        IconType::SquareArrowUpRight => Some(crate::common::icon_registry_elements::SQUAREARROWUPRIGHT_ELEMENTS),
+        IconType::SquareAsterisk => Some(crate::common::icon_registry_elements::SQUAREASTERISK_ELEMENTS),
         IconType::SquareBottomDashedScissors => {
             Some(crate::common::icon_registry_elements::SQUAREBOTTOMDASHEDSCISSORS_ELEMENTS)
         }
-        IconType::SquareChartGantt => {
-            Some(crate::common::icon_registry_elements::SQUARECHARTGANTT_ELEMENTS)
-        }
+        IconType::SquareChartGantt => Some(crate::common::icon_registry_elements::SQUARECHARTGANTT_ELEMENTS),
         IconType::SquareCheck => Some(crate::common::icon_registry_elements::SQUARECHECK_ELEMENTS),
-        IconType::SquareCheckBig => {
-            Some(crate::common::icon_registry_elements::SQUARECHECKBIG_ELEMENTS)
-        }
-        IconType::SquareChevronDown => {
-            Some(crate::common::icon_registry_elements::SQUARECHEVRONDOWN_ELEMENTS)
-        }
-        IconType::SquareChevronLeft => {
-            Some(crate::common::icon_registry_elements::SQUARECHEVRONLEFT_ELEMENTS)
-        }
-        IconType::SquareChevronRight => {
-            Some(crate::common::icon_registry_elements::SQUARECHEVRONRIGHT_ELEMENTS)
-        }
-        IconType::SquareChevronUp => {
-            Some(crate::common::icon_registry_elements::SQUARECHEVRONUP_ELEMENTS)
-        }
+        IconType::SquareCheckBig => Some(crate::common::icon_registry_elements::SQUARECHECKBIG_ELEMENTS),
+        IconType::SquareChevronDown => Some(crate::common::icon_registry_elements::SQUARECHEVRONDOWN_ELEMENTS),
+        IconType::SquareChevronLeft => Some(crate::common::icon_registry_elements::SQUARECHEVRONLEFT_ELEMENTS),
+        IconType::SquareChevronRight => Some(crate::common::icon_registry_elements::SQUARECHEVRONRIGHT_ELEMENTS),
+        IconType::SquareChevronUp => Some(crate::common::icon_registry_elements::SQUARECHEVRONUP_ELEMENTS),
         IconType::SquareCode => Some(crate::common::icon_registry_elements::SQUARECODE_ELEMENTS),
-        IconType::SquareDashed => {
-            Some(crate::common::icon_registry_elements::SQUAREDASHED_ELEMENTS)
-        }
-        IconType::SquareDashedBottom => {
-            Some(crate::common::icon_registry_elements::SQUAREDASHEDBOTTOM_ELEMENTS)
-        }
+        IconType::SquareDashed => Some(crate::common::icon_registry_elements::SQUAREDASHED_ELEMENTS),
+        IconType::SquareDashedBottom => Some(crate::common::icon_registry_elements::SQUAREDASHEDBOTTOM_ELEMENTS),
         IconType::SquareDashedBottomCode => {
             Some(crate::common::icon_registry_elements::SQUAREDASHEDBOTTOMCODE_ELEMENTS)
         }
-        IconType::SquareDashedKanban => {
-            Some(crate::common::icon_registry_elements::SQUAREDASHEDKANBAN_ELEMENTS)
-        }
+        IconType::SquareDashedKanban => Some(crate::common::icon_registry_elements::SQUAREDASHEDKANBAN_ELEMENTS),
         IconType::SquareDashedMousePointer => {
             Some(crate::common::icon_registry_elements::SQUAREDASHEDMOUSEPOINTER_ELEMENTS)
         }
-        IconType::SquareDashedTopSolid => {
-            Some(crate::common::icon_registry_elements::SQUAREDASHEDTOPSOLID_ELEMENTS)
-        }
-        IconType::SquareDivide => {
-            Some(crate::common::icon_registry_elements::SQUAREDIVIDE_ELEMENTS)
-        }
+        IconType::SquareDashedTopSolid => Some(crate::common::icon_registry_elements::SQUAREDASHEDTOPSOLID_ELEMENTS),
+        IconType::SquareDivide => Some(crate::common::icon_registry_elements::SQUAREDIVIDE_ELEMENTS),
         IconType::SquareDot => Some(crate::common::icon_registry_elements::SQUAREDOT_ELEMENTS),
         IconType::SquareEqual => Some(crate::common::icon_registry_elements::SQUAREEQUAL_ELEMENTS),
-        IconType::SquareFunction => {
-            Some(crate::common::icon_registry_elements::SQUAREFUNCTION_ELEMENTS)
-        }
-        IconType::SquareKanban => {
-            Some(crate::common::icon_registry_elements::SQUAREKANBAN_ELEMENTS)
-        }
-        IconType::SquareLibrary => {
-            Some(crate::common::icon_registry_elements::SQUARELIBRARY_ELEMENTS)
-        }
+        IconType::SquareFunction => Some(crate::common::icon_registry_elements::SQUAREFUNCTION_ELEMENTS),
+        IconType::SquareKanban => Some(crate::common::icon_registry_elements::SQUAREKANBAN_ELEMENTS),
+        IconType::SquareLibrary => Some(crate::common::icon_registry_elements::SQUARELIBRARY_ELEMENTS),
         IconType::SquareM => Some(crate::common::icon_registry_elements::SQUAREM_ELEMENTS),
         IconType::SquareMenu => Some(crate::common::icon_registry_elements::SQUAREMENU_ELEMENTS),
         IconType::SquareMinus => Some(crate::common::icon_registry_elements::SQUAREMINUS_ELEMENTS),
-        IconType::SquareMousePointer => {
-            Some(crate::common::icon_registry_elements::SQUAREMOUSEPOINTER_ELEMENTS)
-        }
-        IconType::SquareParking => {
-            Some(crate::common::icon_registry_elements::SQUAREPARKING_ELEMENTS)
-        }
-        IconType::SquareParkingOff => {
-            Some(crate::common::icon_registry_elements::SQUAREPARKINGOFF_ELEMENTS)
-        }
+        IconType::SquareMousePointer => Some(crate::common::icon_registry_elements::SQUAREMOUSEPOINTER_ELEMENTS),
+        IconType::SquareParking => Some(crate::common::icon_registry_elements::SQUAREPARKING_ELEMENTS),
+        IconType::SquareParkingOff => Some(crate::common::icon_registry_elements::SQUAREPARKINGOFF_ELEMENTS),
         IconType::SquarePause => Some(crate::common::icon_registry_elements::SQUAREPAUSE_ELEMENTS),
         IconType::SquarePen => Some(crate::common::icon_registry_elements::SQUAREPEN_ELEMENTS),
-        IconType::SquarePercent => {
-            Some(crate::common::icon_registry_elements::SQUAREPERCENT_ELEMENTS)
-        }
+        IconType::SquarePercent => Some(crate::common::icon_registry_elements::SQUAREPERCENT_ELEMENTS),
         IconType::SquarePi => Some(crate::common::icon_registry_elements::SQUAREPI_ELEMENTS),
-        IconType::SquarePilcrow => {
-            Some(crate::common::icon_registry_elements::SQUAREPILCROW_ELEMENTS)
-        }
+        IconType::SquarePilcrow => Some(crate::common::icon_registry_elements::SQUAREPILCROW_ELEMENTS),
         IconType::SquarePlay => Some(crate::common::icon_registry_elements::SQUAREPLAY_ELEMENTS),
         IconType::SquarePlus => Some(crate::common::icon_registry_elements::SQUAREPLUS_ELEMENTS),
         IconType::SquarePower => Some(crate::common::icon_registry_elements::SQUAREPOWER_ELEMENTS),
-        IconType::SquareRadical => {
-            Some(crate::common::icon_registry_elements::SQUARERADICAL_ELEMENTS)
-        }
-        IconType::SquareRoundCorner => {
-            Some(crate::common::icon_registry_elements::SQUAREROUNDCORNER_ELEMENTS)
-        }
-        IconType::SquareScissors => {
-            Some(crate::common::icon_registry_elements::SQUARESCISSORS_ELEMENTS)
-        }
+        IconType::SquareRadical => Some(crate::common::icon_registry_elements::SQUARERADICAL_ELEMENTS),
+        IconType::SquareRoundCorner => Some(crate::common::icon_registry_elements::SQUAREROUNDCORNER_ELEMENTS),
+        IconType::SquareScissors => Some(crate::common::icon_registry_elements::SQUARESCISSORS_ELEMENTS),
         IconType::SquareSigma => Some(crate::common::icon_registry_elements::SQUARESIGMA_ELEMENTS),
         IconType::SquareSlash => Some(crate::common::icon_registry_elements::SQUARESLASH_ELEMENTS),
-        IconType::SquareSplitHorizontal => {
-            Some(crate::common::icon_registry_elements::SQUARESPLITHORIZONTAL_ELEMENTS)
-        }
-        IconType::SquareSplitVertical => {
-            Some(crate::common::icon_registry_elements::SQUARESPLITVERTICAL_ELEMENTS)
-        }
-        IconType::SquareSquare => {
-            Some(crate::common::icon_registry_elements::SQUARESQUARE_ELEMENTS)
-        }
+        IconType::SquareSplitHorizontal => Some(crate::common::icon_registry_elements::SQUARESPLITHORIZONTAL_ELEMENTS),
+        IconType::SquareSplitVertical => Some(crate::common::icon_registry_elements::SQUARESPLITVERTICAL_ELEMENTS),
+        IconType::SquareSquare => Some(crate::common::icon_registry_elements::SQUARESQUARE_ELEMENTS),
         IconType::SquareStack => Some(crate::common::icon_registry_elements::SQUARESTACK_ELEMENTS),
         IconType::SquareStop => Some(crate::common::icon_registry_elements::SQUARESTOP_ELEMENTS),
-        IconType::SquareTerminal => {
-            Some(crate::common::icon_registry_elements::SQUARETERMINAL_ELEMENTS)
-        }
+        IconType::SquareTerminal => Some(crate::common::icon_registry_elements::SQUARETERMINAL_ELEMENTS),
         IconType::SquareUser => Some(crate::common::icon_registry_elements::SQUAREUSER_ELEMENTS),
-        IconType::SquareUserRound => {
-            Some(crate::common::icon_registry_elements::SQUAREUSERROUND_ELEMENTS)
-        }
+        IconType::SquareUserRound => Some(crate::common::icon_registry_elements::SQUAREUSERROUND_ELEMENTS),
         IconType::SquareX => Some(crate::common::icon_registry_elements::SQUAREX_ELEMENTS),
-        IconType::SquaresExclude => {
-            Some(crate::common::icon_registry_elements::SQUARESEXCLUDE_ELEMENTS)
-        }
-        IconType::SquaresIntersect => {
-            Some(crate::common::icon_registry_elements::SQUARESINTERSECT_ELEMENTS)
-        }
-        IconType::SquaresSubtract => {
-            Some(crate::common::icon_registry_elements::SQUARESSUBTRACT_ELEMENTS)
-        }
-        IconType::SquaresUnite => {
-            Some(crate::common::icon_registry_elements::SQUARESUNITE_ELEMENTS)
-        }
+        IconType::SquaresExclude => Some(crate::common::icon_registry_elements::SQUARESEXCLUDE_ELEMENTS),
+        IconType::SquaresIntersect => Some(crate::common::icon_registry_elements::SQUARESINTERSECT_ELEMENTS),
+        IconType::SquaresSubtract => Some(crate::common::icon_registry_elements::SQUARESSUBTRACT_ELEMENTS),
+        IconType::SquaresUnite => Some(crate::common::icon_registry_elements::SQUARESUNITE_ELEMENTS),
         IconType::Squircle => Some(crate::common::icon_registry_elements::SQUIRCLE_ELEMENTS),
-        IconType::SquircleDashed => {
-            Some(crate::common::icon_registry_elements::SQUIRCLEDASHED_ELEMENTS)
-        }
+        IconType::SquircleDashed => Some(crate::common::icon_registry_elements::SQUIRCLEDASHED_ELEMENTS),
         IconType::Squirrel => Some(crate::common::icon_registry_elements::SQUIRREL_ELEMENTS),
         IconType::Stamp => Some(crate::common::icon_registry_elements::STAMP_ELEMENTS),
         IconType::Star => Some(crate::common::icon_registry_elements::STAR_ELEMENTS),
@@ -2488,15 +1564,9 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Sticker => Some(crate::common::icon_registry_elements::STICKER_ELEMENTS),
         IconType::StickyNote => Some(crate::common::icon_registry_elements::STICKYNOTE_ELEMENTS),
         IconType::Store => Some(crate::common::icon_registry_elements::STORE_ELEMENTS),
-        IconType::StretchHorizontal => {
-            Some(crate::common::icon_registry_elements::STRETCHHORIZONTAL_ELEMENTS)
-        }
-        IconType::StretchVertical => {
-            Some(crate::common::icon_registry_elements::STRETCHVERTICAL_ELEMENTS)
-        }
-        IconType::Strikethrough => {
-            Some(crate::common::icon_registry_elements::STRIKETHROUGH_ELEMENTS)
-        }
+        IconType::StretchHorizontal => Some(crate::common::icon_registry_elements::STRETCHHORIZONTAL_ELEMENTS),
+        IconType::StretchVertical => Some(crate::common::icon_registry_elements::STRETCHVERTICAL_ELEMENTS),
+        IconType::Strikethrough => Some(crate::common::icon_registry_elements::STRIKETHROUGH_ELEMENTS),
         IconType::Subscript => Some(crate::common::icon_registry_elements::SUBSCRIPT_ELEMENTS),
         IconType::Sun => Some(crate::common::icon_registry_elements::SUN_ELEMENTS),
         IconType::SunDim => Some(crate::common::icon_registry_elements::SUNDIM_ELEMENTS),
@@ -2508,36 +1578,20 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Superscript => Some(crate::common::icon_registry_elements::SUPERSCRIPT_ELEMENTS),
         IconType::SwatchBook => Some(crate::common::icon_registry_elements::SWATCHBOOK_ELEMENTS),
         IconType::SwissFranc => Some(crate::common::icon_registry_elements::SWISSFRANC_ELEMENTS),
-        IconType::SwitchCamera => {
-            Some(crate::common::icon_registry_elements::SWITCHCAMERA_ELEMENTS)
-        }
+        IconType::SwitchCamera => Some(crate::common::icon_registry_elements::SWITCHCAMERA_ELEMENTS),
         IconType::Sword => Some(crate::common::icon_registry_elements::SWORD_ELEMENTS),
         IconType::Swords => Some(crate::common::icon_registry_elements::SWORDS_ELEMENTS),
         IconType::Syringe => Some(crate::common::icon_registry_elements::SYRINGE_ELEMENTS),
         IconType::Table => Some(crate::common::icon_registry_elements::TABLE_ELEMENTS),
         IconType::Table2 => Some(crate::common::icon_registry_elements::TABLE2_ELEMENTS),
-        IconType::TableCellsMerge => {
-            Some(crate::common::icon_registry_elements::TABLECELLSMERGE_ELEMENTS)
-        }
-        IconType::TableCellsSplit => {
-            Some(crate::common::icon_registry_elements::TABLECELLSSPLIT_ELEMENTS)
-        }
-        IconType::TableColumnsSplit => {
-            Some(crate::common::icon_registry_elements::TABLECOLUMNSSPLIT_ELEMENTS)
-        }
-        IconType::TableOfContents => {
-            Some(crate::common::icon_registry_elements::TABLEOFCONTENTS_ELEMENTS)
-        }
-        IconType::TableProperties => {
-            Some(crate::common::icon_registry_elements::TABLEPROPERTIES_ELEMENTS)
-        }
-        IconType::TableRowsSplit => {
-            Some(crate::common::icon_registry_elements::TABLEROWSSPLIT_ELEMENTS)
-        }
+        IconType::TableCellsMerge => Some(crate::common::icon_registry_elements::TABLECELLSMERGE_ELEMENTS),
+        IconType::TableCellsSplit => Some(crate::common::icon_registry_elements::TABLECELLSSPLIT_ELEMENTS),
+        IconType::TableColumnsSplit => Some(crate::common::icon_registry_elements::TABLECOLUMNSSPLIT_ELEMENTS),
+        IconType::TableOfContents => Some(crate::common::icon_registry_elements::TABLEOFCONTENTS_ELEMENTS),
+        IconType::TableProperties => Some(crate::common::icon_registry_elements::TABLEPROPERTIES_ELEMENTS),
+        IconType::TableRowsSplit => Some(crate::common::icon_registry_elements::TABLEROWSSPLIT_ELEMENTS),
         IconType::Tablet => Some(crate::common::icon_registry_elements::TABLET_ELEMENTS),
-        IconType::TabletSmartphone => {
-            Some(crate::common::icon_registry_elements::TABLETSMARTPHONE_ELEMENTS)
-        }
+        IconType::TabletSmartphone => Some(crate::common::icon_registry_elements::TABLETSMARTPHONE_ELEMENTS),
         IconType::Tablets => Some(crate::common::icon_registry_elements::TABLETS_ELEMENTS),
         IconType::Tag => Some(crate::common::icon_registry_elements::TAG_ELEMENTS),
         IconType::Tags => Some(crate::common::icon_registry_elements::TAGS_ELEMENTS),
@@ -2553,41 +1607,29 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::TentTree => Some(crate::common::icon_registry_elements::TENTTREE_ELEMENTS),
         IconType::Terminal => Some(crate::common::icon_registry_elements::TERMINAL_ELEMENTS),
         IconType::TestTube => Some(crate::common::icon_registry_elements::TESTTUBE_ELEMENTS),
-        IconType::TestTubeDiagonal => {
-            Some(crate::common::icon_registry_elements::TESTTUBEDIAGONAL_ELEMENTS)
-        }
+        IconType::TestTubeDiagonal => Some(crate::common::icon_registry_elements::TESTTUBEDIAGONAL_ELEMENTS),
         IconType::TestTubes => Some(crate::common::icon_registry_elements::TESTTUBES_ELEMENTS),
         IconType::Text => Some(crate::common::icon_registry_elements::TEXT_ELEMENTS),
         IconType::TextCursor => Some(crate::common::icon_registry_elements::TEXTCURSOR_ELEMENTS),
-        IconType::TextCursorInput => {
-            Some(crate::common::icon_registry_elements::TEXTCURSORINPUT_ELEMENTS)
-        }
+        IconType::TextCursorInput => Some(crate::common::icon_registry_elements::TEXTCURSORINPUT_ELEMENTS),
         IconType::TextQuote => Some(crate::common::icon_registry_elements::TEXTQUOTE_ELEMENTS),
         IconType::TextSearch => Some(crate::common::icon_registry_elements::TEXTSEARCH_ELEMENTS),
         IconType::TextSelect => Some(crate::common::icon_registry_elements::TEXTSELECT_ELEMENTS),
         IconType::Theater => Some(crate::common::icon_registry_elements::THEATER_ELEMENTS),
         IconType::Thermometer => Some(crate::common::icon_registry_elements::THERMOMETER_ELEMENTS),
-        IconType::ThermometerSnowflake => {
-            Some(crate::common::icon_registry_elements::THERMOMETERSNOWFLAKE_ELEMENTS)
-        }
-        IconType::ThermometerSun => {
-            Some(crate::common::icon_registry_elements::THERMOMETERSUN_ELEMENTS)
-        }
+        IconType::ThermometerSnowflake => Some(crate::common::icon_registry_elements::THERMOMETERSNOWFLAKE_ELEMENTS),
+        IconType::ThermometerSun => Some(crate::common::icon_registry_elements::THERMOMETERSUN_ELEMENTS),
         IconType::ThumbsDown => Some(crate::common::icon_registry_elements::THUMBSDOWN_ELEMENTS),
         IconType::ThumbsUp => Some(crate::common::icon_registry_elements::THUMBSUP_ELEMENTS),
         IconType::Ticket => Some(crate::common::icon_registry_elements::TICKET_ELEMENTS),
         IconType::TicketCheck => Some(crate::common::icon_registry_elements::TICKETCHECK_ELEMENTS),
         IconType::TicketMinus => Some(crate::common::icon_registry_elements::TICKETMINUS_ELEMENTS),
-        IconType::TicketPercent => {
-            Some(crate::common::icon_registry_elements::TICKETPERCENT_ELEMENTS)
-        }
+        IconType::TicketPercent => Some(crate::common::icon_registry_elements::TICKETPERCENT_ELEMENTS),
         IconType::TicketPlus => Some(crate::common::icon_registry_elements::TICKETPLUS_ELEMENTS),
         IconType::TicketSlash => Some(crate::common::icon_registry_elements::TICKETSLASH_ELEMENTS),
         IconType::TicketX => Some(crate::common::icon_registry_elements::TICKETX_ELEMENTS),
         IconType::Tickets => Some(crate::common::icon_registry_elements::TICKETS_ELEMENTS),
-        IconType::TicketsPlane => {
-            Some(crate::common::icon_registry_elements::TICKETSPLANE_ELEMENTS)
-        }
+        IconType::TicketsPlane => Some(crate::common::icon_registry_elements::TICKETSPLANE_ELEMENTS),
         IconType::Timer => Some(crate::common::icon_registry_elements::TIMER_ELEMENTS),
         IconType::TimerOff => Some(crate::common::icon_registry_elements::TIMEROFF_ELEMENTS),
         IconType::TimerReset => Some(crate::common::icon_registry_elements::TIMERRESET_ELEMENTS),
@@ -2599,57 +1641,37 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Torus => Some(crate::common::icon_registry_elements::TORUS_ELEMENTS),
         IconType::Touchpad => Some(crate::common::icon_registry_elements::TOUCHPAD_ELEMENTS),
         IconType::TouchpadOff => Some(crate::common::icon_registry_elements::TOUCHPADOFF_ELEMENTS),
-        IconType::TowerControl => {
-            Some(crate::common::icon_registry_elements::TOWERCONTROL_ELEMENTS)
-        }
+        IconType::TowerControl => Some(crate::common::icon_registry_elements::TOWERCONTROL_ELEMENTS),
         IconType::ToyBrick => Some(crate::common::icon_registry_elements::TOYBRICK_ELEMENTS),
         IconType::Tractor => Some(crate::common::icon_registry_elements::TRACTOR_ELEMENTS),
         IconType::TrafficCone => Some(crate::common::icon_registry_elements::TRAFFICCONE_ELEMENTS),
         IconType::TrainFront => Some(crate::common::icon_registry_elements::TRAINFRONT_ELEMENTS),
-        IconType::TrainFrontTunnel => {
-            Some(crate::common::icon_registry_elements::TRAINFRONTTUNNEL_ELEMENTS)
-        }
+        IconType::TrainFrontTunnel => Some(crate::common::icon_registry_elements::TRAINFRONTTUNNEL_ELEMENTS),
         IconType::TrainTrack => Some(crate::common::icon_registry_elements::TRAINTRACK_ELEMENTS),
         IconType::TramFront => Some(crate::common::icon_registry_elements::TRAMFRONT_ELEMENTS),
         IconType::Transgender => Some(crate::common::icon_registry_elements::TRANSGENDER_ELEMENTS),
         IconType::Trash => Some(crate::common::icon_registry_elements::TRASH_ELEMENTS),
         IconType::Trash2 => Some(crate::common::icon_registry_elements::TRASH2_ELEMENTS),
-        IconType::TreeDeciduous => {
-            Some(crate::common::icon_registry_elements::TREEDECIDUOUS_ELEMENTS)
-        }
+        IconType::TreeDeciduous => Some(crate::common::icon_registry_elements::TREEDECIDUOUS_ELEMENTS),
         IconType::TreePalm => Some(crate::common::icon_registry_elements::TREEPALM_ELEMENTS),
         IconType::TreePine => Some(crate::common::icon_registry_elements::TREEPINE_ELEMENTS),
         IconType::Trees => Some(crate::common::icon_registry_elements::TREES_ELEMENTS),
         IconType::Trello => Some(crate::common::icon_registry_elements::TRELLO_ELEMENTS),
-        IconType::TrendingDown => {
-            Some(crate::common::icon_registry_elements::TRENDINGDOWN_ELEMENTS)
-        }
+        IconType::TrendingDown => Some(crate::common::icon_registry_elements::TRENDINGDOWN_ELEMENTS),
         IconType::TrendingUp => Some(crate::common::icon_registry_elements::TRENDINGUP_ELEMENTS),
-        IconType::TrendingUpDown => {
-            Some(crate::common::icon_registry_elements::TRENDINGUPDOWN_ELEMENTS)
-        }
+        IconType::TrendingUpDown => Some(crate::common::icon_registry_elements::TRENDINGUPDOWN_ELEMENTS),
         IconType::Triangle => Some(crate::common::icon_registry_elements::TRIANGLE_ELEMENTS),
-        IconType::TriangleAlert => {
-            Some(crate::common::icon_registry_elements::TRIANGLEALERT_ELEMENTS)
-        }
-        IconType::TriangleDashed => {
-            Some(crate::common::icon_registry_elements::TRIANGLEDASHED_ELEMENTS)
-        }
-        IconType::TriangleRight => {
-            Some(crate::common::icon_registry_elements::TRIANGLERIGHT_ELEMENTS)
-        }
+        IconType::TriangleAlert => Some(crate::common::icon_registry_elements::TRIANGLEALERT_ELEMENTS),
+        IconType::TriangleDashed => Some(crate::common::icon_registry_elements::TRIANGLEDASHED_ELEMENTS),
+        IconType::TriangleRight => Some(crate::common::icon_registry_elements::TRIANGLERIGHT_ELEMENTS),
         IconType::Trophy => Some(crate::common::icon_registry_elements::TROPHY_ELEMENTS),
         IconType::Truck => Some(crate::common::icon_registry_elements::TRUCK_ELEMENTS),
-        IconType::TruckElectric => {
-            Some(crate::common::icon_registry_elements::TRUCKELECTRIC_ELEMENTS)
-        }
+        IconType::TruckElectric => Some(crate::common::icon_registry_elements::TRUCKELECTRIC_ELEMENTS),
         IconType::TurkishLira => Some(crate::common::icon_registry_elements::TURKISHLIRA_ELEMENTS),
         IconType::Turtle => Some(crate::common::icon_registry_elements::TURTLE_ELEMENTS),
         IconType::Tv => Some(crate::common::icon_registry_elements::TV_ELEMENTS),
         IconType::TvMinimal => Some(crate::common::icon_registry_elements::TVMINIMAL_ELEMENTS),
-        IconType::TvMinimalPlay => {
-            Some(crate::common::icon_registry_elements::TVMINIMALPLAY_ELEMENTS)
-        }
+        IconType::TvMinimalPlay => Some(crate::common::icon_registry_elements::TVMINIMALPLAY_ELEMENTS),
         IconType::Twitch => Some(crate::common::icon_registry_elements::TWITCH_ELEMENTS),
         IconType::Twitter => Some(crate::common::icon_registry_elements::TWITTER_ELEMENTS),
         IconType::Type => Some(crate::common::icon_registry_elements::TYPE_ELEMENTS),
@@ -2660,12 +1682,8 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Undo => Some(crate::common::icon_registry_elements::UNDO_ELEMENTS),
         IconType::Undo2 => Some(crate::common::icon_registry_elements::UNDO2_ELEMENTS),
         IconType::UndoDot => Some(crate::common::icon_registry_elements::UNDODOT_ELEMENTS),
-        IconType::UnfoldHorizontal => {
-            Some(crate::common::icon_registry_elements::UNFOLDHORIZONTAL_ELEMENTS)
-        }
-        IconType::UnfoldVertical => {
-            Some(crate::common::icon_registry_elements::UNFOLDVERTICAL_ELEMENTS)
-        }
+        IconType::UnfoldHorizontal => Some(crate::common::icon_registry_elements::UNFOLDHORIZONTAL_ELEMENTS),
+        IconType::UnfoldVertical => Some(crate::common::icon_registry_elements::UNFOLDVERTICAL_ELEMENTS),
         IconType::Ungroup => Some(crate::common::icon_registry_elements::UNGROUP_ELEMENTS),
         IconType::University => Some(crate::common::icon_registry_elements::UNIVERSITY_ELEMENTS),
         IconType::Unlink => Some(crate::common::icon_registry_elements::UNLINK_ELEMENTS),
@@ -2681,24 +1699,12 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::UserPen => Some(crate::common::icon_registry_elements::USERPEN_ELEMENTS),
         IconType::UserPlus => Some(crate::common::icon_registry_elements::USERPLUS_ELEMENTS),
         IconType::UserRound => Some(crate::common::icon_registry_elements::USERROUND_ELEMENTS),
-        IconType::UserRoundCheck => {
-            Some(crate::common::icon_registry_elements::USERROUNDCHECK_ELEMENTS)
-        }
-        IconType::UserRoundCog => {
-            Some(crate::common::icon_registry_elements::USERROUNDCOG_ELEMENTS)
-        }
-        IconType::UserRoundMinus => {
-            Some(crate::common::icon_registry_elements::USERROUNDMINUS_ELEMENTS)
-        }
-        IconType::UserRoundPen => {
-            Some(crate::common::icon_registry_elements::USERROUNDPEN_ELEMENTS)
-        }
-        IconType::UserRoundPlus => {
-            Some(crate::common::icon_registry_elements::USERROUNDPLUS_ELEMENTS)
-        }
-        IconType::UserRoundSearch => {
-            Some(crate::common::icon_registry_elements::USERROUNDSEARCH_ELEMENTS)
-        }
+        IconType::UserRoundCheck => Some(crate::common::icon_registry_elements::USERROUNDCHECK_ELEMENTS),
+        IconType::UserRoundCog => Some(crate::common::icon_registry_elements::USERROUNDCOG_ELEMENTS),
+        IconType::UserRoundMinus => Some(crate::common::icon_registry_elements::USERROUNDMINUS_ELEMENTS),
+        IconType::UserRoundPen => Some(crate::common::icon_registry_elements::USERROUNDPEN_ELEMENTS),
+        IconType::UserRoundPlus => Some(crate::common::icon_registry_elements::USERROUNDPLUS_ELEMENTS),
+        IconType::UserRoundSearch => Some(crate::common::icon_registry_elements::USERROUNDSEARCH_ELEMENTS),
         IconType::UserRoundX => Some(crate::common::icon_registry_elements::USERROUNDX_ELEMENTS),
         IconType::UserSearch => Some(crate::common::icon_registry_elements::USERSEARCH_ELEMENTS),
         IconType::UserStar => Some(crate::common::icon_registry_elements::USERSTAR_ELEMENTS),
@@ -2706,23 +1712,15 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Users => Some(crate::common::icon_registry_elements::USERS_ELEMENTS),
         IconType::UsersRound => Some(crate::common::icon_registry_elements::USERSROUND_ELEMENTS),
         IconType::Utensils => Some(crate::common::icon_registry_elements::UTENSILS_ELEMENTS),
-        IconType::UtensilsCrossed => {
-            Some(crate::common::icon_registry_elements::UTENSILSCROSSED_ELEMENTS)
-        }
+        IconType::UtensilsCrossed => Some(crate::common::icon_registry_elements::UTENSILSCROSSED_ELEMENTS),
         IconType::UtilityPole => Some(crate::common::icon_registry_elements::UTILITYPOLE_ELEMENTS),
         IconType::Variable => Some(crate::common::icon_registry_elements::VARIABLE_ELEMENTS),
         IconType::Vault => Some(crate::common::icon_registry_elements::VAULT_ELEMENTS),
-        IconType::VectorSquare => {
-            Some(crate::common::icon_registry_elements::VECTORSQUARE_ELEMENTS)
-        }
+        IconType::VectorSquare => Some(crate::common::icon_registry_elements::VECTORSQUARE_ELEMENTS),
         IconType::Vegan => Some(crate::common::icon_registry_elements::VEGAN_ELEMENTS),
-        IconType::VenetianMask => {
-            Some(crate::common::icon_registry_elements::VENETIANMASK_ELEMENTS)
-        }
+        IconType::VenetianMask => Some(crate::common::icon_registry_elements::VENETIANMASK_ELEMENTS),
         IconType::Venus => Some(crate::common::icon_registry_elements::VENUS_ELEMENTS),
-        IconType::VenusAndMars => {
-            Some(crate::common::icon_registry_elements::VENUSANDMARS_ELEMENTS)
-        }
+        IconType::VenusAndMars => Some(crate::common::icon_registry_elements::VENUSANDMARS_ELEMENTS),
         IconType::Vibrate => Some(crate::common::icon_registry_elements::VIBRATE_ELEMENTS),
         IconType::VibrateOff => Some(crate::common::icon_registry_elements::VIBRATEOFF_ELEMENTS),
         IconType::Video => Some(crate::common::icon_registry_elements::VIDEO_ELEMENTS),
@@ -2739,18 +1737,12 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::Vote => Some(crate::common::icon_registry_elements::VOTE_ELEMENTS),
         IconType::Wallet => Some(crate::common::icon_registry_elements::WALLET_ELEMENTS),
         IconType::WalletCards => Some(crate::common::icon_registry_elements::WALLETCARDS_ELEMENTS),
-        IconType::WalletMinimal => {
-            Some(crate::common::icon_registry_elements::WALLETMINIMAL_ELEMENTS)
-        }
+        IconType::WalletMinimal => Some(crate::common::icon_registry_elements::WALLETMINIMAL_ELEMENTS),
         IconType::Wallpaper => Some(crate::common::icon_registry_elements::WALLPAPER_ELEMENTS),
         IconType::Wand => Some(crate::common::icon_registry_elements::WAND_ELEMENTS),
-        IconType::WandSparkles => {
-            Some(crate::common::icon_registry_elements::WANDSPARKLES_ELEMENTS)
-        }
+        IconType::WandSparkles => Some(crate::common::icon_registry_elements::WANDSPARKLES_ELEMENTS),
         IconType::Warehouse => Some(crate::common::icon_registry_elements::WAREHOUSE_ELEMENTS),
-        IconType::WashingMachine => {
-            Some(crate::common::icon_registry_elements::WASHINGMACHINE_ELEMENTS)
-        }
+        IconType::WashingMachine => Some(crate::common::icon_registry_elements::WASHINGMACHINE_ELEMENTS),
         IconType::Watch => Some(crate::common::icon_registry_elements::WATCH_ELEMENTS),
         IconType::Waves => Some(crate::common::icon_registry_elements::WAVES_ELEMENTS),
         IconType::WavesLadder => Some(crate::common::icon_registry_elements::WAVESLADDER_ELEMENTS),
@@ -2771,9 +1763,7 @@ pub fn get_icon_elements(icon: IconType) -> Option<&'static [StaticSvgElement]> 
         IconType::WifiSync => Some(crate::common::icon_registry_elements::WIFISYNC_ELEMENTS),
         IconType::WifiZero => Some(crate::common::icon_registry_elements::WIFIZERO_ELEMENTS),
         IconType::Wind => Some(crate::common::icon_registry_elements::WIND_ELEMENTS),
-        IconType::WindArrowDown => {
-            Some(crate::common::icon_registry_elements::WINDARROWDOWN_ELEMENTS)
-        }
+        IconType::WindArrowDown => Some(crate::common::icon_registry_elements::WINDARROWDOWN_ELEMENTS),
         IconType::Wine => Some(crate::common::icon_registry_elements::WINE_ELEMENTS),
         IconType::WineOff => Some(crate::common::icon_registry_elements::WINEOFF_ELEMENTS),
         IconType::Workflow => Some(crate::common::icon_registry_elements::WORKFLOW_ELEMENTS),

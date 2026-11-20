@@ -10,10 +10,7 @@ mod spotlight;
 mod store;
 
 use dioxus::prelude::*;
-use icons::{
-    Activity, ArrowUp, ChevronLeft, ChevronRight, Cpu, FolderOpen, HardDrive, LogOut, MemoryStick,
-    RefreshCw, Settings, ShoppingBag, X,
-};
+use icons::{Activity, ArrowUp, ChevronLeft, ChevronRight, Cpu, FolderOpen, HardDrive, LogOut, MemoryStick, RefreshCw, Settings, ShoppingBag, X};
 
 use crate::api::apps::{AppTile, app_tiles};
 use crate::api::get_overview;
@@ -65,15 +62,7 @@ impl Win {
 }
 
 pub fn open_win(win: Win) {
-    let route = if win == Win::Files {
-        Route::files("/Home")
-    } else {
-        Route::HomePage {
-            w: win.key().to_string(),
-            path: String::new(),
-            msg: String::new(),
-        }
-    };
+    let route = if win == Win::Files { Route::files("/Home") } else { Route::HomePage { w: win.key().to_string(), path: String::new(), msg: String::new() } };
     navigator().push(route);
 }
 
@@ -110,17 +99,9 @@ impl HomeCtx {
 
 /// App icon from `/appicon/{id}` (fetched by the server), first letter as fallback.
 #[component]
-pub fn AppIcon(
-    id: String,
-    name: String,
-    #[props(default = "size-12".to_string())] class: String,
-) -> Element {
+pub fn AppIcon(id: String, name: String, #[props(default = "size-12".to_string())] class: String) -> Element {
     let mut failed = use_signal(|| false);
-    let letter: String = name
-        .chars()
-        .find(|c| c.is_alphanumeric())
-        .map(|c| c.to_uppercase().collect())
-        .unwrap_or_else(|| "?".into());
+    let letter: String = name.chars().find(|c| c.is_alphanumeric()).map(|c| c.to_uppercase().collect()).unwrap_or_else(|| "?".into());
     rsx! {
         if failed() {
             div { class: "{class} flex items-center justify-center rounded-[24%] bg-gradient-to-b from-[#2c2c2e] to-[#1c1c1e] text-lg font-semibold text-white/80",
@@ -166,11 +147,7 @@ fn grid_dims(w: f64, h: f64) -> (usize, usize) {
     } else {
         4
     };
-    let (row_h, reserved, max_rows) = if w >= 768.0 {
-        (132.0, 470.0, 4)
-    } else {
-        (104.0, 400.0, 6)
-    };
+    let (row_h, reserved, max_rows) = if w >= 768.0 { (132.0, 470.0, 4) } else { (104.0, 400.0, 6) };
     let rows = (((h - reserved) / row_h).floor() as i64).clamp(2, max_rows) as usize;
     (cols, rows)
 }
@@ -222,14 +199,7 @@ pub fn HomePage(w: String, path: String, msg: String) -> Element {
         let _ = refresh();
         settings_get()
     });
-    let ctx = use_context_provider(|| HomeCtx {
-        overview,
-        tiles,
-        settings,
-        refresh,
-        menu,
-        editing,
-    });
+    let ctx = use_context_provider(|| HomeCtx { overview, tiles, settings, refresh, menu, editing });
 
     // Live values: resources every 5 s, apps every 15 s.
     use_future(move || async move {
@@ -276,11 +246,7 @@ pub fn HomePage(w: String, path: String, msg: String) -> Element {
     let (cols, rows) = grid_dims(viewport().0, viewport().1);
     let per_page = cols * rows;
     let visible: Vec<AppTile> = match &*tiles.read() {
-        Some(Ok(list)) => list
-            .iter()
-            .filter(|t| !t.hidden && t.id != "nrz-dashboard")
-            .cloned()
-            .collect(),
+        Some(Ok(list)) => list.iter().filter(|t| !t.hidden && t.id != "nrz-dashboard").cloned().collect(),
         _ => Vec::new(),
     };
     let pages = visible.len().div_ceil(per_page).max(1);
@@ -502,11 +468,7 @@ pub fn open_url(url: &str) {
 fn HomeTile(tile: AppTile) -> Element {
     let ctx = use_context::<HomeCtx>();
     let mut menu = ctx.menu;
-    let href = if tile.is_running() {
-        tile.url(&ctx.link_mode())
-    } else {
-        None
-    };
+    let href = if tile.is_running() { tile.url(&ctx.link_mode()) } else { None };
     let busy = busy_label(&tile.state);
     let dim = if busy.is_some() { "opacity-60" } else { "" };
     // Long press (touch) opens the menu like a right click.
@@ -578,10 +540,7 @@ fn LiveBar() -> Element {
     let ov = ctx.overview.read().clone();
     let failed = matches!(&ov, Some(Err(_))) || matches!(&ov, Some(Ok(o)) if o.resources.is_none());
     let (res, updates) = match ov {
-        Some(Ok(o)) => (
-            o.resources,
-            o.apps.iter().filter(|a| a.update_available).count(),
-        ),
+        Some(Ok(o)) => (o.resources, o.apps.iter().filter(|a| a.update_available).count()),
         _ => (None, 0),
     };
     rsx! {
@@ -708,11 +667,7 @@ fn Dock(active: Option<Win>) -> Element {
 /// Glass window used by App Store, activity and settings.
 #[component]
 pub fn HomeWindow(title: String, #[props(default)] narrow: bool, children: Element) -> Element {
-    let w = if narrow {
-        "md:max-w-3xl"
-    } else {
-        "md:max-w-6xl"
-    };
+    let w = if narrow { "md:max-w-3xl" } else { "md:max-w-6xl" };
     rsx! {
         div { class: "fixed inset-0 z-50 flex items-stretch justify-center bg-black/45 backdrop-blur-sm md:items-center md:p-6",
             onclick: move |_| close_win(),

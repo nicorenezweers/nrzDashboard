@@ -53,9 +53,6 @@ pub struct AstParseOptions<'a> {
 #[doc(hidden)]
 impl Default for AstParseOptions<'static> {
     fn default() -> Self {
-        Self {
-            prefix: "",
-            separator: ":",
-        }
+        Self { prefix: "", separator: ":" }
     }
 }

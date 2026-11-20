@@ -37,26 +37,14 @@ fn Form(tile: AppTile) -> Element {
     let mut error = use_signal(|| None::<String>);
     let mut saving = use_signal(|| false);
 
-    let auto_user = tile
-        .auto_user_url
-        .clone()
-        .unwrap_or_else(|| "nicht gefunden".into());
-    let auto_admin = tile
-        .auto_admin_url
-        .clone()
-        .unwrap_or_else(|| "nicht gefunden".into());
+    let auto_user = tile.auto_user_url.clone().unwrap_or_else(|| "nicht gefunden".into());
+    let auto_admin = tile.auto_admin_url.clone().unwrap_or_else(|| "nicht gefunden".into());
     let user_err = normalize_link(&user()).err();
     let admin_err = normalize_link(&admin()).err();
     let valid = user_err.is_none() && admin_err.is_none();
     // Link that would be used, for the "test" buttons.
-    let eff_user = normalize_link(&user())
-        .ok()
-        .filter(|s| !s.is_empty())
-        .or_else(|| tile.auto_user_url.clone());
-    let eff_admin = normalize_link(&admin())
-        .ok()
-        .filter(|s| !s.is_empty())
-        .or_else(|| tile.auto_admin_url.clone());
+    let eff_user = normalize_link(&user()).ok().filter(|s| !s.is_empty()).or_else(|| tile.auto_user_url.clone());
+    let eff_admin = normalize_link(&admin()).ok().filter(|s| !s.is_empty()).or_else(|| tile.auto_admin_url.clone());
     let id = tile.id.clone();
 
     let save = move |links: AppLinks| {
@@ -133,15 +121,7 @@ fn Form(tile: AppTile) -> Element {
 }
 
 #[component]
-fn LinkField(
-    icon: Element,
-    label: String,
-    value: String,
-    placeholder: String,
-    error: Option<String>,
-    test: Option<String>,
-    oninput: EventHandler<String>,
-) -> Element {
+fn LinkField(icon: Element, label: String, value: String, placeholder: String, error: Option<String>, test: Option<String>, oninput: EventHandler<String>) -> Element {
     rsx! {
         label { class: "mb-1.5 mt-4 flex items-center gap-2 text-sm text-white/60 [&_svg]:size-4", {icon} "{label}" }
         div { class: "flex gap-2",

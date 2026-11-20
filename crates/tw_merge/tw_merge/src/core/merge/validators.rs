@@ -16,13 +16,7 @@ pub mod length {
 
     // Parser for numeric values
     fn number(input: &str) -> IResult<&str, &str> {
-        recognize(pair(
-            pair(
-                opt(char('-')),
-                take_while1(|c: char| c.is_ascii_digit() || c == '.'),
-            ),
-            opt(unit),
-        ))(input)
+        recognize(pair(pair(opt(char('-')), take_while1(|c: char| c.is_ascii_digit() || c == '.')), opt(unit)))(input)
     }
 
     // Parser for units like px, em, rem, etc.

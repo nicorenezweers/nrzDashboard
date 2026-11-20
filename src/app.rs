@@ -22,20 +22,12 @@ pub enum Route {
 impl Route {
     /// Home screen without an open window.
     pub fn home() -> Self {
-        Self::HomePage {
-            w: String::new(),
-            path: String::new(),
-            msg: String::new(),
-        }
+        Self::HomePage { w: String::new(), path: String::new(), msg: String::new() }
     }
 
     /// File window at `path`.
     pub fn files(path: &str) -> Self {
-        Self::HomePage {
-            w: "files".into(),
-            path: path.into(),
-            msg: String::new(),
-        }
+        Self::HomePage { w: "files".into(), path: path.into(), msg: String::new() }
     }
 }
 

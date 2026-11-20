@@ -22,19 +22,14 @@ pub struct DownloadQuery {
 pub async fn download_handler(Query(q): Query<DownloadQuery>) -> Response {
     let cfg = settings::umbrel();
     let upstream = http()
-        .get(format!(
-            "{}/mcp/files/download?path={}",
-            cfg.url,
-            enc(&q.path)
-        ))
+        .get(format!("{}/mcp/files/download?path={}", cfg.url, enc(&q.path)))
         .bearer_auth(&cfg.token)
         .send()
         .await;
     let res = match upstream {
         Ok(r) if r.status().is_success() => r,
         Ok(r) => {
-            let status =
-                StatusCode::from_u16(r.status().as_u16()).unwrap_or(StatusCode::BAD_GATEWAY);
+            let status = StatusCode::from_u16(r.status().as_u16()).unwrap_or(StatusCode::BAD_GATEWAY);
             let text = r.text().await.unwrap_or_default();
             return (status, text).into_response();
         }
@@ -53,16 +48,7 @@ pub async fn download_handler(Query(q): Query<DownloadQuery>) -> Response {
         .unwrap_or_else(|| HeaderValue::from_static("application/octet-stream"));
     let len = res.headers().get(header::CONTENT_LENGTH).cloned();
     let disposition = if inline { "inline" } else { "attachment" };
-    let ascii: String = name
-        .chars()
-        .map(|c| {
-            if c.is_ascii_alphanumeric() || ".-_ ".contains(c) {
-                c
-            } else {
-                '_'
-            }
-        })
-        .collect();
+    let ascii: String = name.chars().map(|c| if c.is_ascii_alphanumeric() || ".-_ ".contains(c) { c } else { '_' }).collect();
 
     let mut out = Response::new(Body::from_stream(res.bytes_stream()));
     let h = out.headers_mut();
@@ -70,28 +56,16 @@ pub async fn download_handler(Query(q): Query<DownloadQuery>) -> Response {
     if let Some(len) = len {
         h.insert(header::CONTENT_LENGTH, len);
     }
-    if let Ok(v) = HeaderValue::from_str(&format!(
-        "{disposition}; filename=\"{ascii}\"; filename*=UTF-8''{}",
-        enc(&name)
-    )) {
+    if let Ok(v) = HeaderValue::from_str(&format!("{disposition}; filename=\"{ascii}\"; filename*=UTF-8''{}", enc(&name))) {
         h.insert(header::CONTENT_DISPOSITION, v);
     }
-    h.insert(
-        header::X_CONTENT_TYPE_OPTIONS,
-        HeaderValue::from_static("nosniff"),
-    );
+    h.insert(header::X_CONTENT_TYPE_OPTIONS, HeaderValue::from_static("nosniff"));
     // Browsers refuse to render PDFs inside a sandboxed document; PDFs run in the viewer's own sandbox.
     if !is_pdf {
-        h.insert(
-            header::CONTENT_SECURITY_POLICY,
-            HeaderValue::from_static("sandbox"),
-        );
+        h.insert(header::CONTENT_SECURITY_POLICY, HeaderValue::from_static("sandbox"));
     }
     if inline {
-        h.insert(
-            header::CACHE_CONTROL,
-            HeaderValue::from_static("private, max-age=300"),
-        );
+        h.insert(header::CACHE_CONTROL, HeaderValue::from_static("private, max-age=300"));
     }
     out
 }
@@ -120,9 +94,10 @@ fn inline_type(name: &str) -> Option<&'static str> {
         "flac" => "audio/flac",
         "ogg" | "oga" | "opus" => "audio/ogg",
         "pdf" => "application/pdf",
-        "txt" | "md" | "log" | "csv" | "json" | "yml" | "yaml" | "toml" | "ini" | "conf"
-        | "cfg" | "env" | "xml" | "html" | "htm" | "css" | "js" | "ts" | "rs" | "py" | "sh"
-        | "go" | "c" | "h" | "cpp" | "java" | "sql" => "text/plain; charset=utf-8",
+        "txt" | "md" | "log" | "csv" | "json" | "yml" | "yaml" | "toml" | "ini" | "conf" | "cfg" | "env" | "xml" | "html"
+        | "htm" | "css" | "js" | "ts" | "rs" | "py" | "sh" | "go" | "c" | "h" | "cpp" | "java" | "sql" => {
+            "text/plain; charset=utf-8"
+        }
         _ => return None,
     })
 }
@@ -147,27 +122,15 @@ pub async fn upload_handler(Query(q): Query<UploadQuery>, mut multipart: Multipa
                 break;
             }
         };
-        let Some(name) = field
-            .file_name()
-            .map(str::to_string)
-            .filter(|n| !n.is_empty())
-        else {
-            continue;
-        };
+        let Some(name) = field.file_name().map(str::to_string).filter(|n| !n.is_empty()) else { continue };
         let name = name.rsplit(['/', '\\']).next().unwrap_or(&name).to_string();
         let target = format!("{dir}/{name}");
 
         // Pump the multipart field into a channel that feeds the upstream request body.
         let (tx, rx) = tokio::sync::mpsc::channel::<Result<Bytes, std::io::Error>>(8);
-        let body_stream = futures::stream::unfold(rx, |mut rx| async move {
-            rx.recv().await.map(|item| (item, rx))
-        });
+        let body_stream = futures::stream::unfold(rx, |mut rx| async move { rx.recv().await.map(|item| (item, rx)) });
         let request = http()
-            .post(format!(
-                "{}/mcp/files/upload?path={}",
-                cfg.url,
-                enc(&target)
-            ))
+            .post(format!("{}/mcp/files/upload?path={}", cfg.url, enc(&target)))
             .bearer_auth(&cfg.token)
             .body(reqwest::Body::wrap_stream(body_stream))
             .send();
@@ -193,10 +156,7 @@ pub async fn upload_handler(Query(q): Query<UploadQuery>, mut multipart: Multipa
             Ok(r) => {
                 let status = r.status();
                 let text = r.text().await.unwrap_or_default();
-                errors.push(format!(
-                    "{name}: HTTP {status} {}",
-                    text.chars().take(200).collect::<String>()
-                ));
+                errors.push(format!("{name}: HTTP {status} {}", text.chars().take(200).collect::<String>()));
             }
             Err(e) => errors.push(format!("{name}: {e}")),
         }
@@ -207,13 +167,9 @@ pub async fn upload_handler(Query(q): Query<UploadQuery>, mut multipart: Multipa
     } else {
         format!("{ok} hochgeladen, Fehler: {}", errors.join("; "))
     };
-    Redirect::to(&format!(
-        "/?w=files&path={}&msg={}",
-        enc(if dir.is_empty() { "/" } else { &dir }),
-        enc(&msg)
-    ))
-    .into_response()
+    Redirect::to(&format!("/?w=files&path={}&msg={}", enc(if dir.is_empty() { "/" } else { &dir }), enc(&msg))).into_response()
 }
+
 
 #[derive(Deserialize)]
 pub struct RawUploadQuery {
@@ -222,12 +178,7 @@ pub struct RawUploadQuery {
 
 /// Plain-text error response the UI shows as-is.
 fn fail(status: StatusCode, msg: impl Into<String>) -> Response {
-    (
-        status,
-        [(header::CONTENT_TYPE, "text/plain; charset=utf-8")],
-        msg.into(),
-    )
-        .into_response()
+    (status, [(header::CONTENT_TYPE, "text/plain; charset=utf-8")], msg.into()).into_response()
 }
 
 /// Checks a virtual umbrelOS target path (`/Home/a/b.txt`).
@@ -235,10 +186,7 @@ fn valid_target(path: &str) -> bool {
     path.starts_with('/')
         && !path.ends_with('/')
         && !path.contains('\\')
-        && path
-            .split('/')
-            .skip(1)
-            .all(|seg| !seg.is_empty() && seg != "." && seg != "..")
+        && path.split('/').skip(1).all(|seg| !seg.is_empty() && seg != "." && seg != "..")
         && path.split('/').count() >= 3
 }
 
@@ -251,18 +199,11 @@ pub async fn upload_raw_handler(Query(q): Query<RawUploadQuery>, body: Body) -> 
     }
     let target = q.path.trim().to_string();
     if !valid_target(&target) {
-        return fail(
-            StatusCode::BAD_REQUEST,
-            format!("Ungültiger Zielpfad: {target}"),
-        );
+        return fail(StatusCode::BAD_REQUEST, format!("Ungültiger Zielpfad: {target}"));
     }
     let name = target.rsplit('/').next().unwrap_or_default().to_string();
     let res = http()
-        .post(format!(
-            "{}/mcp/files/upload?path={}",
-            cfg.url,
-            enc(&target)
-        ))
+        .post(format!("{}/mcp/files/upload?path={}", cfg.url, enc(&target)))
         .bearer_auth(&cfg.token)
         .body(reqwest::Body::wrap_stream(body.into_data_stream()))
         .send()
@@ -270,12 +211,7 @@ pub async fn upload_raw_handler(Query(q): Query<RawUploadQuery>, body: Body) -> 
     match res {
         Ok(r) if r.status().is_success() => {
             let text = r.text().await.unwrap_or_default();
-            (
-                StatusCode::OK,
-                [(header::CONTENT_TYPE, "application/json")],
-                text,
-            )
-                .into_response()
+            (StatusCode::OK, [(header::CONTENT_TYPE, "application/json")], text).into_response()
         }
         Ok(r) => {
             let status = r.status().as_u16();
@@ -284,22 +220,14 @@ pub async fn upload_raw_handler(Query(q): Query<RawUploadQuery>, body: Body) -> 
             if status == 409 || lower.contains("exist") || lower.contains("conflict") {
                 return fail(
                     StatusCode::CONFLICT,
-                    format!(
-                        "„{name}“ existiert hier bereits – umbrelOS überschreibt keine Dateien. Bitte die vorhandene Datei umbenennen oder in den Papierkorb legen."
-                    ),
+                    format!("„{name}“ existiert hier bereits – umbrelOS überschreibt keine Dateien. Bitte die vorhandene Datei umbenennen oder in den Papierkorb legen."),
                 );
             }
             let detail = upstream_message(&text);
             let code = StatusCode::from_u16(status).unwrap_or(StatusCode::BAD_GATEWAY);
-            fail(
-                code,
-                format!("Hochladen von „{name}“ fehlgeschlagen (HTTP {status}){detail}"),
-            )
+            fail(code, format!("Hochladen von „{name}“ fehlgeschlagen (HTTP {status}){detail}"))
         }
-        Err(e) => fail(
-            StatusCode::BAD_GATEWAY,
-            format!("Umbrel nicht erreichbar: {e}"),
-        ),
+        Err(e) => fail(StatusCode::BAD_GATEWAY, format!("Umbrel nicht erreichbar: {e}")),
     }
 }
 
@@ -308,29 +236,19 @@ fn upstream_message(text: &str) -> String {
     let msg = serde_json::from_str::<serde_json::Value>(text)
         .ok()
         .and_then(|v| {
-            v.get("error").or_else(|| v.get("message")).and_then(|m| {
-                m.as_str().map(str::to_string).or_else(|| {
-                    m.get("message")
-                        .and_then(|x| x.as_str())
-                        .map(str::to_string)
-                })
-            })
+            v.get("error")
+                .or_else(|| v.get("message"))
+                .and_then(|m| m.as_str().map(str::to_string).or_else(|| m.get("message").and_then(|x| x.as_str()).map(str::to_string)))
         })
         .unwrap_or_else(|| text.trim().chars().take(200).collect());
-    if msg.is_empty() {
-        String::new()
-    } else {
-        format!(": {msg}")
-    }
+    if msg.is_empty() { String::new() } else { format!(": {msg}") }
 }
 
 /// Extra HTTP routes of the file manager (merged into the main router, behind the auth middleware).
 pub fn routes() -> axum::Router {
     use axum::routing::post;
-    axum::Router::new().route(
-        "/files/upload-raw",
-        post(upload_raw_handler).layer(axum::extract::DefaultBodyLimit::disable()),
-    )
+    axum::Router::new()
+        .route("/files/upload-raw", post(upload_raw_handler).layer(axum::extract::DefaultBodyLimit::disable()))
 }
 
 #[cfg(test)]
@@ -369,10 +287,7 @@ pub async fn read_text_file(path: &str) -> Result<crate::api::files::TextFile, S
         .await
         .map_err(|e| format!("Umbrel nicht erreichbar: {e}"))?;
     if !res.status().is_success() {
-        return Err(format!(
-            "Datei konnte nicht geladen werden (HTTP {})",
-            res.status()
-        ));
+        return Err(format!("Datei konnte nicht geladen werden (HTTP {})", res.status()));
     }
     let mut buf: Vec<u8> = Vec::new();
     while let Some(chunk) = res.chunk().await.map_err(|e| e.to_string())? {
@@ -382,68 +297,38 @@ pub async fn read_text_file(path: &str) -> Result<crate::api::files::TextFile, S
         }
     }
     if buf.iter().take(8000).any(|b| *b == 0) {
-        return Err(
-            "Das ist keine Textdatei (Binärdaten) – sie kann nicht im Editor geöffnet werden."
-                .into(),
-        );
+        return Err("Das ist keine Textdatei (Binärdaten) – sie kann nicht im Editor geöffnet werden.".into());
     }
     let size = buf.len() as u64;
-    let content = String::from_utf8(buf)
-        .unwrap_or_else(|e| String::from_utf8_lossy(e.as_bytes()).into_owned());
+    let content = String::from_utf8(buf).unwrap_or_else(|e| String::from_utf8_lossy(e.as_bytes()).into_owned());
     Ok(crate::api::files::TextFile { content, size })
 }
 
 /// Uploads bytes; `Ok(Some(path))` on success, `Ok(None)` when the destination already exists.
-async fn upload_bytes(
-    path: &str,
-    data: Vec<u8>,
-    keep_both: bool,
-) -> Result<Option<String>, String> {
+async fn upload_bytes(path: &str, data: Vec<u8>, keep_both: bool) -> Result<Option<String>, String> {
     let cfg = settings::umbrel();
     let mut url = format!("{}/mcp/files/upload?path={}", cfg.url, enc(path));
     if keep_both {
         url.push_str("&collision=keep-both");
     }
-    let res = http()
-        .post(url)
-        .bearer_auth(&cfg.token)
-        .body(data)
-        .send()
-        .await
-        .map_err(|e| format!("Umbrel nicht erreichbar: {e}"))?;
+    let res = http().post(url).bearer_auth(&cfg.token).body(data).send().await.map_err(|e| format!("Umbrel nicht erreichbar: {e}"))?;
     let status = res.status();
     let v: serde_json::Value = res.json().await.unwrap_or_default();
     if status.is_success() {
-        return Ok(Some(
-            v.get("path")
-                .and_then(serde_json::Value::as_str)
-                .unwrap_or(path)
-                .to_string(),
-        ));
+        return Ok(Some(v.get("path").and_then(serde_json::Value::as_str).unwrap_or(path).to_string()));
     }
-    let msg = v
-        .get("error")
-        .and_then(serde_json::Value::as_str)
-        .unwrap_or_default()
-        .to_string();
+    let msg = v.get("error").and_then(serde_json::Value::as_str).unwrap_or_default().to_string();
     if msg.contains("already-exists") {
         return Ok(None);
     }
-    Err(if msg.is_empty() {
-        format!("Speichern fehlgeschlagen (HTTP {status})")
-    } else {
-        format!("Speichern fehlgeschlagen: {msg}")
-    })
+    Err(if msg.is_empty() { format!("Speichern fehlgeschlagen (HTTP {status})") } else { format!("Speichern fehlgeschlagen: {msg}") })
 }
 
 fn is_internal(path: &str) -> bool {
     path.starts_with("/Home/") || path.starts_with("/Apps/")
 }
 
-pub async fn save_text_file(
-    path: &str,
-    content: String,
-) -> Result<crate::api::files::SavedText, String> {
+pub async fn save_text_file(path: &str, content: String) -> Result<crate::api::files::SavedText, String> {
     use crate::api::files::SavedText;
     let (dir, name) = path.rsplit_once('/').ok_or("Ungültiger Pfad")?;
     if name.is_empty() {
@@ -452,26 +337,16 @@ pub async fn save_text_file(
     let data = content.into_bytes();
     // New file: plain upload.
     if let Some(p) = upload_bytes(path, data.clone(), false).await? {
-        return Ok(SavedText {
-            path: p,
-            copied: false,
-        });
+        return Ok(SavedText { path: p, copied: false });
     }
     if !is_internal(path) {
-        let p = upload_bytes(path, data, true)
-            .await?
-            .ok_or("Speichern fehlgeschlagen")?;
-        return Ok(SavedText {
-            path: p,
-            copied: true,
-        });
+        let p = upload_bytes(path, data, true).await?.ok_or("Speichern fehlgeschlagen")?;
+        return Ok(SavedText { path: p, copied: true });
     }
     // Internal storage: temp file → old version to Trash → rename.
     let tmp_name = format!(".{name}.nrzedit-{}", super::auth::random_token(4));
     let tmp = format!("{dir}/{tmp_name}");
-    upload_bytes(&tmp, data, false)
-        .await?
-        .ok_or("Temporäre Datei konnte nicht angelegt werden")?;
+    upload_bytes(&tmp, data, false).await?.ok_or("Temporäre Datei konnte nicht angelegt werden")?;
     if let Err(e) = super::mcp::call("trash", serde_json::json!({ "path": path })).await {
         let _ = super::mcp::call("trash", serde_json::json!({ "path": tmp })).await;
         return Err(format!("Alte Version konnte nicht in den Papierkorb: {e}"));
@@ -479,8 +354,5 @@ pub async fn save_text_file(
     super::mcp::call("rename", serde_json::json!({ "path": tmp, "name": name }))
         .await
         .map_err(|e| format!("Gespeichert als {tmp_name}, Umbenennen fehlgeschlagen: {e}"))?;
-    Ok(SavedText {
-        path: path.to_string(),
-        copied: false,
-    })
+    Ok(SavedText { path: path.to_string(), copied: false })
 }

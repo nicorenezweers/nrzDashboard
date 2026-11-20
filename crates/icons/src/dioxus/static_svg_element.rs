@@ -13,14 +13,7 @@ impl StaticSvgElement {
             StaticSvgElement::Circle { cx, cy, r } => rsx! {
                 circle { cx: *cx, cy: *cy, r: *r }
             },
-            StaticSvgElement::Rect {
-                x,
-                y,
-                width,
-                height,
-                rx,
-                ry,
-            } => match (rx, ry) {
+            StaticSvgElement::Rect { x, y, width, height, rx, ry } => match (rx, ry) {
                 (Some(rx), Some(ry)) => rsx! {
                     rect {
                         x: *x,

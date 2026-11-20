@@ -77,10 +77,7 @@ pub fn router(app: fn() -> dioxus::prelude::Element) -> axum::Router {
     dioxus::server::router(app)
         .route("/auth/login", post(auth::login_handler))
         .route("/auth/code", post(auth::code_handler))
-        .route(
-            "/auth/logout",
-            get(auth::logout_handler).post(auth::logout_handler),
-        )
+        .route("/auth/logout", get(auth::logout_handler).post(auth::logout_handler))
         .route("/files/download", get(files::download_handler))
         .route(
             "/files/upload",

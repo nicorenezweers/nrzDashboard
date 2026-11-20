@@ -38,14 +38,8 @@ fn join() {
     assert_eq!(tw_join!("a", "b", "c", "d", "e"), "a b c d e");
     assert_eq!(tw_join!("a", "b", "c", "d", "e", "f"), "a b c d e f");
 
-    assert_eq!(
-        tw_join!(" one", "two ", " three".to_string()),
-        "one two three"
-    );
+    assert_eq!(tw_join!(" one", "two ", " three".to_string()), "one two three");
     assert_eq!(tw_join!("a", "    ", "b", "c", " "), "a b c");
 
-    assert_eq!(
-        tw_join!("a", (false).then_some("b"), (true).then_some("c")),
-        "a c"
-    )
+    assert_eq!(tw_join!("a", (false).then_some("b"), (true).then_some("c")), "a c")
 }

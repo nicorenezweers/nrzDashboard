@@ -7,8 +7,8 @@ use icons::{Check, Eye, Globe, KeyRound, Link, ShieldCheck, User};
 use super::{AppIcon, HomeCtx, HomeWindow};
 use crate::api::apps::app_set_hidden;
 use crate::api::settings::{
-    SettingsView, TotpSetup, password_change, settings_save_general, settings_save_monitor,
-    settings_save_network, settings_save_umbrel, totp_begin, totp_disable, totp_enable,
+    SettingsView, TotpSetup, password_change, settings_save_general, settings_save_monitor, settings_save_network, settings_save_umbrel, totp_begin, totp_disable,
+    totp_enable,
 };
 use crate::utils::err_msg;
 
@@ -41,12 +41,7 @@ pub fn SettingsWindow() -> Element {
 }
 
 #[component]
-fn Section(
-    icon: Element,
-    title: String,
-    #[props(default)] hint: String,
-    children: Element,
-) -> Element {
+fn Section(icon: Element, title: String, #[props(default)] hint: String, children: Element) -> Element {
     rsx! {
         section { class: "rounded-3xl bg-white/[0.05] p-5 md:p-6",
             h3 { class: "flex items-center gap-2.5 text-lg font-semibold [&_svg]:size-5 [&_svg]:text-white/60", {icon} "{title}" }
@@ -79,10 +74,7 @@ fn General(s: SettingsView) -> Element {
         mode.set(m.clone());
         spawn(async move {
             let r = settings_save_general(name(), m).await;
-            msg.set(Some(
-                r.map(|_| "Gespeichert".to_string())
-                    .map_err(|e| err_msg(&e)),
-            ));
+            msg.set(Some(r.map(|_| "Gespeichert".to_string()).map_err(|e| err_msg(&e))));
             ctx.reload();
         });
     };

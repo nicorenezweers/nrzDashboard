@@ -52,23 +52,14 @@ pub fn CardTitle(#[props(into, optional)] class: Option<String>, children: Eleme
 
 #[component]
 pub fn CardContent(#[props(into, optional)] class: Option<String>, children: Element) -> Element {
-    let merged_class = tw_merge!(
-        "px-6 [[data-size=sm]_&]:px-4",
-        class.as_deref().unwrap_or("")
-    );
+    let merged_class = tw_merge!("px-6 [[data-size=sm]_&]:px-4", class.as_deref().unwrap_or(""));
 
     rsx! { div { "data-name": "CardContent", class: "{merged_class}", {children} } }
 }
 
 #[component]
-pub fn CardDescription(
-    #[props(into, optional)] class: Option<String>,
-    children: Element,
-) -> Element {
-    let merged_class = tw_merge!(
-        "text-muted-foreground text-sm",
-        class.as_deref().unwrap_or("")
-    );
+pub fn CardDescription(#[props(into, optional)] class: Option<String>, children: Element) -> Element {
+    let merged_class = tw_merge!("text-muted-foreground text-sm", class.as_deref().unwrap_or(""));
 
     rsx! { p { "data-name": "CardDescription", class: "{merged_class}", {children} } }
 }

@@ -15,9 +15,7 @@ const TEXTAREA_ID: &str = "fm-editor";
 #[component]
 pub fn EditorDialog() -> Element {
     let fm = use_context::<Fm>();
-    let Some(path) = fm.editor.read().clone() else {
-        return rsx! {};
-    };
+    let Some(path) = fm.editor.read().clone() else { return rsx! {} };
     rsx! { Editor { key: "{path}", path } }
 }
 
@@ -26,10 +24,7 @@ fn name_of(path: &str) -> String {
 }
 
 fn ext_of(path: &str) -> String {
-    name_of(path)
-        .rsplit_once('.')
-        .map(|(_, e)| e.to_ascii_lowercase())
-        .unwrap_or_default()
+    name_of(path).rsplit_once('.').map(|(_, e)| e.to_ascii_lowercase()).unwrap_or_default()
 }
 
 /// Inserts text at the cursor via the browser so undo/redo keeps working.
@@ -121,13 +116,11 @@ fn Editor(path: String) -> Element {
                     }
                     Ok(_) => {
                         original.set(text);
-                        fm.toast(
-                            if path.starts_with("/Home/") || path.starts_with("/Apps/") {
-                                "Gespeichert – die vorherige Version liegt im Papierkorb."
-                            } else {
-                                "Gespeichert."
-                            },
-                        );
+                        fm.toast(if path.starts_with("/Home/") || path.starts_with("/Apps/") {
+                            "Gespeichert – die vorherige Version liegt im Papierkorb."
+                        } else {
+                            "Gespeichert."
+                        });
                         fm.reload();
                     }
                     Err(e) => fm.toast_err(err_msg(&e)),

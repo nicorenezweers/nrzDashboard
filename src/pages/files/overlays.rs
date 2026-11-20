@@ -2,9 +2,8 @@
 
 use dioxus::prelude::*;
 use icons::{
-    ArrowUp, ChevronLeft, ChevronRight, ClipboardCopy, CloudUpload, Copy, Download, ExternalLink,
-    FileCode, Folder, FolderInput, FolderOpen, FolderPlus, LoaderCircle, Pencil, Star, StarOff,
-    Trash2, TriangleAlert, X,
+    ArrowUp, ChevronLeft, ChevronRight, ClipboardCopy, CloudUpload, Copy, Download, ExternalLink, FileCode, Folder, FolderInput,
+    FolderOpen, FolderPlus, LoaderCircle, Pencil, Star, StarOff, Trash2, TriangleAlert, X,
 };
 
 use super::items::{kind_icon, root_icon, root_label};
@@ -22,53 +21,30 @@ const MENU_ITEM: &str = "flex w-full items-center gap-3 rounded-md px-3 py-2.5 m
 #[component]
 pub fn ContextMenu() -> Element {
     let mut fm = use_context::<Fm>();
-    let Some(menu) = fm.menu.read().clone() else {
-        return rsx! {};
-    };
-    let Some(entry) = fm.find(&menu.path) else {
-        return rsx! {};
-    };
+    let Some(menu) = fm.menu.read().clone() else { return rsx! {} };
+    let Some(entry) = fm.find(&menu.path) else { return rsx! {} };
     let sel = fm.selection();
     let multi = sel.len() > 1 && sel.contains(&entry.path);
-    let targets = if multi {
-        sel.clone()
-    } else {
-        vec![entry.path.clone()]
-    };
+    let targets = if multi { sel.clone() } else { vec![entry.path.clone()] };
     let searching = fm.results.read().is_some() || *fm.path.read() == RECENT;
     let fav = (!multi && entry.is_dir()).then(|| fm.is_fav(&entry.path));
     let (vw, vh) = web::viewport();
     let sheet = *fm.touch.read() || vw < 768.0;
     let est_h = if multi { 200.0 } else { 370.0 };
     let x = menu.x.min(vw - 236.0).max(8.0);
-    let y = if menu.y + est_h > vh {
-        (menu.y - est_h).max(8.0)
-    } else {
-        menu.y
-    };
-    let has_files = targets
-        .iter()
-        .any(|p| fm.find(p).is_none_or(|e| !e.is_dir()));
+    let y = if menu.y + est_h > vh { (menu.y - est_h).max(8.0) } else { menu.y };
+    let has_files = targets.iter().any(|p| fm.find(p).is_none_or(|e| !e.is_dir()));
 
     let mut close = move || fm.menu.set(None);
     let e_open = entry.clone();
-    let (t_dl, t_mv, t_cp, t_tr) = (
-        targets.clone(),
-        targets.clone(),
-        targets.clone(),
-        targets.clone(),
-    );
+    let (t_dl, t_mv, t_cp, t_tr) = (targets.clone(), targets.clone(), targets.clone(), targets.clone());
     let p_ren = entry.path.clone();
     let p_copy = entry.path.clone();
     let p_reveal = entry.path.clone();
     let p_tab = entry.path.clone();
     let p_edit = entry.path.clone();
     let p_fav = entry.path.clone();
-    let title = if multi {
-        format!("{} Elemente", targets.len())
-    } else {
-        entry.name.clone()
-    };
+    let title = if multi { format!("{} Elemente", targets.len()) } else { entry.name.clone() };
 
     rsx! {
         div {
@@ -145,27 +121,15 @@ pub fn ContextMenu() -> Element {
 #[component]
 pub fn PreviewDialog() -> Element {
     let mut fm = use_context::<Fm>();
-    let Some(path) = fm.preview.read().clone() else {
-        return rsx! {};
-    };
+    let Some(path) = fm.preview.read().clone() else { return rsx! {} };
     let list = fm.preview_list();
-    let Some(entry) = fm.find(&path) else {
-        return rsx! {};
-    };
-    let idx = list
-        .iter()
-        .position(|e| e.path == path)
-        .map(|i| i + 1)
-        .unwrap_or(0);
+    let Some(entry) = fm.find(&path) else { return rsx! {} };
+    let idx = list.iter().position(|e| e.path == path).map(|i| i + 1).unwrap_or(0);
     let total = list.len();
     let kind = logic::kind_of(&entry);
     let src = inline_url(&entry);
     let dl = download_url(&path);
-    let meta = [entry.size.map(fmt_bytes), entry.modified.map(fmt_time_ms)]
-        .into_iter()
-        .flatten()
-        .collect::<Vec<_>>()
-        .join(" · ");
+    let meta = [entry.size.map(fmt_bytes), entry.modified.map(fmt_time_ms)].into_iter().flatten().collect::<Vec<_>>().join(" · ");
     let p_dl = path.clone();
 
     rsx! {
@@ -230,9 +194,7 @@ pub fn PreviewDialog() -> Element {
 
 #[component]
 fn TextPreview(path: String) -> Element {
-    let text = use_resource(use_reactive!(|path| async move {
-        read_text(path).await.map_err(|e| err_msg(&e))
-    }));
+    let text = use_resource(use_reactive!(|path| async move { read_text(path).await.map_err(|e| err_msg(&e)) }));
     rsx! {
         div { class: "h-[calc(100dvh-8rem)] w-[min(64rem,95vw)] overflow-auto rounded-md border bg-card",
             match &*text.read() {
@@ -253,9 +215,7 @@ fn TextPreview(path: String) -> Element {
 #[component]
 pub fn FolderPicker() -> Element {
     let fm = use_context::<Fm>();
-    let Some(state) = fm.picker.read().clone() else {
-        return rsx! {};
-    };
+    let Some(state) = fm.picker.read().clone() else { return rsx! {} };
     rsx! { PickerInner { key: "{state.paths.join(\"|\")}", state } }
 }
 
@@ -263,22 +223,14 @@ pub fn FolderPicker() -> Element {
 fn PickerInner(state: PickerState) -> Element {
     let mut fm = use_context::<Fm>();
     let start = fm.path.peek().clone();
-    let mut at = use_signal(move || {
-        if start == "/" {
-            "/Home".to_string()
-        } else {
-            start
-        }
-    });
+    let mut at = use_signal(move || if start == "/" { "/Home".to_string() } else { start });
     let listing = use_resource(move || async move {
         let p = at();
         let mut dirs = Vec::new();
         let mut last = None;
         // Folders only; walk a few pages so big folders still show their subfolders.
         for _ in 0..5 {
-            let l = list_dir(p.clone(), last.clone())
-                .await
-                .map_err(|e| err_msg(&e))?;
+            let l = list_dir(p.clone(), last.clone()).await.map_err(|e| err_msg(&e))?;
             last = l.files.last().map(|f| f.name.clone());
             dirs.extend(l.files.into_iter().filter(|f| f.is_dir()));
             if !l.has_more {
@@ -294,16 +246,8 @@ fn PickerInner(state: PickerState) -> Element {
         PickOp::Move => logic::can_move_into(&state.paths, &here),
         PickOp::Copy => here != "/",
     };
-    let verb = if state.op == PickOp::Move {
-        "verschieben"
-    } else {
-        "kopieren"
-    };
-    let count = if state.paths.len() == 1 {
-        format!("„{}“", logic::name_of(&state.paths[0]))
-    } else {
-        format!("{} Elemente", state.paths.len())
-    };
+    let verb = if state.op == PickOp::Move { "verschieben" } else { "kopieren" };
+    let count = if state.paths.len() == 1 { format!("„{}“", logic::name_of(&state.paths[0])) } else { format!("{} Elemente", state.paths.len()) };
     let paths = state.paths.clone();
     let op = state.op;
 
@@ -433,20 +377,10 @@ pub fn SelectionBar() -> Element {
         return rsx! {};
     }
     let all = fm.visible().len();
-    let single_dir = if count == 1 {
-        fm.selection()
-            .pop()
-            .filter(|p| fm.find(p).is_some_and(|e| e.is_dir()))
-    } else {
-        None
-    };
+    let single_dir = if count == 1 { fm.selection().pop().filter(|p| fm.find(p).is_some_and(|e| e.is_dir())) } else { None };
     let is_fav = single_dir.as_deref().is_some_and(|p| fm.is_fav(p));
     let btn = "flex min-w-14 flex-col items-center gap-0.5 rounded-lg px-2 py-1.5 text-[11px] hover:bg-accent disabled:opacity-40 md:flex-row md:gap-2 md:px-3 md:text-sm";
-    let label = if count == 1 {
-        "1 ausgewählt".to_string()
-    } else {
-        format!("{count} ausgewählt")
-    };
+    let label = if count == 1 { "1 ausgewählt".to_string() } else { format!("{count} ausgewählt") };
     rsx! {
         div { class: "pointer-events-none fixed inset-x-0 bottom-[calc(1.5rem+env(safe-area-inset-bottom,0px))] z-30 flex justify-center px-2 md:bottom-6",
             div { class: "pointer-events-auto flex max-w-full items-center gap-1 overflow-x-auto rounded-2xl border bg-popover p-1.5 shadow-2xl",
@@ -516,11 +450,7 @@ pub fn DropOverlay() -> Element {
         return rsx! {};
     }
     let path = fm.path.read().clone();
-    let target = fm
-        .drop_target
-        .read()
-        .clone()
-        .unwrap_or_else(|| path.clone());
+    let target = fm.drop_target.read().clone().unwrap_or_else(|| path.clone());
     let can = target != "/";
     rsx! {
         div { class: "pointer-events-none fixed inset-0 z-40 flex items-end justify-center bg-primary/5 p-6 pb-24 md:items-center md:pb-6",

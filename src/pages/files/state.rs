@@ -21,12 +21,7 @@ pub const KEY_RECENT: &str = "nrz.files.recent";
 pub const RECENT: &str = "recent";
 const RECENT_MAX: usize = 40;
 /// Favourites until the user changes them (only shown if they exist in /Home).
-const DEFAULT_FAVS: [&str; 4] = [
-    "/Home/Downloads",
-    "/Home/Documents",
-    "/Home/Photos",
-    "/Home/Videos",
-];
+const DEFAULT_FAVS: [&str; 4] = ["/Home/Downloads", "/Home/Documents", "/Home/Photos", "/Home/Videos"];
 
 #[derive(Clone, PartialEq, Debug)]
 pub struct MenuState {
@@ -59,11 +54,7 @@ pub fn download_url(path: &str) -> String {
 }
 
 pub fn inline_url(e: &FileEntry) -> String {
-    format!(
-        "/files/download?path={}&inline=1&v={}",
-        enc(&e.path),
-        e.modified.unwrap_or(0.0) as u64
-    )
+    format!("/files/download?path={}&inline=1&v={}", enc(&e.path), e.modified.unwrap_or(0.0) as u64)
 }
 
 #[derive(Clone, Copy)]
@@ -176,12 +167,7 @@ impl Fm {
             self.sort.set(s);
         }
         if let Some(f) = web::store_get(KEY_FAVS) {
-            self.favs.set(Some(
-                f.lines()
-                    .filter(|l| l.starts_with('/'))
-                    .map(str::to_string)
-                    .collect(),
-            ));
+            self.favs.set(Some(f.lines().filter(|l| l.starts_with('/')).map(str::to_string).collect()));
         }
         self.touch.set(web::is_touch());
         web::focus("fm-root");
@@ -196,9 +182,7 @@ impl Fm {
     /// Loads the locations of the sidebar (top level, /Home, drives, network shares).
     pub fn load_sidebar(mut self) {
         self.spawn(async move {
-            let Ok(l) = list_dir("/".into(), None).await else {
-                return;
-            };
+            let Ok(l) = list_dir("/".into(), None).await else { return };
             let roots: Vec<FileEntry> = l.files.into_iter().filter(|f| f.is_dir()).collect();
             let has = |p: &str| roots.iter().any(|r| r.path == p);
             let (h, x, n) = (has("/Home"), has("/External"), has("/Network"));
@@ -279,11 +263,7 @@ impl Fm {
             Some(f) => f.clone(),
             None => {
                 let home = self.home_dirs.read();
-                DEFAULT_FAVS
-                    .iter()
-                    .filter(|p| home.iter().any(|d| d.path == **p))
-                    .map(|p| p.to_string())
-                    .collect()
+                DEFAULT_FAVS.iter().filter(|p| home.iter().any(|d| d.path == **p)).map(|p| p.to_string()).collect()
             }
         }
     }
@@ -308,11 +288,7 @@ impl Fm {
         }
         if added > 0 {
             self.set_favs(list);
-            self.toast(if added == 1 {
-                "Zu Favoriten hinzugefügt".to_string()
-            } else {
-                format!("{added} Ordner zu Favoriten hinzugefügt")
-            });
+            self.toast(if added == 1 { "Zu Favoriten hinzugefügt".to_string() } else { format!("{added} Ordner zu Favoriten hinzugefügt") });
         }
     }
 
@@ -332,19 +308,13 @@ impl Fm {
     }
 
     pub fn toggle_fav(self, path: &str) {
-        if self.is_fav(path) {
-            self.remove_fav(path)
-        } else {
-            self.add_favs(vec![path.to_string()])
-        }
+        if self.is_fav(path) { self.remove_fav(path) } else { self.add_favs(vec![path.to_string()]) }
     }
 
     // ---------- recent files ----------
 
     fn recent_list() -> Vec<FileEntry> {
-        web::store_get(KEY_RECENT)
-            .and_then(|s| serde_json::from_str(&s).ok())
-            .unwrap_or_default()
+        web::store_get(KEY_RECENT).and_then(|s| serde_json::from_str(&s).ok()).unwrap_or_default()
     }
 
     fn store_recent(list: &[FileEntry]) {
@@ -440,8 +410,7 @@ impl Fm {
                     self.error.set(None);
                     if self.results.peek().is_none() {
                         let keep: BTreeSet<String> = all.iter().map(|e| e.path.clone()).collect();
-                        let pruned: BTreeSet<String> =
-                            self.selected.peek().intersection(&keep).cloned().collect();
+                        let pruned: BTreeSet<String> = self.selected.peek().intersection(&keep).cloned().collect();
                         if pruned.len() != self.selected.peek().len() {
                             self.selected.set(pruned);
                         }
@@ -464,9 +433,7 @@ impl Fm {
         if !*self.has_more.peek() || *self.loading_more.peek() || self.results.peek().is_some() {
             return;
         }
-        let Some(last) = self.entries.peek().last().map(|e| e.name.clone()) else {
-            return;
-        };
+        let Some(last) = self.entries.peek().last().map(|e| e.name.clone()) else { return };
         self.loading_more.set(true);
         let path = self.path.peek().clone();
         let generation = *self.generation.peek();
@@ -531,12 +498,7 @@ impl Fm {
     }
 
     pub fn find(self, path: &str) -> Option<FileEntry> {
-        let in_results = self
-            .results
-            .peek()
-            .as_ref()
-            .and_then(|r| r.as_ref().ok())
-            .and_then(|r| r.iter().find(|e| e.path == path).cloned());
+        let in_results = self.results.peek().as_ref().and_then(|r| r.as_ref().ok()).and_then(|r| r.iter().find(|e| e.path == path).cloned());
         in_results.or_else(|| self.entries.peek().iter().find(|e| e.path == path).cloned())
     }
 
@@ -558,9 +520,7 @@ impl Fm {
             if *self.search_gen.peek() != generation {
                 return;
             }
-            let r = search_files(q.trim().to_string())
-                .await
-                .map_err(|e| err_msg(&e));
+            let r = search_files(q.trim().to_string()).await.map_err(|e| err_msg(&e));
             if *self.search_gen.peek() == generation {
                 self.selected.set(BTreeSet::new());
                 self.results.set(Some(r));
@@ -624,11 +584,7 @@ impl Fm {
             let order: Vec<String> = self.visible().into_iter().map(|e| e.path).collect();
             let anchor = self.anchor.peek().clone();
             let r = logic::range(&order, anchor.as_deref(), &path);
-            let mut sel: BTreeSet<String> = if toggle_mod {
-                self.selected.peek().clone()
-            } else {
-                BTreeSet::new()
-            };
+            let mut sel: BTreeSet<String> = if toggle_mod { self.selected.peek().clone() } else { BTreeSet::new() };
             sel.extend(r);
             self.selected.set(sel);
         } else if toggle_mod {
@@ -644,11 +600,7 @@ impl Fm {
         if order.is_empty() {
             return;
         }
-        let cur = self
-            .anchor
-            .peek()
-            .clone()
-            .and_then(|a| order.iter().position(|p| *p == a));
+        let cur = self.anchor.peek().clone().and_then(|a| order.iter().position(|p| *p == a));
         let next = match cur {
             Some(i) => (i as i64 + delta).clamp(0, order.len() as i64 - 1) as usize,
             None => 0,
@@ -675,17 +627,12 @@ impl Fm {
 
     /// Files the preview can page through (display order).
     pub fn preview_list(self) -> Vec<FileEntry> {
-        self.visible()
-            .into_iter()
-            .filter(|e| logic::previewable(logic::kind_of(e)))
-            .collect()
+        self.visible().into_iter().filter(|e| logic::previewable(logic::kind_of(e))).collect()
     }
 
     pub fn preview_step(mut self, delta: i64) {
         let list = self.preview_list();
-        let Some(cur) = self.preview.peek().clone() else {
-            return;
-        };
+        let Some(cur) = self.preview.peek().clone() else { return };
         if let Some(i) = list.iter().position(|e| e.path == cur) {
             let n = list.len() as i64;
             let j = ((i as i64 + delta) % n + n) % n;
@@ -728,11 +675,7 @@ impl Fm {
             match fs_batch(op.to_string(), paths, arg.clone()).await {
                 Ok((ok, errors)) => {
                     if ok > 0 {
-                        let what = if ok == 1 {
-                            "1 Element".to_string()
-                        } else {
-                            format!("{ok} Elemente")
-                        };
+                        let what = if ok == 1 { "1 Element".to_string() } else { format!("{ok} Elemente") };
                         let target = logic::name_of(&arg);
                         self.toast(match op {
                             "move" => format!("{what} nach „{target}“ verschoben"),
@@ -792,11 +735,7 @@ impl Fm {
                     let new_path = logic::join(&logic::parent(&path), &name);
                     self.forget(std::slice::from_ref(&path), Some(&new_path));
                     if self.is_fav(&path) {
-                        let list = self
-                            .fav_list()
-                            .into_iter()
-                            .map(|p| if p == path { new_path.clone() } else { p })
-                            .collect();
+                        let list = self.fav_list().into_iter().map(|p| if p == path { new_path.clone() } else { p }).collect();
                         self.set_favs(list);
                     }
                     self.select_only(&new_path);
@@ -829,9 +768,7 @@ impl Fm {
     }
 
     pub fn download(self, paths: Vec<String>) {
-        let (dirs, files): (Vec<String>, Vec<String>) = paths
-            .into_iter()
-            .partition(|p| self.find(p).is_some_and(|e| e.is_dir()));
+        let (dirs, files): (Vec<String>, Vec<String>) = paths.into_iter().partition(|p| self.find(p).is_some_and(|e| e.is_dir()));
         let skipped = dirs.len();
         if files.is_empty() {
             self.toast_err("Ordner können nicht als Ganzes heruntergeladen werden");
@@ -869,11 +806,7 @@ impl Fm {
     // ---------- drag & drop ----------
 
     pub fn start_drag(mut self, path: &str) {
-        let paths = if self.selected.peek().contains(path) {
-            self.selection()
-        } else {
-            vec![path.to_string()]
-        };
+        let paths = if self.selected.peek().contains(path) { self.selection() } else { vec![path.to_string()] };
         if !self.selected.peek().contains(path) {
             self.select_only(path);
         }
@@ -897,14 +830,7 @@ impl Fm {
         if self.can_drop(dir, e) {
             e.prevent_default();
             e.stop_propagation();
-            web::set_drop_effect(
-                e,
-                if self.drag.peek().is_some() {
-                    "move"
-                } else {
-                    "copy"
-                },
-            );
+            web::set_drop_effect(e, if self.drag.peek().is_some() { "move" } else { "copy" });
             if self.drop_target.peek().as_deref() != Some(dir) {
                 self.drop_target.set(Some(dir.to_string()));
             }

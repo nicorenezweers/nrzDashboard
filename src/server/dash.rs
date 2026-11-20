@@ -56,22 +56,14 @@ fn file() -> std::path::PathBuf {
 }
 
 fn read_json(name: &str) -> Option<Value> {
-    std::fs::read_to_string(config().data_dir.join(name))
-        .ok()
-        .and_then(|s| serde_json::from_str(&s).ok())
+    std::fs::read_to_string(config().data_dir.join(name)).ok().and_then(|s| serde_json::from_str(&s).ok())
 }
 
 /// First start after the update: take nrzDNS connection and hidden apps from the old files.
 fn migrate(d: &mut Dash) {
     if d.network_url.is_empty() || d.network_token.is_empty() {
         let old = read_json("integrations.json").and_then(|v| v.get("dns").cloned());
-        let s = |k: &str| {
-            old.as_ref()
-                .and_then(|o| o.get(k))
-                .and_then(Value::as_str)
-                .unwrap_or_default()
-                .to_string()
-        };
+        let s = |k: &str| old.as_ref().and_then(|o| o.get(k)).and_then(Value::as_str).unwrap_or_default().to_string();
         if d.network_url.is_empty() {
             d.network_url = Some(s("url"))
                 .filter(|u| !u.is_empty())
@@ -79,10 +71,7 @@ fn migrate(d: &mut Dash) {
                 .unwrap_or_else(|| DEFAULT_NETWORK_URL.into());
         }
         if d.network_token.is_empty() {
-            d.network_token = Some(s("token"))
-                .filter(|t| !t.is_empty())
-                .or_else(|| env("NRZDNS_MCP_TOKEN"))
-                .unwrap_or_default();
+            d.network_token = Some(s("token")).filter(|t| !t.is_empty()).or_else(|| env("NRZDNS_MCP_TOKEN")).unwrap_or_default();
         }
     }
     if d.hidden.is_empty() {
@@ -99,10 +88,7 @@ fn migrate(d: &mut Dash) {
 fn store() -> &'static RwLock<Dash> {
     static S: OnceLock<RwLock<Dash>> = OnceLock::new();
     S.get_or_init(|| {
-        let mut d: Dash = std::fs::read_to_string(file())
-            .ok()
-            .and_then(|s| serde_json::from_str(&s).ok())
-            .unwrap_or_default();
+        let mut d: Dash = std::fs::read_to_string(file()).ok().and_then(|s| serde_json::from_str(&s).ok()).unwrap_or_default();
         migrate(&mut d);
         RwLock::new(d)
     })
@@ -121,8 +107,7 @@ pub fn update(f: impl FnOnce(&mut Dash)) -> Result<(), String> {
         let _ = std::fs::create_dir_all(dir);
     }
     let json = serde_json::to_string_pretty(&*cur).map_err(|e| e.to_string())?;
-    std::fs::write(&path, json)
-        .map_err(|e| format!("Konnte {} nicht schreiben: {e}", path.display()))?;
+    std::fs::write(&path, json).map_err(|e| format!("Konnte {} nicht schreiben: {e}", path.display()))?;
     #[cfg(unix)]
     {
         use std::os::unix::fs::PermissionsExt;
@@ -156,9 +141,7 @@ fn b32_decode(s: &str) -> Option<Vec<u8>> {
     let mut out = Vec::new();
     let (mut buf, mut bits) = (0u32, 0u32);
     for c in s.chars().filter(|c| !c.is_whitespace() && *c != '=') {
-        let v = B32
-            .iter()
-            .position(|&x| x as char == c.to_ascii_uppercase())? as u32;
+        let v = B32.iter().position(|&x| x as char == c.to_ascii_uppercase())? as u32;
         buf = (buf << 5) | v;
         bits += 5;
         if bits >= 8 {
@@ -179,16 +162,11 @@ pub fn new_secret() -> String {
 
 fn code_at(secret: &[u8], step: u64) -> u32 {
     use hmac::{Hmac, Mac};
-    let Ok(mut mac) = Hmac::<sha1::Sha1>::new_from_slice(secret) else {
-        return u32::MAX;
-    };
+    let Ok(mut mac) = Hmac::<sha1::Sha1>::new_from_slice(secret) else { return u32::MAX };
     mac.update(&step.to_be_bytes());
     let h = mac.finalize().into_bytes();
     let off = (h[19] & 0x0f) as usize;
-    let bin = (u32::from(h[off]) & 0x7f) << 24
-        | u32::from(h[off + 1]) << 16
-        | u32::from(h[off + 2]) << 8
-        | u32::from(h[off + 3]);
+    let bin = (u32::from(h[off]) & 0x7f) << 24 | u32::from(h[off + 1]) << 16 | u32::from(h[off + 2]) << 8 | u32::from(h[off + 3]);
     bin % 1_000_000
 }
 
@@ -196,27 +174,13 @@ fn code_at(secret: &[u8], step: u64) -> u32 {
 pub fn totp_check(secret_b32: &str, code: &str) -> bool {
     static LAST: OnceLock<std::sync::Mutex<u64>> = OnceLock::new();
     let code: String = code.chars().filter(char::is_ascii_digit).collect();
-    let (Some(secret), Ok(n)) = (b32_decode(secret_b32), code.parse::<u32>()) else {
-        return false;
-    };
+    let (Some(secret), Ok(n)) = (b32_decode(secret_b32), code.parse::<u32>()) else { return false };
     if code.len() != 6 || secret.is_empty() {
         return false;
     }
-    let now = std::time::SystemTime::now()
-        .duration_since(std::time::UNIX_EPOCH)
-        .map(|d| d.as_secs())
-        .unwrap_or(0)
-        / 30;
-    let Some(step) = [now.saturating_sub(1), now, now + 1]
-        .into_iter()
-        .find(|s| code_at(&secret, *s) == n)
-    else {
-        return false;
-    };
-    let mut last = LAST
-        .get_or_init(|| std::sync::Mutex::new(0))
-        .lock()
-        .unwrap_or_else(|e| e.into_inner());
+    let now = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map(|d| d.as_secs()).unwrap_or(0) / 30;
+    let Some(step) = [now.saturating_sub(1), now, now + 1].into_iter().find(|s| code_at(&secret, *s) == n) else { return false };
+    let mut last = LAST.get_or_init(|| std::sync::Mutex::new(0)).lock().unwrap_or_else(|e| e.into_inner());
     if step <= *last {
         return false;
     }
