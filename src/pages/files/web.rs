@@ -13,7 +13,11 @@ fn document() -> Option<web_sys::Document> {
 pub fn store_get(key: &str) -> Option<String> {
     #[cfg(feature = "web")]
     {
-        web_sys::window()?.local_storage().ok()??.get_item(key).ok()?
+        web_sys::window()?
+            .local_storage()
+            .ok()??
+            .get_item(key)
+            .ok()?
     }
     #[cfg(not(feature = "web"))]
     {
@@ -94,7 +98,9 @@ pub fn viewport() -> (f64, f64) {
     #[cfg(feature = "web")]
     {
         let w = web_sys::window();
-        let get = |v: Option<Result<wasm_bindgen::JsValue, wasm_bindgen::JsValue>>| v.and_then(|r| r.ok()).and_then(|v| v.as_f64());
+        let get = |v: Option<Result<wasm_bindgen::JsValue, wasm_bindgen::JsValue>>| {
+            v.and_then(|r| r.ok()).and_then(|v| v.as_f64())
+        };
         (
             get(w.as_ref().map(|w| w.inner_width())).unwrap_or(1024.0),
             get(w.as_ref().map(|w| w.inner_height())).unwrap_or(768.0),
@@ -130,7 +136,10 @@ pub fn click(id: &str) {
 /// Focuses a freshly mounted input and selects the first `len` UTF-16 units (name without extension).
 pub fn select_range(e: &MountedEvent, len: u32) {
     #[cfg(feature = "web")]
-    if let Some(input) = e.downcast::<web_sys::Element>().and_then(|el| el.dyn_ref::<web_sys::HtmlInputElement>().cloned()) {
+    if let Some(input) = e
+        .downcast::<web_sys::Element>()
+        .and_then(|el| el.dyn_ref::<web_sys::HtmlInputElement>().cloned())
+    {
         let _ = input.focus();
         let _ = input.set_selection_range(0, len);
     }
@@ -147,7 +156,10 @@ pub fn from_text_field(e: &KeyboardEvent) -> bool {
             .and_then(|t| t.dyn_into::<web_sys::Element>().ok())
             .is_some_and(|el| {
                 let tag = el.tag_name().to_ascii_uppercase();
-                tag == "INPUT" || tag == "TEXTAREA" || tag == "SELECT" || el.has_attribute("contenteditable")
+                tag == "INPUT"
+                    || tag == "TEXTAREA"
+                    || tag == "SELECT"
+                    || el.has_attribute("contenteditable")
             })
     }
     #[cfg(not(feature = "web"))]
@@ -163,7 +175,11 @@ pub fn drag_has_files(e: &DragEvent) -> bool {
     {
         e.downcast::<web_sys::DragEvent>()
             .and_then(|d| d.data_transfer())
-            .is_some_and(|dt| dt.types().iter().any(|t| t.as_string().as_deref() == Some("Files")))
+            .is_some_and(|dt| {
+                dt.types()
+                    .iter()
+                    .any(|t| t.as_string().as_deref() == Some("Files"))
+            })
     }
     #[cfg(not(feature = "web"))]
     {
@@ -174,7 +190,10 @@ pub fn drag_has_files(e: &DragEvent) -> bool {
 
 pub fn set_drop_effect(e: &DragEvent, effect: &str) {
     #[cfg(feature = "web")]
-    if let Some(dt) = e.downcast::<web_sys::DragEvent>().and_then(|d| d.data_transfer()) {
+    if let Some(dt) = e
+        .downcast::<web_sys::DragEvent>()
+        .and_then(|d| d.data_transfer())
+    {
         dt.set_drop_effect(effect);
     }
     #[cfg(not(feature = "web"))]
@@ -184,7 +203,10 @@ pub fn set_drop_effect(e: &DragEvent, effect: &str) {
 /// Marks the start of an in-app drag (Firefox needs some data to start dragging).
 pub fn start_drag(e: &DragEvent, text: &str) {
     #[cfg(feature = "web")]
-    if let Some(dt) = e.downcast::<web_sys::DragEvent>().and_then(|d| d.data_transfer()) {
+    if let Some(dt) = e
+        .downcast::<web_sys::DragEvent>()
+        .and_then(|d| d.data_transfer())
+    {
         let _ = dt.set_data("text/plain", text);
         dt.set_effect_allowed("move");
     }

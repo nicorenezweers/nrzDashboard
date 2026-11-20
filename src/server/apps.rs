@@ -65,17 +65,33 @@ pub fn clear_host_cache() {
 }
 
 /// Reverse proxy entries from nrzNetwork (`get_proxy`).
-pub async fn proxy_hosts_raw(url: &str, token: &str) -> Result<Vec<(String, String, bool)>, String> {
+pub async fn proxy_hosts_raw(
+    url: &str,
+    token: &str,
+) -> Result<Vec<(String, String, bool)>, String> {
     if token.trim().is_empty() {
         return Err("Kein nrzNetwork-Token".into());
     }
     let v = mcp::call_at("nrzNetwork", url, token, "get_proxy", json!({})).await?;
-    let hosts = v.get("hosts").and_then(Value::as_array).cloned().unwrap_or_default();
+    let hosts = v
+        .get("hosts")
+        .and_then(Value::as_array)
+        .cloned()
+        .unwrap_or_default();
     Ok(hosts
         .iter()
         .map(|h| {
-            let s = |k: &str| h.get(k).and_then(Value::as_str).unwrap_or_default().to_lowercase();
-            (s("host"), s("target"), h.get("enabled").and_then(Value::as_bool).unwrap_or(true))
+            let s = |k: &str| {
+                h.get(k)
+                    .and_then(Value::as_str)
+                    .unwrap_or_default()
+                    .to_lowercase()
+            };
+            (
+                s("host"),
+                s("target"),
+                h.get("enabled").and_then(Value::as_bool).unwrap_or(true),
+            )
         })
         .collect())
 }
@@ -92,7 +108,12 @@ async fn proxy_hosts() -> Vec<ProxyHost> {
         .unwrap_or_default()
         .into_iter()
         .filter(|(h, _, enabled)| *enabled && !h.is_empty())
-        .filter_map(|(host, target, _)| Some(ProxyHost { port: port_of(&target)?, host }))
+        .filter_map(|(host, target, _)| {
+            Some(ProxyHost {
+                port: port_of(&target)?,
+                host,
+            })
+        })
         .collect();
     if let Ok(mut c) = host_cache().lock() {
         *c = Some((Instant::now(), hosts.clone()));
@@ -104,15 +125,27 @@ async fn proxy_hosts() -> Vec<ProxyHost> {
 fn domains_for(port: u16, hosts: &[ProxyHost]) -> (Option<String>, Option<String>) {
     let exists = |name: &str| hosts.iter().any(|h| h.host == name);
     let on_port: Vec<&ProxyHost> = hosts.iter().filter(|h| h.port == port).collect();
-    let admin = on_port.iter().find(|h| h.host.starts_with("admin.")).map(|h| h.host.clone());
+    let admin = on_port
+        .iter()
+        .find(|h| h.host.starts_with("admin."))
+        .map(|h| h.host.clone());
     let user = admin
         .as_deref()
         .and_then(|a| a.strip_prefix("admin."))
         .filter(|u| exists(u))
         .map(str::to_string)
-        .or_else(|| on_port.iter().find(|h| !h.host.starts_with("admin.")).map(|h| h.host.clone()));
+        .or_else(|| {
+            on_port
+                .iter()
+                .find(|h| !h.host.starts_with("admin."))
+                .map(|h| h.host.clone())
+        });
     // Only the user domain points at the app port: an admin twin may still exist.
-    let admin = admin.or_else(|| user.as_ref().map(|u| format!("admin.{u}")).filter(|a| exists(a)));
+    let admin = admin.or_else(|| {
+        user.as_ref()
+            .map(|u| format!("admin.{u}"))
+            .filter(|a| exists(a))
+    });
     (user, admin)
 }
 
@@ -159,28 +192,71 @@ fn icon_cache() -> &'static Mutex<HashMap<String, (Instant, Icon)>> {
     C.get_or_init(Default::default)
 }
 
+/// Repositories of the own app stores in nrzGit (app id = folder name).
+const STORES: [&str; 2] = ["nrzStore", "nrzPrivatStore"];
+
 fn icon_sources(id: &str) -> Vec<String> {
     let mut v = Vec::new();
     if let Some(base) = super::env("NRZSTORE_ICON_BASE") {
         v.push(format!("{}/{id}/icon.png", base.trim_end_matches('/')));
-    } else {
-        // nrzGit on the same device (port 8390), reached through the configured umbrelOS address.
-        let u = settings::umbrel().url;
-        let host = u.split_once("://").map_or(u.as_str(), |(_, r)| r).split(['/', ':']).next().unwrap_or("umbrel.local").to_string();
-        v.push(format!("http://{host}:8390/nicorenezweers/nrzStore/raw/branch/main/{id}/icon.png"));
     }
-    v.push(format!("https://getumbrel.github.io/umbrel-apps-gallery/{id}/icon.svg"));
+    // nrzGit directly in the umbrel network, then through its app port (8390) on the device.
+    let u = settings::umbrel().url;
+    let host = u
+        .split_once("://")
+        .map_or(u.as_str(), |(_, r)| r)
+        .split(['/', ':'])
+        .next()
+        .unwrap_or("umbrel.local")
+        .to_string();
+    let git = super::env("NRZGIT_URL").unwrap_or_else(|| "http://nrz-git_app_1:8380".into());
+    for base in [
+        git.trim_end_matches('/').to_string(),
+        format!("http://{host}:8390"),
+    ] {
+        for store in STORES {
+            v.push(format!(
+                "{base}/nicorenezweers/{store}/raw/branch/main/{id}/icon.png"
+            ));
+        }
+    }
+    v.push(format!(
+        "https://getumbrel.github.io/umbrel-apps-gallery/{id}/icon.svg"
+    ));
     v
 }
 
 async fn fetch_icon(id: &str) -> Icon {
     for src in icon_sources(id) {
-        let Ok(res) = http().get(&src).timeout(Duration::from_secs(6)).send().await else { continue };
+        let Ok(res) = http()
+            .get(&src)
+            .timeout(Duration::from_secs(6))
+            .send()
+            .await
+        else {
+            continue;
+        };
         if !res.status().is_success() {
             continue;
         }
-        let ctype = res.headers().get(header::CONTENT_TYPE).and_then(|v| v.to_str().ok()).unwrap_or("").to_string();
-        let ctype = if src.ends_with(".svg") { "image/svg+xml".to_string() } else if ctype.starts_with("image/") { ctype } else { "image/png".into() };
+        let ctype = res
+            .headers()
+            .get(header::CONTENT_TYPE)
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("")
+            .to_string();
+        // HTML (login page, 404 page) is not an icon – try the next source.
+        let ctype = if src.ends_with(".svg") && !ctype.contains("html") {
+            "image/svg+xml".to_string()
+        } else if ctype.starts_with("image/") || ctype == "application/octet-stream" {
+            if ctype.starts_with("image/") {
+                ctype
+            } else {
+                "image/png".into()
+            }
+        } else {
+            continue;
+        };
         if let Ok(bytes) = res.bytes().await {
             if !bytes.is_empty() && bytes.len() < 2_000_000 {
                 return Some((ctype, bytes.to_vec()));
@@ -191,7 +267,11 @@ async fn fetch_icon(id: &str) -> Icon {
 }
 
 async fn icon_handler(Path(id): Path<String>) -> Response {
-    if id.is_empty() || !id.chars().all(|c| c.is_ascii_alphanumeric() || c == '-' || c == '_') {
+    if id.is_empty()
+        || !id
+            .chars()
+            .all(|c| c.is_ascii_alphanumeric() || c == '-' || c == '_')
+    {
         return StatusCode::BAD_REQUEST.into_response();
     }
     let cached = icon_cache().lock().ok().and_then(|c| c.get(&id).cloned());
@@ -207,7 +287,14 @@ async fn icon_handler(Path(id): Path<String>) -> Response {
         }
     };
     match icon {
-        Some((ctype, bytes)) => ([(header::CONTENT_TYPE, ctype), (header::CACHE_CONTROL, "private, max-age=86400".into())], bytes).into_response(),
+        Some((ctype, bytes)) => (
+            [
+                (header::CONTENT_TYPE, ctype),
+                (header::CACHE_CONTROL, "private, max-age=86400".into()),
+            ],
+            bytes,
+        )
+            .into_response(),
         None => StatusCode::NOT_FOUND.into_response(),
     }
 }
@@ -221,7 +308,10 @@ mod tests {
     use super::*;
 
     fn h(host: &str, port: u16) -> ProxyHost {
-        ProxyHost { host: host.into(), port }
+        ProxyHost {
+            host: host.into(),
+            port,
+        }
     }
 
     #[test]
@@ -233,10 +323,29 @@ mod tests {
 
     #[test]
     fn user_and_admin() {
-        let hosts = [h("admin.bench.zweers.ch", 8500), h("bench.zweers.ch", 8501), h("music.zweers.ch", 8350)];
-        assert_eq!(domains_for(8500, &hosts), (Some("bench.zweers.ch".into()), Some("admin.bench.zweers.ch".into())));
-        assert_eq!(domains_for(8350, &hosts), (Some("music.zweers.ch".into()), None));
-        assert_eq!(domains_for(8501, &hosts), (Some("bench.zweers.ch".into()), Some("admin.bench.zweers.ch".into())));
+        let hosts = [
+            h("admin.bench.zweers.ch", 8500),
+            h("bench.zweers.ch", 8501),
+            h("music.zweers.ch", 8350),
+        ];
+        assert_eq!(
+            domains_for(8500, &hosts),
+            (
+                Some("bench.zweers.ch".into()),
+                Some("admin.bench.zweers.ch".into())
+            )
+        );
+        assert_eq!(
+            domains_for(8350, &hosts),
+            (Some("music.zweers.ch".into()), None)
+        );
+        assert_eq!(
+            domains_for(8501, &hosts),
+            (
+                Some("bench.zweers.ch".into()),
+                Some("admin.bench.zweers.ch".into())
+            )
+        );
         assert_eq!(domains_for(9999, &hosts), (None, None));
     }
 }

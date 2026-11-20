@@ -32,7 +32,10 @@ pub fn ActivityWindow() -> Element {
     let data = overview.read().clone();
     // Record history whenever new data arrives.
     let sample = match &data {
-        Some(Ok(o)) => o.resources.as_ref().map(|r| (r.cpu.total_used, pct(r.memory.total_used, r.memory.size))),
+        Some(Ok(o)) => o
+            .resources
+            .as_ref()
+            .map(|r| (r.cpu.total_used, pct(r.memory.total_used, r.memory.size))),
         _ => None,
     };
     use_effect(use_reactive!(|sample| {
@@ -123,6 +126,7 @@ pub fn ActivityWindow() -> Element {
                                         }
                                     }
                                 }
+                                super::monitor::MonitorPanel { live, names: names.clone() }
                             }
                         }
                     }
@@ -133,19 +137,37 @@ pub fn ActivityWindow() -> Element {
 }
 
 #[component]
-fn BigCard(icon: Element, label: String, value: f64, main: String, sub: String, history: Vec<f64>, color: String) -> Element {
+fn BigCard(
+    icon: Element,
+    label: String,
+    value: f64,
+    main: String,
+    sub: String,
+    history: Vec<f64>,
+    color: String,
+) -> Element {
     let points: String = if history.len() > 1 {
         let n = (history.len() - 1) as f64;
         history
             .iter()
             .enumerate()
-            .map(|(i, v)| format!("{:.1},{:.1}", i as f64 / n * 100.0, 40.0 - v.clamp(0.0, 100.0) * 0.38))
+            .map(|(i, v)| {
+                format!(
+                    "{:.1},{:.1}",
+                    i as f64 / n * 100.0,
+                    40.0 - v.clamp(0.0, 100.0) * 0.38
+                )
+            })
             .collect::<Vec<_>>()
             .join(" ")
     } else {
         String::new()
     };
-    let area = if points.is_empty() { String::new() } else { format!("0,40 {points} 100,40") };
+    let area = if points.is_empty() {
+        String::new()
+    } else {
+        format!("0,40 {points} 100,40")
+    };
     rsx! {
         div { class: "relative overflow-hidden rounded-3xl bg-white/[0.05] p-5",
             div { class: "flex items-center gap-2 text-sm text-white/60 [&_svg]:size-4", {icon} "{label}" }
@@ -165,11 +187,20 @@ fn BigCard(icon: Element, label: String, value: f64, main: String, sub: String, 
 }
 
 #[component]
-fn UsageList(title: String, items: Vec<AppUse>, names: HashMap<String, String>, cpu: bool) -> Element {
+fn UsageList(
+    title: String,
+    items: Vec<AppUse>,
+    names: HashMap<String, String>,
+    cpu: bool,
+) -> Element {
     let mut items: Vec<AppUse> = items.into_iter().filter(|a| a.used > 0.0).collect();
     items.sort_by(|a, b| b.used.total_cmp(&a.used));
     items.truncate(12);
-    let max = items.first().map(|a| a.used).unwrap_or(1.0).max(f64::EPSILON);
+    let max = items
+        .first()
+        .map(|a| a.used)
+        .unwrap_or(1.0)
+        .max(f64::EPSILON);
     rsx! {
         div { class: "rounded-3xl bg-white/[0.05] p-5",
             div { class: "mb-3 text-sm text-white/60", "{title}" }

@@ -6,7 +6,8 @@ use serde::{Deserialize, Serialize};
 
 use super::{config, env, tracing_warn};
 
-pub const NO_TOKEN: &str = "Kein Umbrel-MCP-Token hinterlegt – unter Einstellungen → Umbrel eintragen.";
+pub const NO_TOKEN: &str =
+    "Kein Umbrel-MCP-Token hinterlegt – unter Einstellungen → Umbrel eintragen.";
 const DEFAULT_URL: &str = "http://umbrel.local";
 
 #[derive(Clone, Default, Serialize, Deserialize)]
@@ -62,7 +63,8 @@ pub fn save(url: &str, token: &str) -> Result<(), String> {
         let _ = std::fs::create_dir_all(dir);
     }
     let json = serde_json::to_string_pretty(&*cur).map_err(|e| e.to_string())?;
-    std::fs::write(&path, json).map_err(|e| format!("Konnte {} nicht schreiben: {e}", path.display()))?;
+    std::fs::write(&path, json)
+        .map_err(|e| format!("Konnte {} nicht schreiben: {e}", path.display()))?;
     #[cfg(unix)]
     {
         use std::os::unix::fs::PermissionsExt;

@@ -63,22 +63,35 @@ fn Places() -> Element {
     let favs: Vec<String> = fm
         .fav_list()
         .into_iter()
-        .filter(|f| home.is_empty() || logic::parent(f) != "/Home" || home.iter().any(|d| &d.path == f))
+        .filter(|f| {
+            home.is_empty() || logic::parent(f) != "/Home" || home.iter().any(|d| &d.path == f)
+        })
         .collect();
     let ext = fm.ext_dirs.read().clone();
     let net = fm.net_dirs.read().clone();
     let device = fm.device.read().clone();
-    let umbrel = if device.is_empty() || device.eq_ignore_ascii_case("umbrel") { "Umbrel".to_string() } else { device };
+    let umbrel = if device.is_empty() || device.eq_ignore_ascii_case("umbrel") {
+        "Umbrel".to_string()
+    } else {
+        device
+    };
 
     // The most specific entry containing the open folder is highlighted.
-    let mut candidates: Vec<String> = ["/Home", "/Apps", "/Network", "/External"].iter().map(|s| s.to_string()).collect();
+    let mut candidates: Vec<String> = ["/Home", "/Apps", "/Network", "/External"]
+        .iter()
+        .map(|s| s.to_string())
+        .collect();
     candidates.extend(favs.iter().cloned());
     candidates.extend(ext.iter().map(|e| e.path.clone()));
     candidates.extend(net.iter().map(|e| e.path.clone()));
     let active = if cur == RECENT {
         RECENT.to_string()
     } else {
-        candidates.into_iter().filter(|p| logic::is_within(&cur, p)).max_by_key(String::len).unwrap_or_default()
+        candidates
+            .into_iter()
+            .filter(|p| logic::is_within(&cur, p))
+            .max_by_key(String::len)
+            .unwrap_or_default()
     };
     let is = |p: &str| active == p;
 
@@ -156,7 +169,11 @@ fn SideItem(
     let row = format!(
         "flex h-10 items-center gap-3 rounded-xl pr-3 text-[15px] transition-colors {} {}",
         if indent { "pl-9" } else { "pl-3" },
-        if active { "bg-accent font-medium text-foreground" } else { "text-foreground/85 hover:bg-accent/50" }
+        if active {
+            "bg-accent font-medium text-foreground"
+        } else {
+            "text-foreground/85 hover:bg-accent/50"
+        }
     );
     let p_rm = path.clone();
     let link = rsx! {
@@ -198,7 +215,12 @@ fn dragged_dirs(fm: Fm) -> Vec<String> {
     fm.drag
         .peek()
         .as_ref()
-        .map(|d| d.iter().filter(|p| !favs.contains(p) && fm.find(p).is_some_and(|e| e.is_dir())).cloned().collect())
+        .map(|d| {
+            d.iter()
+                .filter(|p| !favs.contains(p) && fm.find(p).is_some_and(|e| e.is_dir()))
+                .cloned()
+                .collect()
+        })
         .unwrap_or_default()
 }
 

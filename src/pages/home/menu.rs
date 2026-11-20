@@ -18,15 +18,26 @@ pub struct MenuReq {
 fn viewport() -> (f64, f64) {
     #[cfg(feature = "web")]
     if let Some(w) = web_sys::window() {
-        let wd = w.inner_width().ok().and_then(|v| v.as_f64()).unwrap_or(1200.0);
-        let ht = w.inner_height().ok().and_then(|v| v.as_f64()).unwrap_or(800.0);
+        let wd = w
+            .inner_width()
+            .ok()
+            .and_then(|v| v.as_f64())
+            .unwrap_or(1200.0);
+        let ht = w
+            .inner_height()
+            .ok()
+            .and_then(|v| v.as_f64())
+            .unwrap_or(800.0);
         return (wd, ht);
     }
     (1200.0, 800.0)
 }
 
 fn host(url: &str) -> String {
-    url.split_once("://").map_or(url, |(_, r)| r).trim_end_matches('/').to_string()
+    url.split_once("://")
+        .map_or(url, |(_, r)| r)
+        .trim_end_matches('/')
+        .to_string()
 }
 
 #[component]
@@ -38,7 +49,9 @@ pub fn AppMenu() -> Element {
     let mut act = move |id: String, action: &'static str| {
         menu.set(None);
         spawn(async move {
-            let r = app_action(id, action.to_string()).await.map_err(|e| err_msg(&e));
+            let r = app_action(id, action.to_string())
+                .await
+                .map_err(|e| err_msg(&e));
             toast.set(Some(r.map(|_| match action {
                 "start" => "Wird gestartet…".to_string(),
                 "stop" => "Wird gestoppt…".to_string(),

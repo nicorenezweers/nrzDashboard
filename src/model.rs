@@ -113,3 +113,82 @@ pub struct DirListing {
     pub total_files: f64,
     pub has_more: bool,
 }
+
+// ---------- nrzMonitor ----------
+
+/// Docker container as reported by nrzMonitor (`docker.containers`).
+#[derive(Serialize, Deserialize, Clone, PartialEq, Debug, Default)]
+#[serde(default)]
+pub struct Container {
+    pub name: String,
+    pub app: String,
+    pub service: String,
+    pub image: String,
+    pub state: String,
+    pub status: String,
+    pub health: String,
+    /// Percent, 100 = one core.
+    pub cpu: f64,
+    pub mem: f64,
+    pub mem_limit: f64,
+    /// Bit/s.
+    pub net_rx: f64,
+    pub net_tx: f64,
+    pub restarts: f64,
+    pub oom_killed: bool,
+    pub started: f64,
+}
+
+#[derive(Serialize, Deserialize, Clone, PartialEq, Debug, Default)]
+#[serde(default)]
+pub struct Filesystem {
+    pub mount: String,
+    pub device: String,
+    pub fstype: String,
+    pub size: f64,
+    pub used: f64,
+    pub avail: f64,
+}
+
+#[derive(Serialize, Deserialize, Clone, PartialEq, Debug, Default)]
+#[serde(default)]
+pub struct Probe {
+    pub name: String,
+    pub target: String,
+    pub up: bool,
+    pub pending: bool,
+    pub latency_ms: Option<f64>,
+    pub uptime_pct: Option<f64>,
+}
+
+#[derive(Serialize, Deserialize, Clone, PartialEq, Debug, Default)]
+#[serde(default)]
+pub struct Sensor {
+    pub chip_label: String,
+    pub label: String,
+    pub kind: String,
+    pub value: Option<f64>,
+    pub crit: Option<f64>,
+}
+
+#[derive(Serialize, Deserialize, Clone, PartialEq, Debug, Default)]
+#[serde(default)]
+pub struct MonEvent {
+    /// Unix milliseconds.
+    pub ts: f64,
+    pub severity: String,
+    pub title: String,
+    pub subject: String,
+}
+
+/// Everything the activity window shows from nrzMonitor.
+#[derive(Serialize, Deserialize, Clone, PartialEq, Debug, Default)]
+pub struct MonitorView {
+    pub containers: Vec<Container>,
+    pub filesystems: Vec<Filesystem>,
+    pub probes: Vec<Probe>,
+    pub sensors: Vec<Sensor>,
+    /// Active alerts (title).
+    pub alerts: Vec<String>,
+    pub events: Vec<MonEvent>,
+}

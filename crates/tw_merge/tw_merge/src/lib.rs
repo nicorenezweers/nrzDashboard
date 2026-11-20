@@ -298,16 +298,18 @@ mod variant {
 
     impl TailwindCompose for TailwindJoin {
         fn compose_classes(&self, class: &[&str]) -> String {
-            class.iter().flat_map(|s| s.split_whitespace()).map(|s| s.trim()).filter(|s| !s.is_empty()).fold(
-                String::new(),
-                |mut acc, s| {
+            class
+                .iter()
+                .flat_map(|s| s.split_whitespace())
+                .map(|s| s.trim())
+                .filter(|s| !s.is_empty())
+                .fold(String::new(), |mut acc, s| {
                     if !acc.is_empty() {
                         acc.push(' ');
                     }
                     acc.push_str(s);
                     acc
-                },
-            )
+                })
         }
     }
 

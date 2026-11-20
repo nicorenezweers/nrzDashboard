@@ -15,7 +15,10 @@ mod upload;
 mod web;
 
 use dioxus::prelude::*;
-use icons::{ArrowDown, ArrowUp, Clock, CloudUpload, FolderPlus, FolderUp, LoaderCircle, Plus, Search, Upload, X};
+use icons::{
+    ArrowDown, ArrowUp, Clock, CloudUpload, FolderPlus, FolderUp, LoaderCircle, Plus, Search,
+    Upload, X,
+};
 
 use crate::components::ui::button::{Button, ButtonSize, ButtonVariant};
 use crate::components::ui::skeleton::Skeleton;
@@ -23,7 +26,9 @@ use crate::components::widgets::ErrorBox;
 
 use items::Item;
 use logic::{SortKey, ViewMode};
-use overlays::{ContextMenu, DropOverlay, FolderPicker, NewFolderDialog, PreviewDialog, SelectionBar, Toasts};
+use overlays::{
+    ContextMenu, DropOverlay, FolderPicker, NewFolderDialog, PreviewDialog, SelectionBar, Toasts,
+};
 use sidebar::Sidebar;
 use state::{Fm, KEY_SORT, RECENT};
 use toolbar::Toolbar;
@@ -33,7 +38,11 @@ const POLL_MS: u32 = 5000;
 
 #[component]
 pub fn FilesPage(path: String, msg: String) -> Element {
-    let path = if path.is_empty() { "/".to_string() } else { path };
+    let path = if path.is_empty() {
+        "/".to_string()
+    } else {
+        path
+    };
     let initial = path.clone();
     let mut fm = use_context_provider(move || Fm::new(initial));
     let marquee_state = use_signal(|| None::<marquee::Marquee>);
@@ -55,7 +64,8 @@ pub fn FilesPage(path: String, msg: String) -> Element {
         let mut tick = 0u32;
         loop {
             crate::utils::sleep_ms(POLL_MS).await;
-            let busy = fm.drag.peek().is_some() || fm.renaming.peek().is_some() || *fm.ext_drag.peek() > 0;
+            let busy =
+                fm.drag.peek().is_some() || fm.renaming.peek().is_some() || *fm.ext_drag.peek() > 0;
             if web::page_visible() && !busy {
                 fm.reload();
                 tick += 1;
@@ -279,7 +289,11 @@ fn Content() -> Element {
         if sort.key != k {
             return rsx! {};
         }
-        if sort.asc { rsx! { ArrowUp { class: "size-3" } } } else { rsx! { ArrowDown { class: "size-3" } } }
+        if sort.asc {
+            rsx! { ArrowUp { class: "size-3" } }
+        } else {
+            rsx! { ArrowDown { class: "size-3" } }
+        }
     };
     let mut sort_by = move |k: SortKey| {
         let s = fm.sort.peek().toggle(k);
@@ -409,7 +423,8 @@ fn ListSkeleton() -> Element {
 fn MobileFab() -> Element {
     let mut fm = use_context::<Fm>();
     let mut open = use_signal(|| false);
-    let item = "flex items-center gap-3 rounded-full border bg-popover py-2 pl-3 pr-4 text-sm shadow-lg";
+    let item =
+        "flex items-center gap-3 rounded-full border bg-popover py-2 pl-3 pr-4 text-sm shadow-lg";
     rsx! {
         div { class: "absolute bottom-4 right-4 z-30 flex flex-col items-end gap-2 md:hidden",
             if open() {

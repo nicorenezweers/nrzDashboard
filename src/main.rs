@@ -16,9 +16,13 @@ fn main() {
         let args: Vec<String> = std::env::args().collect();
         if args.get(1).map(String::as_str) == Some("healthcheck") {
             // Docker healthcheck: is the server accepting connections?
-            let port = std::env::var("PORT").ok().and_then(|p| p.parse::<u16>().ok()).unwrap_or(8080);
+            let port = std::env::var("PORT")
+                .ok()
+                .and_then(|p| p.parse::<u16>().ok())
+                .unwrap_or(8080);
             let addr = std::net::SocketAddr::from(([127, 0, 0, 1], port));
-            let ok = std::net::TcpStream::connect_timeout(&addr, std::time::Duration::from_secs(3)).is_ok();
+            let ok = std::net::TcpStream::connect_timeout(&addr, std::time::Duration::from_secs(3))
+                .is_ok();
             std::process::exit(i32::from(!ok));
         }
         if args.get(1).map(String::as_str) == Some("hash-password") {

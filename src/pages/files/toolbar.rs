@@ -2,8 +2,8 @@
 
 use dioxus::prelude::*;
 use icons::{
-    ArrowUpDown, Check, ChevronLeft, ChevronRight, FolderOpen, FolderPlus, FolderUp, LayoutGrid, LayoutList, LoaderCircle,
-    Search, SquareCheck, Upload, X,
+    ArrowUpDown, Check, ChevronLeft, ChevronRight, FolderOpen, FolderPlus, FolderUp, LayoutGrid,
+    LayoutList, LoaderCircle, Search, SquareCheck, Upload, X,
 };
 
 use super::items::{DropTarget, root_label};
@@ -16,10 +16,13 @@ use crate::app::Route;
 const PILL: &str = "inline-flex h-10 shrink-0 items-center gap-2 rounded-full border border-border px-4 text-sm font-medium text-foreground/90 transition-colors hover:bg-accent disabled:pointer-events-none disabled:opacity-40";
 const ROUND: &str = "inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-border text-foreground/90 transition-colors hover:bg-accent";
 const ARROW: &str = "inline-flex size-8 shrink-0 items-center justify-center rounded-full text-foreground/80 transition-colors hover:bg-accent disabled:pointer-events-none disabled:opacity-30";
-const MENU: &str = "absolute right-0 top-12 z-40 w-52 rounded-2xl border bg-popover p-1.5 shadow-xl";
-const MENU_ITEM: &str = "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm hover:bg-accent";
+const MENU: &str =
+    "absolute right-0 top-12 z-40 w-52 rounded-2xl border bg-popover p-1.5 shadow-xl";
+const MENU_ITEM: &str =
+    "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm hover:bg-accent";
 /// Highlight of the active view (fixed teal, matches the folder icons).
-const SEG_ON: &str = "inline-flex h-8 w-10 items-center justify-center rounded-full bg-[#1f5f66] text-white";
+const SEG_ON: &str =
+    "inline-flex h-8 w-10 items-center justify-center rounded-full bg-[#1f5f66] text-white";
 const SEG_OFF: &str = "inline-flex h-8 w-10 items-center justify-center rounded-full text-muted-foreground hover:text-foreground";
 
 #[component]
@@ -225,7 +228,12 @@ fn SortButton() -> Element {
         fm.sort.set(s);
         web::store_set(KEY_SORT, &s.encode());
     };
-    let keys = [(SortKey::Name, "Name"), (SortKey::Size, "Grösse"), (SortKey::Modified, "Geändert"), (SortKey::Type, "Typ")];
+    let keys = [
+        (SortKey::Name, "Name"),
+        (SortKey::Size, "Grösse"),
+        (SortKey::Modified, "Geändert"),
+        (SortKey::Type, "Typ"),
+    ];
     rsx! {
         div { class: "relative",
             button { class: ROUND, title: "Sortieren", onclick: move |_| open.toggle(), ArrowUpDown { class: "size-4" } }

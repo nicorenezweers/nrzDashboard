@@ -11455,7 +11455,9 @@ mod tests {
     #[test]
     fn test_compatibility_functions_compile() {
         let _activity = ActivityProps { class: None };
-        let _check = CheckProps { class: Some("text-red-500".to_string()) };
+        let _check = CheckProps {
+            class: Some("text-red-500".to_string()),
+        };
         let _x = XProps { class: None };
     }
 }

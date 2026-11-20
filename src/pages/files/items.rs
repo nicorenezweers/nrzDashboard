@@ -2,8 +2,8 @@
 
 use dioxus::prelude::*;
 use icons::{
-    Boxes, Check, Ellipsis, File, FileArchive, FileCode, FileText, Film, Folder, HardDrive, House, Image, Music, Network,
-    Usb,
+    Boxes, Check, Ellipsis, File, FileArchive, FileCode, FileText, Film, Folder, HardDrive, House,
+    Image, Music, Network, Usb,
 };
 
 use super::art::{emblem_for, file_art, folder_art};
@@ -51,7 +51,12 @@ pub fn root_label(path: &str) -> String {
 
 /// Wraps children in a drop zone for a folder (breadcrumbs, sidebar): move or upload into `dir`.
 #[component]
-pub fn DropTarget(dir: String, class: String, #[props(into, default)] active_class: String, children: Element) -> Element {
+pub fn DropTarget(
+    dir: String,
+    class: String,
+    #[props(into, default)] active_class: String,
+    children: Element,
+) -> Element {
     let fm = use_context::<Fm>();
     let active = fm.drop_target.read().as_deref() == Some(dir.as_str());
     let (d1, d2, d3) = (dir.clone(), dir.clone(), dir.clone());
@@ -129,7 +134,11 @@ pub fn Item(entry: FileEntry, mode: ViewMode, #[props(default)] show_path: bool)
             fm.select_only(&p_menu);
         }
         let c = e.client_coordinates();
-        fm.menu.set(Some(MenuState { x: c.x, y: c.y, path: p_menu.clone() }));
+        fm.menu.set(Some(MenuState {
+            x: c.x,
+            y: c.y,
+            path: p_menu.clone(),
+        }));
     };
     let p_drag = path.clone();
     let ondragstart = move |e: DragEvent| {

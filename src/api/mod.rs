@@ -10,9 +10,9 @@ use dioxus::prelude::*;
 #[cfg(feature = "server")]
 use serde_json::{Value, json};
 
-use crate::model::Overview;
 #[cfg(feature = "server")]
 use crate::model::AppInfo;
+use crate::model::Overview;
 
 #[cfg(feature = "server")]
 use crate::server::mcp;
@@ -51,7 +51,12 @@ pub async fn get_overview() -> Result<Overview, ServerFnError> {
         .flatten()
         .next()
         .cloned();
-    Ok(Overview { info: info.ok(), resources: res.ok(), apps: apps.unwrap_or_default(), error })
+    Ok(Overview {
+        info: info.ok(),
+        resources: res.ok(),
+        apps: apps.unwrap_or_default(),
+        error,
+    })
 }
 
 // ---------- Apps ----------
@@ -65,7 +70,9 @@ pub async fn app_action(app_id: String, action: String) -> Result<String, Server
         "update" => "update_app",
         _ => return Err(err("Unbekannte Aktion")),
     };
-    let v = mcp::call(tool, json!({ "appId": app_id })).await.map_err(err)?;
+    let v = mcp::call(tool, json!({ "appId": app_id }))
+        .await
+        .map_err(err)?;
     Ok(value_to_text(&v))
 }
 

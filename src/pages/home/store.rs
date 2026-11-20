@@ -7,7 +7,10 @@ use icons::{ArrowLeft, ArrowUp, Check, Download, Play, RotateCw, Search, Square,
 
 use super::{AppIcon, HomeCtx, HomeWindow, open_url};
 use crate::api::app_action;
-use crate::api::home::{StoreApp, StoreDetails, store_details, store_install, store_search, store_uninstall, update_all_apps};
+use crate::api::home::{
+    StoreApp, StoreDetails, store_details, store_install, store_search, store_uninstall,
+    update_all_apps,
+};
 use crate::components::widgets::ConfirmButton;
 use crate::model::AppInfo;
 use crate::utils::{err_msg, fmt_bytes, sleep_ms};
@@ -42,7 +45,9 @@ fn category_label(c: &str) -> String {
         "productivity" => "Produktivität".into(),
         other => {
             let mut ch = other.chars();
-            ch.next().map(|f| f.to_uppercase().collect::<String>() + ch.as_str()).unwrap_or_default()
+            ch.next()
+                .map(|f| f.to_uppercase().collect::<String>() + ch.as_str())
+                .unwrap_or_default()
         }
     }
 }
@@ -81,7 +86,9 @@ fn follow(ctx: HomeCtx) {
 fn install(ctx: HomeCtx, mut notice: Notice, id: String, name: String) {
     spawn(async move {
         let r = store_install(id).await.map_err(|e| err_msg(&e));
-        notice.set(Some(r.map(|_| format!("{name} wird installiert – erscheint gleich auf dem Startbildschirm."))));
+        notice.set(Some(r.map(|_| {
+            format!("{name} wird installiert – erscheint gleich auf dem Startbildschirm.")
+        })));
         follow(ctx);
     });
 }
@@ -101,8 +108,17 @@ pub fn StoreWindow(updates: bool) -> Element {
     let mut selected = use_signal(|| None::<String>);
     let notice: Notice = use_signal(|| None);
     let ctx = use_context::<HomeCtx>();
-    let n_updates = installed_map(&ctx).values().filter(|a| a.update_available).count();
-    let seg = |t: Tab| if tab() == t { "rounded-full bg-white px-4 py-1.5 text-sm font-medium text-black shadow" } else { "rounded-full px-4 py-1.5 text-sm text-white/70 hover:text-white" };
+    let n_updates = installed_map(&ctx)
+        .values()
+        .filter(|a| a.update_available)
+        .count();
+    let seg = |t: Tab| {
+        if tab() == t {
+            "rounded-full bg-white px-4 py-1.5 text-sm font-medium text-black shadow"
+        } else {
+            "rounded-full px-4 py-1.5 text-sm text-white/70 hover:text-white"
+        }
+    };
 
     rsx! {
         HomeWindow { title: "App Store",
@@ -156,7 +172,11 @@ fn Discover(notice: Notice, onopen: EventHandler<String>) -> Element {
     let installed = installed_map(&ctx);
     let list = results.read().clone();
     let mut cats: Vec<String> = match &list {
-        Some(Ok(l)) => l.iter().map(|a| a.category.clone()).filter(|c| !c.is_empty()).collect(),
+        Some(Ok(l)) => l
+            .iter()
+            .map(|a| a.category.clone())
+            .filter(|c| !c.is_empty())
+            .collect(),
         _ => vec![],
     };
     cats.sort();
@@ -274,7 +294,12 @@ fn Hero(app: StoreApp, onopen: EventHandler<String>) -> Element {
 }
 
 #[component]
-fn StoreRow(app: StoreApp, state: Option<String>, notice: Notice, onopen: EventHandler<String>) -> Element {
+fn StoreRow(
+    app: StoreApp,
+    state: Option<String>,
+    notice: Notice,
+    onopen: EventHandler<String>,
+) -> Element {
     let ctx = use_context::<HomeCtx>();
     let mut busy = use_signal(|| false);
     let id = app.id.clone();
@@ -317,7 +342,12 @@ fn StoreRow(app: StoreApp, state: Option<String>, notice: Notice, onopen: EventH
 }
 
 #[component]
-fn Details(id: String, notice: Notice, onback: EventHandler<()>, onopen: EventHandler<String>) -> Element {
+fn Details(
+    id: String,
+    notice: Notice,
+    onback: EventHandler<()>,
+    onopen: EventHandler<String>,
+) -> Element {
     let ctx = use_context::<HomeCtx>();
     let id_r = id.clone();
     let details = use_resource(move || store_details(id_r.clone()));
@@ -432,7 +462,14 @@ fn InfoStrip(d: StoreDetails) -> Element {
         Some(("Version", d.version.clone())),
         Some(("Kategorie", category_label(&d.category))),
         d.install_size.map(|s| ("Größe", fmt_bytes(s))),
-        Some(("Kompatibel", if d.compatible { "Ja".to_string() } else { "Nein".to_string() })),
+        Some((
+            "Kompatibel",
+            if d.compatible {
+                "Ja".to_string()
+            } else {
+                "Nein".to_string()
+            },
+        )),
     ]
     .into_iter()
     .flatten()
@@ -454,7 +491,10 @@ fn Updates(notice: Notice) -> Element {
     let ctx = use_context::<HomeCtx>();
     let mut notice = notice;
     let mut busy = use_signal(|| false);
-    let mut list: Vec<AppInfo> = installed_map(&ctx).into_values().filter(|a| a.update_available || a.state == "updating").collect();
+    let mut list: Vec<AppInfo> = installed_map(&ctx)
+        .into_values()
+        .filter(|a| a.update_available || a.state == "updating")
+        .collect();
     list.sort_by_key(|a| a.name.to_lowercase());
     let any = list.iter().any(|a| a.update_available);
 

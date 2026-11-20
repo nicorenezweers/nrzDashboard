@@ -7,8 +7,8 @@ use icons::{Check, Eye, Globe, KeyRound, Link, ShieldCheck, User};
 use super::{AppIcon, HomeCtx, HomeWindow};
 use crate::api::apps::app_set_hidden;
 use crate::api::settings::{
-    SettingsView, TotpSetup, password_change, settings_save_general, settings_save_network, settings_save_umbrel, totp_begin, totp_disable,
-    totp_enable,
+    SettingsView, TotpSetup, password_change, settings_save_general, settings_save_monitor,
+    settings_save_network, settings_save_umbrel, totp_begin, totp_disable, totp_enable,
 };
 use crate::utils::err_msg;
 
@@ -41,7 +41,12 @@ pub fn SettingsWindow() -> Element {
 }
 
 #[component]
-fn Section(icon: Element, title: String, #[props(default)] hint: String, children: Element) -> Element {
+fn Section(
+    icon: Element,
+    title: String,
+    #[props(default)] hint: String,
+    children: Element,
+) -> Element {
     rsx! {
         section { class: "rounded-3xl bg-white/[0.05] p-5 md:p-6",
             h3 { class: "flex items-center gap-2.5 text-lg font-semibold [&_svg]:size-5 [&_svg]:text-white/60", {icon} "{title}" }
@@ -74,7 +79,10 @@ fn General(s: SettingsView) -> Element {
         mode.set(m.clone());
         spawn(async move {
             let r = settings_save_general(name(), m).await;
-            msg.set(Some(r.map(|_| "Gespeichert".to_string()).map_err(|e| err_msg(&e))));
+            msg.set(Some(
+                r.map(|_| "Gespeichert".to_string())
+                    .map_err(|e| err_msg(&e)),
+            ));
             ctx.reload();
         });
     };
@@ -290,6 +298,9 @@ fn Connections(s: SettingsView) -> Element {
     let mut net_url = use_signal(|| s.network_url.clone());
     let mut net_token = use_signal(String::new);
     let mut net_msg: Msg = use_signal(|| None);
+    let mut mon_url = use_signal(|| s.monitor_url.clone());
+    let mut mon_token = use_signal(String::new);
+    let mut mon_msg: Msg = use_signal(|| None);
     let mut um_url = use_signal(|| s.umbrel_url.clone());
     let mut um_token = use_signal(String::new);
     let mut um_msg: Msg = use_signal(|| None);
@@ -319,6 +330,27 @@ fn Connections(s: SettingsView) -> Element {
                             "Verbinden"
                         }
                         Feedback { msg: net_msg() }
+                    }
+                    div {
+                        div { class: "font-medium", "nrzMonitor (Container & System)" }
+                        p { class: "mb-2 text-sm text-white/50", "Auf demselben Gerät reicht die interne Adresse ohne Schlüssel. Für eine öffentliche Adresse: Schlüssel aus nrzMonitor → Einstellungen → MCP (\"-\" entfernt ihn)." }
+                        div { class: "grid gap-2 sm:grid-cols-2",
+                            input { class: INPUT, value: "{mon_url}", placeholder: "http://10.21.0.1:8571", oninput: move |e| mon_url.set(e.value()) }
+                            input { class: INPUT, r#type: "password", value: "{mon_token}", placeholder: s.monitor_token_hint.clone().unwrap_or_else(|| "Schlüssel (optional)".into()), oninput: move |e| mon_token.set(e.value()) }
+                        }
+                        button {
+                            class: "{BTN} mt-2",
+                            onclick: move |_| {
+                                spawn(async move {
+                                    let r = settings_save_monitor(mon_url(), mon_token()).await;
+                                    mon_msg.set(Some(r.map_err(|e| err_msg(&e))));
+                                    mon_token.set(String::new());
+                                    ctx.reload();
+                                });
+                            },
+                            "Verbinden"
+                        }
+                        Feedback { msg: mon_msg() }
                     }
                     div {
                         div { class: "font-medium", "umbrelOS" }

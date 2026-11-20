@@ -29,7 +29,10 @@ struct State {
 }
 
 fn now() -> u64 {
-    SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_secs()).unwrap_or(0)
+    SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map(|d| d.as_secs())
+        .unwrap_or(0)
 }
 
 fn sessions_file() -> std::path::PathBuf {
@@ -63,7 +66,13 @@ fn save_sessions(sessions: &HashMap<String, u64>) {
 
 fn state() -> &'static Mutex<State> {
     static S: OnceLock<Mutex<State>> = OnceLock::new();
-    S.get_or_init(|| Mutex::new(State { sessions: load_sessions(), fails: Vec::new(), pending: HashMap::new() }))
+    S.get_or_init(|| {
+        Mutex::new(State {
+            sessions: load_sessions(),
+            fails: Vec::new(),
+            pending: HashMap::new(),
+        })
+    })
 }
 
 pub fn random_token(bytes: usize) -> String {
@@ -82,7 +91,11 @@ fn ct_eq(a: &[u8], b: &[u8]) -> bool {
 
 fn verify_hash(hash: &str, password: &str) -> bool {
     use argon2::{Argon2, PasswordHash, PasswordVerifier};
-    PasswordHash::new(hash).is_ok_and(|parsed| Argon2::default().verify_password(password.as_bytes(), &parsed).is_ok())
+    PasswordHash::new(hash).is_ok_and(|parsed| {
+        Argon2::default()
+            .verify_password(password.as_bytes(), &parsed)
+            .is_ok()
+    })
 }
 
 /// Checks the password: the one set in the settings, else the one from the environment.
@@ -128,8 +141,12 @@ fn session_from_headers(headers: &HeaderMap) -> Option<String> {
 }
 
 pub fn is_authenticated(headers: &HeaderMap) -> bool {
-    let Some(token) = session_from_headers(headers) else { return false };
-    let Ok(mut st) = state().lock() else { return false };
+    let Some(token) = session_from_headers(headers) else {
+        return false;
+    };
+    let Ok(mut st) = state().lock() else {
+        return false;
+    };
     match st.sessions.get(&token) {
         Some(exp) if *exp > now() => true,
         Some(_) => {
@@ -142,7 +159,11 @@ pub fn is_authenticated(headers: &HeaderMap) -> bool {
 }
 
 fn named_cookie(name: &str, value: &str, max_age: u64) -> HeaderValue {
-    let secure = if config().cookie_secure { "; Secure" } else { "" };
+    let secure = if config().cookie_secure {
+        "; Secure"
+    } else {
+        ""
+    };
     let s = format!("{name}={value}; Path=/; HttpOnly; SameSite=Lax; Max-Age={max_age}{secure}");
     HeaderValue::from_str(&s).unwrap_or_else(|_| HeaderValue::from_static(""))
 }
@@ -153,7 +174,9 @@ fn cookie(value: &str, max_age: u64) -> HeaderValue {
 
 /// Global brute-force brake: max. 5 failed attempts per minute.
 fn locked() -> bool {
-    let Ok(mut st) = state().lock() else { return true };
+    let Ok(mut st) = state().lock() else {
+        return true;
+    };
     let now = Instant::now();
     st.fails.retain(|t| now.duration_since(*t) < FAIL_WINDOW);
     st.fails.len() >= MAX_FAILS
@@ -176,7 +199,8 @@ fn start_session(mut res: Response) -> Response {
         st.sessions.insert(token.clone(), t + SESSION_TTL.as_secs());
         save_sessions(&st.sessions);
     }
-    res.headers_mut().append(header::SET_COOKIE, cookie(&token, SESSION_TTL.as_secs()));
+    res.headers_mut()
+        .append(header::SET_COOKIE, cookie(&token, SESSION_TTL.as_secs()));
     res
 }
 
@@ -201,7 +225,10 @@ pub async fn login_handler(Form(form): Form<LoginForm>) -> Response {
             st.pending.insert(token.clone(), Instant::now());
         }
         let mut res = Redirect::to("/login?step=code").into_response();
-        res.headers_mut().append(header::SET_COOKIE, named_cookie(PENDING_COOKIE, &token, PENDING_TTL.as_secs()));
+        res.headers_mut().append(
+            header::SET_COOKIE,
+            named_cookie(PENDING_COOKIE, &token, PENDING_TTL.as_secs()),
+        );
         return res;
     }
     start_session(Redirect::to("/").into_response())
@@ -235,7 +262,8 @@ pub async fn code_handler(headers: HeaderMap, Form(form): Form<CodeForm>) -> Res
         st.pending.remove(&token);
     }
     let mut res = start_session(Redirect::to("/").into_response());
-    res.headers_mut().append(header::SET_COOKIE, named_cookie(PENDING_COOKIE, "", 0));
+    res.headers_mut()
+        .append(header::SET_COOKIE, named_cookie(PENDING_COOKIE, "", 0));
     res
 }
 

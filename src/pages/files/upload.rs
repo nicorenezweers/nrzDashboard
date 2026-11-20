@@ -45,7 +45,9 @@ pub fn from_drop(fm: Fm, e: &DragEvent, dir: String) {
         let mut files = Vec::new();
         let mut folders = 0;
         for f in e.files() {
-            let Some(file) = f.inner().downcast_ref::<web_sys::File>().cloned() else { continue };
+            let Some(file) = f.inner().downcast_ref::<web_sys::File>().cloned() else {
+                continue;
+            };
             // Dropped folders arrive as empty, typeless entries without extension.
             if file.size() == 0.0 && file.type_().is_empty() && !file.name().contains('.') {
                 folders += 1;
@@ -55,7 +57,9 @@ pub fn from_drop(fm: Fm, e: &DragEvent, dir: String) {
             files.push((file, target));
         }
         if folders > 0 {
-            fm.toast_err("Ordner bitte über „Hochladen → Ordner“ auswählen – per Ziehen gehen nur Dateien");
+            fm.toast_err(
+                "Ordner bitte über „Hochladen → Ordner“ auswählen – per Ziehen gehen nur Dateien",
+            );
         }
         imp::enqueue(fm, files);
     }
@@ -70,7 +74,9 @@ pub fn from_input(fm: Fm, e: &FormEvent, dir: String, folder: bool) {
         use wasm_bindgen::JsCast;
         let mut picked: Vec<(web_sys::File, String)> = Vec::new();
         for f in e.files() {
-            let Some(file) = f.inner().downcast_ref::<web_sys::File>().cloned() else { continue };
+            let Some(file) = f.inner().downcast_ref::<web_sys::File>().cloned() else {
+                continue;
+            };
             let rel = if folder {
                 js_sys::Reflect::get(&file, &"webkitRelativePath".into())
                     .ok()
@@ -95,7 +101,10 @@ pub fn from_input(fm: Fm, e: &FormEvent, dir: String, folder: bool) {
         }
         let rels: Vec<String> = picked.iter().map(|(_, r)| r.clone()).collect();
         let dirs = logic::rel_dirs(&rels);
-        let files: Vec<(web_sys::File, String)> = picked.into_iter().map(|(f, r)| (f, logic::join(&dir, &r))).collect();
+        let files: Vec<(web_sys::File, String)> = picked
+            .into_iter()
+            .map(|(f, r)| (f, logic::join(&dir, &r)))
+            .collect();
         if dirs.is_empty() {
             imp::enqueue(fm, files);
         } else {
@@ -188,10 +197,16 @@ mod imp {
     }
 
     fn pump(fm: Fm) {
-        let Ok(list) = fm.uploads.try_peek() else { return };
+        let Ok(list) = fm.uploads.try_peek() else {
+            return;
+        };
         let running = list.iter().filter(|i| i.state == UpState::Running).count();
-        let next: Vec<u64> =
-            list.iter().filter(|i| i.state == UpState::Queued).map(|i| i.id).take(PARALLEL.saturating_sub(running)).collect();
+        let next: Vec<u64> = list
+            .iter()
+            .filter(|i| i.state == UpState::Queued)
+            .map(|i| i.id)
+            .take(PARALLEL.saturating_sub(running))
+            .collect();
         drop(list);
         for id in next {
             start(fm, id);
@@ -200,20 +215,33 @@ mod imp {
 
     fn start(fm: Fm, id: u64) {
         let Some((file, target)) = PENDING.with(|p| p.borrow_mut().remove(&id)) else {
-            update(fm, id, |i| i.state = UpState::Failed("Datei nicht mehr verfügbar".into()));
+            update(fm, id, |i| {
+                i.state = UpState::Failed("Datei nicht mehr verfügbar".into())
+            });
             return;
         };
         update(fm, id, |i| i.state = UpState::Running);
         if send(fm, id, &file, &target).is_err() {
-            update(fm, id, |i| i.state = UpState::Failed("Upload konnte nicht gestartet werden".into()));
+            update(fm, id, |i| {
+                i.state = UpState::Failed("Upload konnte nicht gestartet werden".into())
+            });
         }
     }
 
-    fn send(fm: Fm, id: u64, file: &web_sys::File, target: &str) -> Result<(), wasm_bindgen::JsValue> {
+    fn send(
+        fm: Fm,
+        id: u64,
+        file: &web_sys::File,
+        target: &str,
+    ) -> Result<(), wasm_bindgen::JsValue> {
         let rt = Runtime::current();
         let scope = fm.scope();
         let xhr = XmlHttpRequest::new()?;
-        xhr.open_with_async("POST", &format!("/files/upload-raw?path={}", enc(target)), true)?;
+        xhr.open_with_async(
+            "POST",
+            &format!("/files/upload-raw?path={}", enc(target)),
+            true,
+        )?;
         xhr.set_request_header("Content-Type", "application/octet-stream")?;
 
         let rt_p = rt.clone();
@@ -241,7 +269,9 @@ mod imp {
                         0 => UpState::Failed("Verbindung abgebrochen".into()),
                         401 => UpState::Failed("Sitzung abgelaufen – bitte neu anmelden".into()),
                         413 => UpState::Failed("Datei zu gross für den Server/Proxy".into()),
-                        _ if !text.trim().is_empty() => UpState::Failed(text.trim().chars().take(300).collect()),
+                        _ if !text.trim().is_empty() => {
+                            UpState::Failed(text.trim().chars().take(300).collect())
+                        }
                         s => UpState::Failed(format!("Fehler HTTP {s}")),
                     };
                 });
@@ -254,10 +284,20 @@ mod imp {
             });
         });
 
-        xhr.upload()?.set_onprogress(Some(progress.as_ref().unchecked_ref()));
+        xhr.upload()?
+            .set_onprogress(Some(progress.as_ref().unchecked_ref()));
         xhr.set_onloadend(Some(done.as_ref().unchecked_ref()));
         xhr.send_with_opt_blob(Some(file))?;
-        ACTIVE.with(|a| a.borrow_mut().insert(id, Active { xhr, _progress: progress, _done: done }));
+        ACTIVE.with(|a| {
+            a.borrow_mut().insert(
+                id,
+                Active {
+                    xhr,
+                    _progress: progress,
+                    _done: done,
+                },
+            )
+        });
         Ok(())
     }
 
@@ -300,11 +340,21 @@ pub fn UploadPanel() -> Element {
     }
     let active = list.iter().filter(|i| i.active()).count();
     let done = list.iter().filter(|i| i.state == UpState::Done).count();
-    let failed = list.iter().filter(|i| matches!(i.state, UpState::Failed(_))).count();
+    let failed = list
+        .iter()
+        .filter(|i| matches!(i.state, UpState::Failed(_)))
+        .count();
     let total: f64 = list.iter().filter(|i| i.active()).map(|i| i.size).sum();
     let loaded: f64 = list.iter().filter(|i| i.active()).map(|i| i.loaded).sum();
     let title = if active > 0 {
-        format!("Lade hoch: {active} offen · {}", if total > 0.0 { format!("{:.0} %", loaded / total * 100.0) } else { "0 %".into() })
+        format!(
+            "Lade hoch: {active} offen · {}",
+            if total > 0.0 {
+                format!("{:.0} %", loaded / total * 100.0)
+            } else {
+                "0 %".into()
+            }
+        )
     } else if failed > 0 {
         format!("{done} hochgeladen, {failed} fehlgeschlagen")
     } else {
@@ -354,7 +404,11 @@ pub fn UploadPanel() -> Element {
 #[component]
 fn UploadRow(item: UploadItem) -> Element {
     let fm = use_context::<Fm>();
-    let pct = if item.size > 0.0 { (item.loaded / item.size * 100.0).clamp(0.0, 100.0) } else { 0.0 };
+    let pct = if item.size > 0.0 {
+        (item.loaded / item.size * 100.0).clamp(0.0, 100.0)
+    } else {
+        0.0
+    };
     let id = item.id;
     let dir = logic::name_of(&item.dir);
     rsx! {

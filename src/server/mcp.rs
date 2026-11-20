@@ -14,11 +14,24 @@ async fn rpc(method: &str, params: Value) -> Result<Value, String> {
     if cfg.token.is_empty() {
         return Err(settings::NO_TOKEN.into());
     }
-    rpc_at("Umbrel", &format!("{}/mcp", cfg.url), &cfg.token, method, params).await
+    rpc_at(
+        "Umbrel",
+        &format!("{}/mcp", cfg.url),
+        &cfg.token,
+        method,
+        params,
+    )
+    .await
 }
 
 /// JSON-RPC call to any MCP endpoint (`label` names the server in error messages).
-pub async fn rpc_at(label: &str, endpoint: &str, token: &str, method: &str, params: Value) -> Result<Value, String> {
+pub async fn rpc_at(
+    label: &str,
+    endpoint: &str,
+    token: &str,
+    method: &str,
+    params: Value,
+) -> Result<Value, String> {
     let id = NEXT_ID.fetch_add(1, Ordering::Relaxed);
     let body = json!({ "jsonrpc": "2.0", "id": id, "method": method, "params": params });
     let res = http()
@@ -42,16 +55,27 @@ pub async fn rpc_at(label: &str, endpoint: &str, token: &str, method: &str, para
         // JSON-RPC error body (e.g. 401 with a message) if there is one
         let message = serde_json::from_str::<Value>(&text)
             .ok()
-            .and_then(|v| v.pointer("/error/message").and_then(Value::as_str).map(str::to_string))
+            .and_then(|v| {
+                v.pointer("/error/message")
+                    .and_then(Value::as_str)
+                    .map(str::to_string)
+            })
             .unwrap_or_else(|| text.chars().take(300).collect());
         // Not "401"/"Unauthorized" in the text: the UI reads that as an expired dashboard
         // session and sends the user to the login page (utils::err_msg).
         if status == reqwest::StatusCode::UNAUTHORIZED || status == reqwest::StatusCode::FORBIDDEN {
             let detail = Some(message.trim())
-                .filter(|m| !m.is_empty() && !m.contains("401") && !m.contains("403") && !m.to_lowercase().contains("unauthorized"))
+                .filter(|m| {
+                    !m.is_empty()
+                        && !m.contains("401")
+                        && !m.contains("403")
+                        && !m.to_lowercase().contains("unauthorized")
+                })
                 .map(|m| format!(" ({m})"))
                 .unwrap_or_default();
-            return Err(format!("{label} lehnt das Token ab{detail} – Token prüfen."));
+            return Err(format!(
+                "{label} lehnt das Token ab{detail} – Token prüfen."
+            ));
         }
         return Err(format!("{label} MCP HTTP {status}: {message}"));
     }
@@ -70,7 +94,11 @@ pub async fn rpc_at(label: &str, endpoint: &str, token: &str, method: &str, para
         .find(|m| m.get("id").and_then(Value::as_u64) == Some(id))
         .ok_or("Keine Antwort vom MCP-Server")?;
     if let Some(err) = msg.get("error") {
-        return Err(err.get("message").and_then(Value::as_str).unwrap_or("MCP-Fehler").to_string());
+        return Err(err
+            .get("message")
+            .and_then(Value::as_str)
+            .unwrap_or("MCP-Fehler")
+            .to_string());
     }
     Ok(msg.get("result").cloned().unwrap_or(Value::Null))
 }
@@ -81,9 +109,25 @@ pub async fn call(name: &str, args: Value) -> Result<Value, String> {
 }
 
 /// Calls a tool on any MCP endpoint; prefers `structuredContent`, else the text (as JSON when possible).
-pub async fn call_at(label: &str, endpoint: &str, token: &str, name: &str, args: Value) -> Result<Value, String> {
-    let result = rpc_at(label, endpoint, token, "tools/call", json!({ "name": name, "arguments": args })).await?;
-    let failed = result.get("isError").and_then(Value::as_bool).unwrap_or(false);
+pub async fn call_at(
+    label: &str,
+    endpoint: &str,
+    token: &str,
+    name: &str,
+    args: Value,
+) -> Result<Value, String> {
+    let result = rpc_at(
+        label,
+        endpoint,
+        token,
+        "tools/call",
+        json!({ "name": name, "arguments": args }),
+    )
+    .await?;
+    let failed = result
+        .get("isError")
+        .and_then(Value::as_bool)
+        .unwrap_or(false);
     match result.get("structuredContent") {
         Some(v) if !failed && !v.is_null() => Ok(v.clone()),
         _ => tool_result(result),
@@ -102,8 +146,16 @@ fn tool_result(result: Value) -> Result<Value, String> {
                 .join("\n")
         })
         .unwrap_or_default();
-    if result.get("isError").and_then(Value::as_bool).unwrap_or(false) {
-        return Err(if text.is_empty() { "Werkzeug meldet Fehler".into() } else { text });
+    if result
+        .get("isError")
+        .and_then(Value::as_bool)
+        .unwrap_or(false)
+    {
+        return Err(if text.is_empty() {
+            "Werkzeug meldet Fehler".into()
+        } else {
+            text
+        });
     }
     Ok(serde_json::from_str(&text).unwrap_or(Value::String(text)))
 }

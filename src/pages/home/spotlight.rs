@@ -28,11 +28,31 @@ struct Item {
 
 fn actions() -> Vec<(&'static str, &'static str, Action)> {
     vec![
-        ("App Store", "Apps entdecken und installieren", Action::Win(Win::Store)),
-        ("Updates", "App-Updates installieren", Action::Win(Win::Updates)),
-        ("Aktivität", "CPU, RAM und Speicher", Action::Win(Win::Activity)),
-        ("Einstellungen", "Name, App-Adressen, Anmeldung", Action::Win(Win::Settings)),
-        ("Dateien", "Deine Dateien", Action::Route(Route::files("/Home"))),
+        (
+            "App Store",
+            "Apps entdecken und installieren",
+            Action::Win(Win::Store),
+        ),
+        (
+            "Updates",
+            "App-Updates installieren",
+            Action::Win(Win::Updates),
+        ),
+        (
+            "Aktivität",
+            "CPU, RAM und Speicher",
+            Action::Win(Win::Activity),
+        ),
+        (
+            "Einstellungen",
+            "Name, App-Adressen, Anmeldung",
+            Action::Win(Win::Settings),
+        ),
+        (
+            "Dateien",
+            "Deine Dateien",
+            Action::Route(Route::files("/Home")),
+        ),
     ]
 }
 
@@ -81,12 +101,20 @@ pub fn Spotlight(onclose: EventHandler<()>) -> Element {
     let mode = ctx.link_mode();
     let mut items: Vec<Item> = Vec::new();
     if let Some(Ok(tiles)) = &*ctx.tiles.read() {
-        for t in tiles.iter().filter(|t| !t.hidden && (q.is_empty() || t.name.to_lowercase().contains(&q) || t.id.contains(&q))) {
+        for t in tiles.iter().filter(|t| {
+            !t.hidden && (q.is_empty() || t.name.to_lowercase().contains(&q) || t.id.contains(&q))
+        }) {
             let action = match t.url(&mode) {
                 Some(u) => Action::Url(u),
                 None => Action::Win(Win::Store),
             };
-            items.push(Item { title: t.name.clone(), subtitle: "App öffnen".into(), app: Some(t.id.clone()), kind: "Apps", action });
+            items.push(Item {
+                title: t.name.clone(),
+                subtitle: "App öffnen".into(),
+                app: Some(t.id.clone()),
+                kind: "Apps",
+                action,
+            });
         }
     }
     if q.is_empty() {
@@ -94,17 +122,33 @@ pub fn Spotlight(onclose: EventHandler<()>) -> Element {
     }
     for (title, sub, action) in actions() {
         if q.is_empty() || title.to_lowercase().contains(&q) || sub.to_lowercase().contains(&q) {
-            items.push(Item { title: title.into(), subtitle: sub.into(), app: None, kind: "Aktionen", action });
+            items.push(Item {
+                title: title.into(),
+                subtitle: sub.into(),
+                app: None,
+                kind: "Aktionen",
+                action,
+            });
         }
     }
     if let Some(list) = &*store.read() {
         for a in list.iter().filter(|a| !a.installed) {
-            items.push(Item { title: a.name.clone(), subtitle: a.tagline.clone(), app: Some(a.id.clone()), kind: "App Store", action: Action::Win(Win::Store) });
+            items.push(Item {
+                title: a.name.clone(),
+                subtitle: a.tagline.clone(),
+                app: Some(a.id.clone()),
+                kind: "App Store",
+                action: Action::Win(Win::Store),
+            });
         }
     }
     if let Some(list) = &*files.read() {
         for f in list.iter().take(6) {
-            let dir = if f.is_dir() { f.path.clone() } else { parent(&f.path) };
+            let dir = if f.is_dir() {
+                f.path.clone()
+            } else {
+                parent(&f.path)
+            };
             items.push(Item {
                 title: f.name.clone(),
                 subtitle: f.path.clone(),

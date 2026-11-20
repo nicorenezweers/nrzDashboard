@@ -10,7 +10,11 @@ pub fn fmt_bytes(b: f64) -> String {
         v /= 1024.0;
         i += 1;
     }
-    if i == 0 { format!("{v:.0} {}", UNITS[0]) } else { format!("{v:.1} {}", UNITS[i]) }
+    if i == 0 {
+        format!("{v:.0} {}", UNITS[0])
+    } else {
+        format!("{v:.1} {}", UNITS[i])
+    }
 }
 
 pub fn fmt_uptime(secs: f64) -> String {
@@ -26,7 +30,11 @@ pub fn fmt_uptime(secs: f64) -> String {
 }
 
 pub fn pct(used: f64, total: f64) -> f64 {
-    if total <= 0.0 { 0.0 } else { (used / total * 100.0).clamp(0.0, 100.0) }
+    if total <= 0.0 {
+        0.0
+    } else {
+        (used / total * 100.0).clamp(0.0, 100.0)
+    }
 }
 
 /// Formats a unix timestamp in milliseconds as local `TT.MM.JJJJ HH:MM`.
@@ -50,7 +58,11 @@ pub fn fmt_time_ms(ms: f64) -> String {
         let days = secs.div_euclid(86_400);
         let rem = secs.rem_euclid(86_400);
         let (y, m, d) = civil_from_days(days);
-        format!("{d:02}.{m:02}.{y} {:02}:{:02}", rem / 3600, (rem % 3600) / 60)
+        format!(
+            "{d:02}.{m:02}.{y} {:02}:{:02}",
+            rem / 3600,
+            (rem % 3600) / 60
+        )
     }
 }
 
@@ -93,7 +105,10 @@ pub fn err_msg(e: &ServerFnError) -> String {
         }
         return "Sitzung abgelaufen – bitte neu anmelden".into();
     }
-    text.trim_start_matches("error running server function:").replace(" (details: None)", "").trim().to_string()
+    text.trim_start_matches("error running server function:")
+        .replace(" (details: None)", "")
+        .trim()
+        .to_string()
 }
 
 pub fn enc(s: &str) -> String {
@@ -103,11 +118,19 @@ pub fn enc(s: &str) -> String {
 /// Markdown → HTML; raw HTML is shown as text, links open in a new tab.
 pub fn markdown(text: &str) -> String {
     use pulldown_cmark::{Event, Options, Parser, html};
-    let parser = Parser::new_ext(text, Options::ENABLE_STRIKETHROUGH | Options::ENABLE_TASKLISTS | Options::ENABLE_TABLES).map(|e| match e {
+    let parser = Parser::new_ext(
+        text,
+        Options::ENABLE_STRIKETHROUGH | Options::ENABLE_TASKLISTS | Options::ENABLE_TABLES,
+    )
+    .map(|e| match e {
         Event::Html(s) | Event::InlineHtml(s) => Event::Text(s),
         other => other,
     });
     let mut out = String::new();
     html::push_html(&mut out, parser);
-    out.replace("<a href=\"javascript:", "<a data-blocked=\"").replace("<a href=", "<a target=\"_blank\" rel=\"noopener noreferrer\" href=")
+    out.replace("<a href=\"javascript:", "<a data-blocked=\"")
+        .replace(
+            "<a href=",
+            "<a target=\"_blank\" rel=\"noopener noreferrer\" href=",
+        )
 }
