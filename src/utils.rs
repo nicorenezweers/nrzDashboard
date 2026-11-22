@@ -31,7 +31,7 @@ pub fn pct(used: f64, total: f64) -> f64 {
 
 /// Formats a unix timestamp in milliseconds as local `TT.MM.JJJJ HH:MM`.
 pub fn fmt_time_ms(ms: f64) -> String {
-    #[cfg(feature = "web")]
+    #[cfg(all(feature = "web", target_arch = "wasm32"))]
     {
         let d = js_sys::Date::new(&wasm_bindgen_value(ms));
         format!(
@@ -43,7 +43,7 @@ pub fn fmt_time_ms(ms: f64) -> String {
             d.get_minutes()
         )
     }
-    #[cfg(not(feature = "web"))]
+    #[cfg(not(all(feature = "web", target_arch = "wasm32")))]
     {
         // UTC fallback (server render).
         let secs = (ms / 1000.0) as i64;
@@ -54,12 +54,12 @@ pub fn fmt_time_ms(ms: f64) -> String {
     }
 }
 
-#[cfg(feature = "web")]
+#[cfg(all(feature = "web", target_arch = "wasm32"))]
 fn wasm_bindgen_value(ms: f64) -> js_sys::wasm_bindgen::JsValue {
     js_sys::wasm_bindgen::JsValue::from_f64(ms)
 }
 
-#[cfg(not(feature = "web"))]
+#[cfg(not(all(feature = "web", target_arch = "wasm32")))]
 fn civil_from_days(z: i64) -> (i64, i64, i64) {
     let z = z + 719_468;
     let era = z.div_euclid(146_097);
@@ -74,9 +74,9 @@ fn civil_from_days(z: i64) -> (i64, i64, i64) {
 
 /// Sleeps on the client; never resolves on the server so polling loops don't run during SSR.
 pub async fn sleep_ms(ms: u32) {
-    #[cfg(feature = "web")]
+    #[cfg(all(feature = "web", target_arch = "wasm32"))]
     gloo_timers::future::TimeoutFuture::new(ms).await;
-    #[cfg(not(feature = "web"))]
+    #[cfg(not(all(feature = "web", target_arch = "wasm32")))]
     {
         let _ = ms;
         std::future::pending::<()>().await;
@@ -87,7 +87,7 @@ pub async fn sleep_ms(ms: u32) {
 pub fn err_msg(e: &ServerFnError) -> String {
     let text = e.to_string();
     if text.contains("401") || text.contains("Unauthorized") {
-        #[cfg(feature = "web")]
+        #[cfg(all(feature = "web", target_arch = "wasm32"))]
         if let Some(w) = web_sys::window() {
             let _ = w.location().set_href("/login");
         }

@@ -7,55 +7,39 @@ use icons::{Cpu, HardDrive, MemoryStick, RefreshCw, Thermometer};
 
 use super::{AppIcon, HomeCtx, HomeWindow};
 use crate::model::AppUse;
-use crate::utils::{err_msg, fmt_bytes, fmt_uptime, pct, sleep_ms};
-
-const HISTORY: usize = 60;
+use crate::utils::{err_msg, fmt_bytes, fmt_uptime, pct};
 
 #[component]
 pub fn ActivityWindow() -> Element {
     let ctx = use_context::<HomeCtx>();
-    let mut overview = ctx.overview;
-    let mut cpu_hist = use_signal(Vec::<f64>::new);
-    let mut mem_hist = use_signal(Vec::<f64>::new);
     let mut live = use_signal(|| true);
-
-    // Faster refresh while the window is open.
-    use_future(move || async move {
-        loop {
-            sleep_ms(2_500).await;
-            if live() {
-                overview.restart();
-            }
-        }
-    });
-
-    let data = overview.read().clone();
-    // Record history whenever new data arrives.
-    let sample = match &data {
-        Some(Ok(o)) => o.resources.as_ref().map(|r| (r.cpu.total_used, pct(r.memory.total_used, r.memory.size))),
-        _ => None,
+    // Pausing freezes the view; the home screen keeps refreshing underneath.
+    let mut frozen = use_signal(|| None::<Option<Result<crate::model::Overview, ServerFnError>>>);
+    let data = match frozen() {
+        Some(d) => d,
+        None => ctx.overview.read().clone(),
     };
-    use_effect(use_reactive!(|sample| {
-        if let Some((c, m)) = sample {
-            let mut ch = cpu_hist.write();
-            ch.push(c);
-            if ch.len() > HISTORY {
-                ch.remove(0);
-            }
-            let mut mh = mem_hist.write();
-            mh.push(m);
-            if mh.len() > HISTORY {
-                mh.remove(0);
-            }
+    let history = match &data {
+        Some(Ok(o)) => o.history.clone(),
+        _ => Vec::new(),
+    };
+    let cpu_hist: Vec<f64> = history.iter().map(|h| h[0]).collect();
+    let mem_hist: Vec<f64> = history.iter().map(|h| h[1]).collect();
+    let toggle = move |_| {
+        if live() {
+            frozen.set(Some(ctx.overview.read().clone()));
+        } else {
+            frozen.set(None);
         }
-    }));
+        live.toggle();
+    };
 
     rsx! {
         HomeWindow { title: "Aktivität",
             div { class: "mb-5 flex flex-wrap items-center gap-2",
                 button {
                     class: if live() { "flex items-center gap-2 rounded-full bg-emerald-500/20 px-4 py-1.5 text-sm text-emerald-200" } else { "flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-sm text-white/70" },
-                    onclick: move |_| live.toggle(),
+                    onclick: toggle,
                     span { class: if live() { "size-2 rounded-full bg-emerald-400 animate-pulse" } else { "size-2 rounded-full bg-white/40" } }
                     if live() { "Live" } else { "Pausiert" }
                 }
@@ -70,7 +54,10 @@ pub fn ActivityWindow() -> Element {
                 Some(Ok(o)) => {
                     let names: HashMap<String, String> = o.apps.iter().map(|a| (a.id.clone(), a.name.clone())).collect();
                     match o.resources {
-                        None => rsx! { p { class: "text-sm text-red-300", {o.error.clone().unwrap_or_else(|| "Keine Daten".into())} } },
+                        None => rsx! {
+                            p { class: "text-sm text-red-300", {o.error.clone().unwrap_or_else(|| "Keine Daten".into())} }
+                            super::monitor::MonitorPanel { live, names: names.clone() }
+                        },
                         Some(r) => {
                             let mem_p = pct(r.memory.total_used, r.memory.size);
                             let disk_p = pct(r.storage.total_used, r.storage.size);
@@ -80,13 +67,13 @@ pub fn ActivityWindow() -> Element {
                                         icon: rsx! { Cpu {} }, label: "CPU", value: r.cpu.total_used.clamp(0.0, 100.0),
                                         main: format!("{:.1} %", r.cpu.total_used),
                                         sub: format!("{} Threads", r.cpu.threads),
-                                        history: cpu_hist(), color: "#34d399",
+                                        history: cpu_hist.clone(), color: "#34d399",
                                     }
                                     BigCard {
                                         icon: rsx! { MemoryStick {} }, label: "Arbeitsspeicher", value: mem_p,
                                         main: fmt_bytes(r.memory.total_used),
                                         sub: format!("von {} · {:.0} %", fmt_bytes(r.memory.size), mem_p),
-                                        history: mem_hist(), color: "#60a5fa",
+                                        history: mem_hist.clone(), color: "#60a5fa",
                                     }
                                     BigCard {
                                         icon: rsx! { HardDrive {} }, label: "Speicher", value: disk_p,

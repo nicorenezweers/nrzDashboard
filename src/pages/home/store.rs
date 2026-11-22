@@ -145,16 +145,18 @@ fn NoticeLine(notice: Notice) -> Element {
 fn Discover(notice: Notice, onopen: EventHandler<String>) -> Element {
     let mut query = use_signal(String::new);
     let mut category = use_signal(|| None::<String>);
+    let ctx = use_context::<HomeCtx>();
     let results = use_resource(move || async move {
         let q = query();
-        if !q.trim().is_empty() {
-            sleep_ms(250).await;
+        if q.trim().is_empty() {
+            return None;
         }
-        store_search(q, 50).await
+        sleep_ms(250).await;
+        Some(store_search(q, 50).await)
     });
-    let ctx = use_context::<HomeCtx>();
     let installed = installed_map(&ctx);
-    let list = results.read().clone();
+    // Without a search the preloaded list is shown right away.
+    let list = if query().trim().is_empty() { ctx.store.read().clone() } else { results.read().clone().flatten() };
     let mut cats: Vec<String> = match &list {
         Some(Ok(l)) => l.iter().map(|a| a.category.clone()).filter(|c| !c.is_empty()).collect(),
         _ => vec![],

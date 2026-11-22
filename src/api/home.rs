@@ -43,20 +43,27 @@ pub struct StoreDetails {
 
 #[server]
 pub async fn store_search(query: String, limit: u32) -> Result<Vec<StoreApp>, ServerFnError> {
-    mcp::call_as("search_app_store", json!({ "query": query.trim(), "limit": limit.clamp(1, 50) }))
+    let limit = limit.clamp(1, 50);
+    if query.trim().is_empty() {
+        let mut list = crate::server::cache::store().await.map_err(err)?;
+        list.truncate(limit as usize);
+        return Ok(list);
+    }
+    mcp::call_as("search_app_store", json!({ "query": query.trim(), "limit": limit }))
         .await
         .map_err(err)
 }
 
 #[server]
 pub async fn store_details(app_id: String) -> Result<StoreDetails, ServerFnError> {
-    mcp::call_as("get_app_store_details", json!({ "appId": app_id })).await.map_err(err)
+    crate::server::cache::store_details(&app_id).await.map_err(err)
 }
 
 /// Installs an App Store app (dependencies must already be installed).
 #[server]
 pub async fn store_install(app_id: String) -> Result<String, ServerFnError> {
     let v = mcp::call("install_app", json!({ "appId": app_id })).await.map_err(err)?;
+    crate::server::cache::kick();
     Ok(value_to_text(&v))
 }
 
@@ -64,6 +71,7 @@ pub async fn store_install(app_id: String) -> Result<String, ServerFnError> {
 #[server]
 pub async fn store_uninstall(app_id: String) -> Result<String, ServerFnError> {
     let v = mcp::call("uninstall_app", json!({ "appId": app_id })).await.map_err(err)?;
+    crate::server::cache::kick();
     Ok(value_to_text(&v))
 }
 
@@ -77,11 +85,12 @@ pub async fn update_all_apps() -> Result<Vec<String>, ServerFnError> {
             started.push(a.name);
         }
     }
+    crate::server::cache::kick();
     Ok(started)
 }
 
 /// Docker containers, file systems, reachability, sensors, alerts and events from nrzMonitor.
 #[server]
 pub async fn monitor_view() -> Result<crate::model::MonitorView, ServerFnError> {
-    crate::server::monitor::view().await.map_err(err)
+    crate::server::cache::monitor().await.map_err(err)
 }

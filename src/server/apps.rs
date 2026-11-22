@@ -117,7 +117,7 @@ fn domains_for(port: u16, hosts: &[ProxyHost]) -> (Option<String>, Option<String
 }
 
 pub async fn tiles() -> Result<Vec<AppTile>, String> {
-    let apps: Vec<AppInfo> = mcp::call_as("list_apps", json!({})).await?;
+    let apps: Vec<AppInfo> = super::cache::apps_quiet().await?;
     let hosts = proxy_hosts().await;
     let d = dash::get();
     let ports = futures::future::join_all(apps.iter().map(|a| app_port(&a.id))).await;
@@ -204,6 +204,31 @@ async fn fetch_icon(id: &str) -> Icon {
         }
     }
     None
+}
+
+/// Loads missing icons into the cache (background, before anyone opens the page).
+pub async fn prefetch_icons(ids: Vec<String>) {
+    let missing: Vec<String> = {
+        let cache = icon_cache().lock().map(|c| c.clone()).unwrap_or_default();
+        let mut ids = ids;
+        ids.sort();
+        ids.dedup();
+        ids.into_iter()
+            .filter(|id| match cache.get(id) {
+                Some((_, Some(_))) => false,
+                Some((t, None)) => t.elapsed() > Duration::from_secs(600),
+                None => true,
+            })
+            .collect()
+    };
+    for chunk in missing.chunks(8) {
+        let icons = futures::future::join_all(chunk.iter().map(|id| fetch_icon(id))).await;
+        if let Ok(mut c) = icon_cache().lock() {
+            for (id, icon) in chunk.iter().zip(icons) {
+                c.insert(id.clone(), (Instant::now(), icon));
+            }
+        }
+    }
 }
 
 async fn icon_handler(Path(id): Path<String>) -> Response {

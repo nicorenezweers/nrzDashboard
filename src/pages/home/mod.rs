@@ -3,6 +3,7 @@
 
 mod activity;
 mod edit;
+mod live;
 mod menu;
 mod monitor;
 mod settings;
@@ -14,9 +15,11 @@ use icons::{Activity, ArrowUp, ChevronLeft, ChevronRight, Cpu, FolderOpen, HardD
 
 use crate::api::apps::{AppTile, app_tiles};
 use crate::api::get_overview;
+use crate::api::home::monitor_view;
 use crate::api::settings::{SettingsView, settings_get};
 use crate::app::Route;
-use crate::model::Overview;
+use crate::model::{MonitorView, Overview};
+use live::{INIT_ID, Live, use_init, use_live};
 use crate::utils::{fmt_bytes, pct, sleep_ms};
 
 use menu::{AppMenu, MenuReq};
@@ -73,9 +76,12 @@ pub fn close_win() {
 /// Data shared by the home screen and its windows.
 #[derive(Clone, Copy)]
 pub struct HomeCtx {
-    pub overview: Resource<Result<Overview, ServerFnError>>,
-    pub tiles: Resource<Result<Vec<AppTile>, ServerFnError>>,
-    pub settings: Resource<Result<SettingsView, ServerFnError>>,
+    pub overview: Live<Result<Overview, ServerFnError>>,
+    pub tiles: Live<Result<Vec<AppTile>, ServerFnError>>,
+    pub settings: Live<Result<SettingsView, ServerFnError>>,
+    pub monitor: Live<Result<MonitorView, ServerFnError>>,
+    /// App Store list, loaded in the background right after the page (ready when the store opens).
+    pub store: Resource<Result<Vec<crate::api::home::StoreApp>, ServerFnError>>,
     /// Bump to reload everything at once.
     pub refresh: Signal<u32>,
     pub menu: Signal<Option<MenuReq>>,
@@ -121,11 +127,11 @@ pub fn AppIcon(id: String, name: String, #[props(default = "size-12".to_string()
 }
 
 fn now_hour() -> u32 {
-    #[cfg(feature = "web")]
+    #[cfg(all(feature = "web", target_arch = "wasm32"))]
     {
         js_sys::Date::new_0().get_hours()
     }
-    #[cfg(not(feature = "web"))]
+    #[cfg(not(all(feature = "web", target_arch = "wasm32")))]
     12
 }
 
@@ -187,27 +193,26 @@ pub fn HomePage(w: String, path: String, msg: String) -> Element {
     let mut menu = use_signal(|| None::<MenuReq>);
     let editing = use_signal(|| None::<AppTile>);
 
-    let mut overview = use_resource(move || {
+    // Start values come with the page (server cache), then refresh in the background.
+    let (init_raw, init) = use_init();
+    let mut overview = use_live(refresh, init.overview.map(Ok), get_overview);
+    let mut tiles = use_live(refresh, init.tiles.map(Ok), app_tiles);
+    let settings = use_live(refresh, init.settings.map(Ok), settings_get);
+    let mut monitor = use_live(refresh, init.monitor.map(|m| m.map_err(ServerFnError::new)), monitor_view);
+    let store = use_resource(move || {
         let _ = refresh();
-        get_overview()
+        crate::api::home::store_search(String::new(), 50)
     });
-    let mut tiles = use_resource(move || {
-        let _ = refresh();
-        app_tiles()
-    });
-    let settings = use_resource(move || {
-        let _ = refresh();
-        settings_get()
-    });
-    let ctx = use_context_provider(|| HomeCtx { overview, tiles, settings, refresh, menu, editing });
+    let ctx = use_context_provider(|| HomeCtx { overview, tiles, settings, monitor, store, refresh, menu, editing });
 
-    // Live values: resources every 5 s, apps every 15 s.
+    // Live values (answered from the server cache): resources and containers every 3 s, apps every 9 s.
     use_future(move || async move {
         let mut n = 0u32;
         loop {
-            sleep_ms(5_000).await;
+            sleep_ms(3_000).await;
             n += 1;
             overview.restart();
+            monitor.restart();
             if n % 3 == 0 {
                 tiles.restart();
             }
@@ -271,6 +276,8 @@ pub fn HomePage(w: String, path: String, msg: String) -> Element {
     let mut drag_x = use_signal(|| None::<f64>);
 
     rsx! {
+        // Start data for the browser (same text on server and client, see `use_init`).
+        script { id: INIT_ID, r#type: "application/json", dangerous_inner_html: "{init_raw}" }
         div { class: "fixed inset-0 overflow-hidden select-none text-white", style: wallpaper_style(),
             div { class: "pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(0,0,0,0.55)_100%)]" }
 
@@ -456,11 +463,11 @@ fn busy_label(state: &str) -> Option<&'static str> {
 
 /// Opens a URL in a new tab.
 pub fn open_url(url: &str) {
-    #[cfg(feature = "web")]
+    #[cfg(all(feature = "web", target_arch = "wasm32"))]
     if let Some(w) = web_sys::window() {
         let _ = w.open_with_url_and_target(url, "_blank");
     }
-    #[cfg(not(feature = "web"))]
+    #[cfg(not(all(feature = "web", target_arch = "wasm32")))]
     let _ = url;
 }
 

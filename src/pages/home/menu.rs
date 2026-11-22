@@ -16,7 +16,7 @@ pub struct MenuReq {
 }
 
 fn viewport() -> (f64, f64) {
-    #[cfg(feature = "web")]
+    #[cfg(all(feature = "web", target_arch = "wasm32"))]
     if let Some(w) = web_sys::window() {
         let wd = w.inner_width().ok().and_then(|v| v.as_f64()).unwrap_or(1200.0);
         let ht = w.inner_height().ok().and_then(|v| v.as_f64()).unwrap_or(800.0);

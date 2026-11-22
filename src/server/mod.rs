@@ -2,6 +2,7 @@
 
 pub mod apps;
 pub mod auth;
+pub mod cache;
 pub mod dash;
 pub mod files;
 pub mod mcp;
@@ -73,6 +74,7 @@ pub fn router(app: fn() -> dioxus::prelude::Element) -> axum::Router {
 
     // Read config once so a generated password is printed at startup.
     let _ = config();
+    cache::start();
 
     dioxus::server::router(app)
         .route("/auth/login", post(auth::login_handler))

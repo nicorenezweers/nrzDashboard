@@ -58,7 +58,7 @@ impl AppTile {
 
 /// `umbrel.local` → host of the page (only for apps without a domain).
 pub fn browser_url(url: &str) -> String {
-    #[cfg(feature = "web")]
+    #[cfg(all(feature = "web", target_arch = "wasm32"))]
     if let Some(host) = web_sys::window().and_then(|w| w.location().hostname().ok()).filter(|h| !h.is_empty()) {
         return url.replace("umbrel.local", &host);
     }
@@ -67,7 +67,7 @@ pub fn browser_url(url: &str) -> String {
 
 #[server]
 pub async fn app_tiles() -> Result<Vec<AppTile>, ServerFnError> {
-    crate::server::apps::tiles().await.map_err(err)
+    crate::server::cache::tiles().await.map_err(err)
 }
 
 #[server]
@@ -78,7 +78,9 @@ pub async fn app_set_hidden(id: String, hidden: bool) -> Result<(), ServerFnErro
             d.hidden.push(id);
         }
     })
-    .map_err(err)
+    .map_err(err)?;
+    crate::server::cache::refresh_tiles().await;
+    Ok(())
 }
 
 /// Normalises a link: `bench.zweers.ch` → `https://bench.zweers.ch`, empty stays empty.
@@ -113,5 +115,7 @@ pub async fn app_links_set(id: String, links: AppLinks) -> Result<(), ServerFnEr
             d.links.insert(id, clean);
         }
     })
-    .map_err(err)
+    .map_err(err)?;
+    crate::server::cache::refresh_tiles().await;
+    Ok(())
 }

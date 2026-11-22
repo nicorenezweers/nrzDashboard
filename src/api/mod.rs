@@ -11,8 +11,6 @@ use dioxus::prelude::*;
 use serde_json::{Value, json};
 
 use crate::model::Overview;
-#[cfg(feature = "server")]
-use crate::model::AppInfo;
 
 #[cfg(feature = "server")]
 use crate::server::mcp;
@@ -41,17 +39,7 @@ pub(crate) fn mask(token: &str) -> Option<String> {
 
 #[server]
 pub async fn get_overview() -> Result<Overview, ServerFnError> {
-    let (info, res, apps) = tokio::join!(
-        mcp::call_as("get_system_info", json!({})),
-        mcp::call_as("get_system_resources", json!({})),
-        mcp::call_as::<Vec<AppInfo>>("list_apps", json!({})),
-    );
-    let error = [info.as_ref().err(), res.as_ref().err(), apps.as_ref().err()]
-        .into_iter()
-        .flatten()
-        .next()
-        .cloned();
-    Ok(Overview { info: info.ok(), resources: res.ok(), apps: apps.unwrap_or_default(), error })
+    Ok(crate::server::cache::overview().await)
 }
 
 // ---------- Apps ----------
@@ -66,6 +54,7 @@ pub async fn app_action(app_id: String, action: String) -> Result<String, Server
         _ => return Err(err("Unbekannte Aktion")),
     };
     let v = mcp::call(tool, json!({ "appId": app_id })).await.map_err(err)?;
+    crate::server::cache::kick();
     Ok(value_to_text(&v))
 }
 

@@ -8,10 +8,9 @@ use icons::{
     Bell, Container as ContainerIcon, HardDrive, Network, Search, Thermometer, TriangleAlert,
 };
 
-use super::AppIcon;
-use crate::api::home::monitor_view;
+use super::{AppIcon, HomeCtx};
 use crate::model::{Container, MonitorView};
-use crate::utils::{err_msg, fmt_bytes, fmt_time_ms, pct, sleep_ms};
+use crate::utils::{err_msg, fmt_bytes, fmt_time_ms, pct};
 
 #[derive(Clone, Copy, PartialEq)]
 enum Filter {
@@ -39,20 +38,12 @@ fn fmt_bits(b: f64) -> String {
 
 #[component]
 pub fn MonitorPanel(live: Signal<bool>, names: HashMap<String, String>) -> Element {
-    let mut data = use_resource(monitor_view);
-    use_future(move || async move {
-        loop {
-            sleep_ms(5_000).await;
-            if live() {
-                data.restart();
-            }
-        }
-    });
-    // Keep the last good data while reloading.
+    let ctx = use_context::<HomeCtx>();
+    let current = ctx.monitor.read().clone();
+    // Keep the last good data (and nothing new while paused).
     let mut last = use_signal(|| None::<MonitorView>);
-    let current = data.read().clone();
     if let Some(Ok(v)) = &current {
-        if last.peek().as_ref() != Some(v) {
+        if live() && last.peek().as_ref() != Some(v) {
             last.set(Some(v.clone()));
         }
     }
@@ -76,6 +67,9 @@ pub fn MonitorPanel(live: Signal<bool>, names: HashMap<String, String>) -> Eleme
 #[component]
 fn MonitorBody(v: MonitorView, names: HashMap<String, String>) -> Element {
     let mut filter = use_signal(|| Filter::Running);
+    // Local times only in the browser (the server does not know the time zone; same first render).
+    let mut mounted = use_signal(|| false);
+    use_effect(move || mounted.set(true));
     let mut query = use_signal(String::new);
 
     let total = v.containers.len();
@@ -233,7 +227,7 @@ fn MonitorBody(v: MonitorView, names: HashMap<String, String>) -> Element {
                                     _ => "mt-1.5 size-2 shrink-0 rounded-full bg-sky-400",
                                 } }
                                 span { class: "min-w-0 flex-1", "{e.title}" }
-                                span { class: "shrink-0 text-xs tabular-nums text-white/40", "{fmt_time_ms(e.ts)}" }
+                                span { class: "shrink-0 text-xs tabular-nums text-white/40", if mounted() { "{fmt_time_ms(e.ts)}" } }
                             }
                         }
                     }

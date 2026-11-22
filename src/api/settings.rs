@@ -40,9 +40,14 @@ fn pending_secret() -> &'static std::sync::Mutex<Option<String>> {
 
 #[server]
 pub async fn settings_get() -> Result<SettingsView, ServerFnError> {
+    Ok(settings_view())
+}
+
+#[cfg(feature = "server")]
+pub fn settings_view() -> SettingsView {
     let d = dash::get();
     let u = settings::umbrel();
-    Ok(SettingsView {
+    SettingsView {
         user: crate::server::config().user.clone(),
         name: d.name,
         link_mode: if d.link_mode == "admin" { "admin".into() } else { "user".into() },
@@ -54,7 +59,7 @@ pub async fn settings_get() -> Result<SettingsView, ServerFnError> {
         umbrel_token_hint: mask(&u.token),
         totp_enabled: d.totp_enabled,
         hidden: d.hidden,
-    })
+    }
 }
 
 #[server]
@@ -83,6 +88,7 @@ pub async fn settings_save_network(url: String, token: String) -> Result<String,
     })
     .map_err(err)?;
     crate::server::apps::clear_host_cache();
+    crate::server::cache::refresh_tiles().await;
     Ok(format!("Verbunden – {} Domains gefunden", hosts.len()))
 }
 
@@ -105,6 +111,7 @@ pub async fn settings_save_monitor(url: String, token: String) -> Result<String,
         d.monitor_token = token;
     })
     .map_err(err)?;
+    crate::server::cache::reset_monitor();
     Ok(format!("Verbunden mit {host}"))
 }
 

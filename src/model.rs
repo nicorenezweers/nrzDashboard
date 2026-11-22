@@ -86,6 +86,9 @@ pub struct Overview {
     pub resources: Option<Resources>,
     pub apps: Vec<AppInfo>,
     pub error: Option<String>,
+    /// CPU and RAM in percent, oldest first (recorded by the server).
+    #[serde(default)]
+    pub history: Vec<[f64; 2]>,
 }
 
 #[derive(Serialize, Deserialize, Clone, PartialEq, Debug, Default)]
@@ -191,4 +194,14 @@ pub struct MonitorView {
     /// Active alerts (title).
     pub alerts: Vec<String>,
     pub events: Vec<MonEvent>,
+}
+
+/// Everything the home screen needs, written into the first HTML by the server (from its cache)
+/// so the page is complete before the WASM bundle has loaded.
+#[derive(Serialize, Deserialize, Clone, PartialEq, Debug, Default)]
+pub struct InitData {
+    pub overview: Option<Overview>,
+    pub tiles: Option<Vec<crate::api::apps::AppTile>>,
+    pub settings: Option<crate::api::settings::SettingsView>,
+    pub monitor: Option<Result<MonitorView, String>>,
 }
